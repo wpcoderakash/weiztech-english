@@ -1,0 +1,38 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* The hero container carries its OWN top margin on top of the section's
+   `padding-block-start: var(--space-xxl)` — the two stack. Ground truth, and it
+   is not a Home-only quirk: every one of the 14 page CSS files repeats it on
+   its hero container.
+     uploads/bricks/css/post-34.min.css
+       #hero-container { z-index: 10; margin-top: var(--space-xxl) }
+     post-640 #brxe-ylcgam, post-756 #brxe-khzvyk, post-786 #brxe-xveodo,
+     post-807, post-810, post-812, post-845, post-1382, post-3725,
+     post-10310, post-10790, post-10814 — all `margin-top: var(--space-xxl)`.
+
+   Without it the hero column sat ~100px too high: the section's xxl padding
+   alone only just clears the fixed header, so the badge landed right under the
+   nav instead of a full band below it. */
+.inner {
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-block-start: var(--space-xxl);
+  z-index: 10;
+}
+
+/* Hero column is width--l (60% of --content-width) with space-s row gap. */
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: var(--space-s);
+  inline-size: calc(var(--content-width) * 0.6);
+  max-inline-size: 100%;
+  text-align: center;
+}

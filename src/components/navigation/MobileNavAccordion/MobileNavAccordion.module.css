@@ -1,0 +1,46 @@
+.accordion {
+  inline-size: 100%;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 100%;
+  block-size: 50px; /* titleHeight in the source */
+  padding: 0;
+  color: var(--white);
+}
+
+.title {
+  font-family: var(--heading-font-family);
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+}
+
+.chevron {
+  transition: transform 0.2s ease-in;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-block: 15px; /* contentPadding in the source */
+}
+
+.item {
+  color: var(--white);
+  font-family: var(--heading-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  transition: var(--transition-fast);
+}
+
+.item:hover {
+  color: var(--secondary);
+}

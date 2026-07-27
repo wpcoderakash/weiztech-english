@@ -1,0 +1,65 @@
+/* Earth.svg, top left, 50% width, no-repeat, background-attachment: fixed
+   over var(--accent). Identical on every page carrying this band.
+   Below mobile_landscape it recentres at 80%; below mobile_portrait the source
+   drops the image and leaves the flat accent fill. */
+.section {
+  background-color: var(--accent);
+  background-image: url("/images/Earth.svg");
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-attachment: fixed;
+}
+
+.end-m {
+  padding-block-end: var(--space-m);
+}
+
+.end-xl {
+  padding-block-end: var(--space-xl);
+}
+
+/* mobile_landscape */
+@media (max-width: 767px) {
+  .section {
+    background-position: center center;
+    background-size: 80%;
+  }
+}
+
+/* mobile_portrait — the source drops the image and leaves the flat fill */
+@media (max-width: 478px) {
+  .section {
+    background-image: none;
+  }
+}
+
+/* .grid--auto-1-2 with gap--m in the source */
+/* `--content-width-safe` deducts the gutter a second time — the same mistake
+   PHASE-9 §1.2 fixed on Container, still here. It put this grid 10px right of
+   the original (form at x=540 against 530 at 1440). */
+.grid {
+  display: grid;
+  grid-template-columns: var(--grid-1-2);
+  gap: var(--space-m);
+  inline-size: 100%;
+  max-inline-size: var(--content-width);
+  z-index: 10;
+}
+
+/* .pad--s */
+.copy {
+  padding: var(--space-s);
+}
+
+/* #brxe-oogrqh sets a literal 12px row gap, not the --space-xs (13.5px) that
+   SectionHeader uses elsewhere. Small, but it compounds over three children. */
+.copy > * {
+  row-gap: 12px;
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

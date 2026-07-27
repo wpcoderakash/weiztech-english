@@ -1,0 +1,33 @@
+/* Transcribed from the .bg-glow global class, including its own
+   min-width: 1512px rule — a breakpoint used nowhere else on the site. */
+
+.glow {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline: 0;
+  inset-block-start: 60px;
+  z-index: var(--z-glow);
+  inline-size: 75%;
+  block-size: 75%;
+  margin-inline: auto;
+  opacity: 0.5;
+  pointer-events: none;
+  background: var(--gradient-glow);
+  border-radius: var(--radius-circle);
+  aspect-ratio: 1 / 1;
+}
+
+@media (min-width: 1512px) {
+  .glow {
+    inline-size: 55%;
+    block-size: 55%;
+  }
+}
+
+@media (max-width: 767px) {
+  .glow {
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+}

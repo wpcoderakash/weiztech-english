@@ -1,0 +1,47 @@
+/* Transcribed from NextBricks bc_swap_title.css (type: line, from: 1, skew: 0). */
+
+.anchor {
+  display: block;
+  inline-size: fit-content;
+  block-size: fit-content;
+  color: var(--white);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  line-height: normal;
+}
+
+.clip {
+  display: block;
+  overflow: hidden;
+}
+
+.text {
+  --duration: 1s;
+  --ease: cubic-bezier(0.19, 1, 0.22, 1);
+
+  display: block;
+  position: relative;
+  transform-origin: left top;
+  transition: transform var(--duration) var(--ease);
+  will-change: transform; /* the plugin notes this fixes text blur mid-transition */
+}
+
+.text::after {
+  content: attr(data-text);
+  display: block;
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  transform-origin: left top;
+}
+
+.anchor:hover .text,
+.anchor:focus-visible .text {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text {
+    transition: none;
+  }
+}

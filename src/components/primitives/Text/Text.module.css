@@ -1,0 +1,46 @@
+.text {
+  font-family: var(--text-font-family);
+  font-weight: var(--text-font-weight);
+  text-wrap: var(--text-text-wrap);
+}
+
+/* FONT-SIZE ONLY — no line-height.
+   In the source a Bricks `text-basic` gets `font-size: var(--text-s)` from the
+   theme style and INHERITS `line-height: var(--text-line-height)` (1.8) from
+   body. The per-size `--text-*-line-height` tokens are applied only by ACSS's
+   `.text--xs` / `.text--s` / `.text--m` utility classes, which just 13 elements
+   on the whole site carry — those live in utilities.css and set both.
+
+   Setting them here gave every paragraph 1.7 instead of 1.8. Measured against
+   the live site at 1440: original line pitch 29-30px on 16px copy (1.8), ours
+   was 27-28px. Small per line, but it accumulated to ~9px over the footer's
+   brand column alone. */
+.size-xs {
+  font-size: var(--text-xs);
+}
+.size-s {
+  font-size: var(--text-s);
+}
+.size-m {
+  font-size: var(--text-m);
+}
+.size-l {
+  font-size: var(--text-l);
+}
+.size-xl {
+  font-size: var(--text-xl);
+}
+.size-xxl {
+  font-size: var(--text-xxl);
+  max-inline-size: var(--text-xxl-max-width);
+}
+
+.tone-base {
+  color: var(--text-color);
+}
+.tone-muted {
+  color: var(--text-muted);
+}
+.tone-white {
+  color: var(--white);
+}

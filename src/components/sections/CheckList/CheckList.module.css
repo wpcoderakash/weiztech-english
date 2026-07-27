@@ -1,0 +1,30 @@
+/* Source: div#umolnx — grid--auto-4 with a var(--space-xs) row gap. */
+.list {
+  --column-count: 4;
+  --grid-gap: var(--space-xs);
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+  gap: var(--grid-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  inline-size: 100%;
+}
+
+/* .wcu-list — 12px gap, centred, left-justified. */
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 12px;
+  row-gap: 12px;
+}

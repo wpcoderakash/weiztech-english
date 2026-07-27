@@ -1,0 +1,57 @@
+/* No `align-self` here: the source's badge-wrapper sets none, so the badge
+   inherits whichever alignment its parent column uses. `fit-content` keeps it
+   from stretching under the default `align-items: stretch`. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: fit-content;
+}
+
+/* .badge-wrapper + .badge-content */
+.section {
+  column-gap: 12px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-card-alt);
+  border-radius: var(--radius-pill);
+  /* --tertiary-dark at 20% */
+  background-color: rgb(41 31 97 / 0.2);
+}
+
+/* Hero pill (#brxe-fgciig) */
+.hero {
+  column-gap: 12px;
+  padding: 6px 18px 6px 6px;
+  border: 1px solid var(--tertiary-dark);
+  border-radius: var(--radius-pill);
+  background-color: rgb(0 0 0 / 0.1);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+}
+
+.chip {
+  padding: 6px 12px;
+  border: 1px solid var(--border-button);
+  border-radius: var(--radius-pill);
+  background-image: var(--gradient-brand);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+}
+
+.label {
+  color: var(--base);
+  font-weight: var(--font-weight-medium);
+}
+
+/* All 8 section eyebrows in the source set white / 12px / 500 on the label —
+   verified across home.json, Hardware.json and Software.json. Only the hero
+   pill's label keeps var(--base). */
+.section .label {
+  color: var(--white);
+  font-size: 12px;
+}
+
+.hero .label {
+  font-size: 12px;
+}

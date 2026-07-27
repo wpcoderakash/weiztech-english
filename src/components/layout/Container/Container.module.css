@@ -1,0 +1,44 @@
+/* Ground truth: uploads/bricks/css/theme-style-weiz.min.css
+     .brxe-container { width: 1200px }
+   over the Bricks base
+     .brxe-container { display:flex; flex-direction:column;
+                       align-items:flex-start; margin-inline:auto }
+
+   The container is a FIXED 1200px inside a section that already carries its own
+   `padding-inline: var(--space-m)`. It does NOT subtract the gutter again.
+
+   The previous `inline-size: var(--content-width-safe)` was wrong. That ACSS
+   variable is only ever applied through the `.content-width--safe` utility
+   class, which this site never uses. Since Section already pads by --space-m,
+   using it here deducted the gutter twice and made every container 60px
+   narrower than the original between ~1200px and ~1320px viewport — the common
+   laptop range, and the header width mismatch that was reported.
+
+   `inline-size: 100%` + `max-inline-size` reproduces the fixed 1200px wherever
+   the parent box allows it, and shrinks rather than overflowing below that —
+   the one case where the original genuinely overflows.
+
+   Wrapped in :where() so it carries ZERO specificity. Consumers pass a
+   className to re-lay-out the container (the header's row, the footer's grids,
+   ContactCTA's 1fr/2fr split). Those live in other CSS modules, and at equal
+   specificity the winner is decided by stylesheet injection order — which
+   Next.js derives from the import graph, not from intent. The header was
+   losing that race: `.container`'s `flex-direction: column` was beating
+   `.inner`'s `row`, stacking the logo, nav and language toggle vertically.
+   :where() removes the race entirely. */
+:where(.container) {
+  inline-size: 100%;
+  max-inline-size: var(--content-width);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Centring is deliberately NOT in the :where() block above. `reset.css` sets
+   `* { margin: 0 }`, which is also zero-specificity, and it wins on source
+   order — so inside :where() the auto margins were being cancelled and every
+   container sat hard against the section's left padding instead of centring.
+   No consumer overrides this, so a normal class selector is safe here. */
+.container {
+  margin-inline: auto;
+}

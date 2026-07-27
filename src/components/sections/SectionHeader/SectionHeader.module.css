@@ -1,0 +1,56 @@
+/* Source header containers use row-gap var(--space-xs) — #yumjkl (Services)
+   and #qoeyvy (Why Choose Us) both. ContactCTA's copy block (#aywjan) uses a
+   literal 12px, 1.5px tighter; not worth a variant. This was var(--space-s)
+   (20px), which spaced every eyebrow/heading/body block ~7px too loosely. */
+.header {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-xs);
+  inline-size: 100%;
+}
+
+.center {
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.start {
+  align-items: flex-start;
+  text-align: start;
+}
+
+/* Heading weight. The source is NOT uniformly 500 — checked element by element
+   against post-34.min.css:
+     #service-heading                    font-weight: 500   (Home / Services)
+     #brxe-uilirt  (Why Choose Us)       unset -> theme 600
+     #brxe-fcmfxo  (FAQ)                 unset -> theme 600
+     #brxe-atuewj  (Home contact)        font-weight: 600
+     #brxe-zmpokq / #brxe-qhnrta         font-weight: 600   (Hardware/Software
+                                                             contact)
+   So 600 is the default and 500 the exception, not the other way round.
+
+   Tag-qualified so they beat Heading's own .h2 rule on any injection order. */
+h2.weight-600 {
+  font-weight: var(--heading-font-weight);
+}
+
+h2.weight-500 {
+  font-weight: var(--font-weight-medium);
+}
+
+.body-m {
+  inline-size: calc(var(--content-width) * 0.4);
+  max-inline-size: 100%;
+}
+
+.body-l {
+  inline-size: calc(var(--content-width) * 0.6);
+  max-inline-size: 100%;
+}
+
+.body-full {
+  max-inline-size: 100%;
+}

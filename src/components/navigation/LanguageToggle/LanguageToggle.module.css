@@ -1,0 +1,29 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-round);
+  border: 1px solid var(--surface-tint);
+}
+
+.outlined {
+  border-color: rgb(255 255 255 / 0.5);
+}
+
+.flag {
+  inline-size: 24px;
+  block-size: 16px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.outlined .flag {
+  inline-size: 20px;
+}
+
+.label {
+  color: var(--white);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+}

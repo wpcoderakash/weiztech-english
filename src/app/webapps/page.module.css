@@ -1,0 +1,148 @@
+/* Source: section#xgdyhu — padding-top var(--space-xxl), bottom var(--space-m),
+   accent fill, flex column, justify-content flex-end, align-items center.
+   Section's `none` spacing zeroes the block padding so these can stand. */
+.hero {
+  padding-block-start: var(--space-xxl);
+  padding-block-end: var(--space-m);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Source: container#qmfuol — margin-top var(--space-xl) (not the --space-xxl
+   the other heroes use), row-gap var(--space-xs), centred. */
+.heroInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: var(--space-xs);
+  margin-block-start: var(--space-xl);
+  text-align: center;
+  z-index: 10;
+}
+
+/* .width--l on both */
+.heroHeading,
+.heroBody {
+  inline-size: calc(var(--content-width) * 0.6);
+  max-inline-size: 100%;
+}
+
+/* .text--m plus .margin-bottom--xs */
+.heroBody {
+  font-size: var(--text-m);
+  line-height: var(--text-m-line-height);
+  margin-block-end: var(--space-xs);
+}
+
+/* Source: div#wcxhnf — .width--xl, space-m padding, rgba(3,1,22,0.35),
+   1px var(--tertiary), 16px radius, space-m top margin. */
+.heroPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: calc(var(--content-width) * 0.8);
+  max-inline-size: 100%;
+  margin-block-start: var(--space-m);
+  padding: var(--space-m);
+  border: 1px solid var(--tertiary);
+  border-radius: var(--radius-lg);
+  background-color: rgb(3 1 22 / 35%);
+}
+
+/* #brxe-atbqva — a flat 650px. */
+.heroImage {
+  inline-size: 650px;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+/* Every section on this page: space-xl block padding over var(--accent),
+   which is Section's `default` spacing plus the fill. */
+.section {
+  background-color: var(--accent);
+}
+
+.centeredHeader,
+.processHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+.stretchGrid {
+  align-items: stretch;
+  z-index: 10;
+}
+
+/* Source: container#qducvr — the header and the grid share one container with
+   a var(--space-l) row gap, and the grid carries an extra space-s top margin
+   (#wcerhy). */
+.industriesInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: var(--space-l);
+  z-index: 10;
+}
+
+.industriesGrid {
+  align-items: stretch;
+  margin-block-start: var(--space-s);
+}
+
+/* Source: container#jdmkdz — grid--auto-2 at gap--m, items centred. */
+.whyGrid {
+  --column-count: 2;
+  --grid-gap: var(--space-m);
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+  gap: var(--grid-gap);
+  align-items: center;
+  z-index: 10;
+}
+
+/* #brxe-avoogr — var(--base) at --text-xs, not the --text-s default. */
+p.whyBody {
+  font-size: var(--text-xs);
+}
+
+/* Source: div#rgcbqo — left-aligned, space-xs row gap, space-m left padding. */
+.whyCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: var(--space-xs);
+  padding-inline-start: var(--space-m);
+}
+
+/* Source: container#f50525 — grid--auto-1-2 at gap--m. */
+.faqGrid {
+  display: grid;
+  grid-template-columns: var(--grid-1-2);
+  gap: var(--space-m);
+  z-index: 10;
+}
+
+@media (max-width: 767px) {
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .whyCopy {
+    padding-inline-start: 0;
+  }
+}

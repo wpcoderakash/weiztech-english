@@ -1,0 +1,265 @@
+/* Bricks template 303. Section padding var(--space-xl) block,
+   var(--space-m) inline, background var(--accent). */
+
+/* .brxe-section is `display:flex; flex-direction:column; align-items:center`.
+   The vertical separation between the divider row, the four columns and the
+   copyright row is measured at ~72px on the live site at a 1440 viewport,
+   which is var(--space-xl). No stylesheet declares it — it is Bricks' own
+   section gap — so it is reproduced here explicitly. Without it the three
+   rows sit flush and the footer reads as one cramped block. */
+.footer {
+  position: relative;
+  z-index: var(--z-content);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: var(--space-xl) var(--space-m);
+  background-color: var(--accent);
+}
+
+/* Source div#zzcmuf carries .width--full + .grid--auto-2 — the ACSS intrinsic
+   grid, which collapses to one column on its own rather than staying 1fr 1fr. */
+.dividerRow {
+  --column-count: 2;
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+  gap: var(--grid-gap);
+  inline-size: 100%;
+  z-index: 10;
+}
+
+/* Hidden below the Bricks mobile_landscape breakpoint in the source. */
+@media (max-width: 767px) {
+  .dividerRow {
+    display: none;
+  }
+}
+
+.columns {
+  flex-direction: row;
+  align-items: flex-start;
+  column-gap: var(--space-m);
+  row-gap: var(--space-l);
+  z-index: 10;
+  /* No flex-wrap at desktop: the source's four columns (40/20/20/20) plus
+     column gaps exceed 100%, and Bricks lets them shrink rather than wrap.
+     Wrapping here pushed the Offices column onto its own row. */
+}
+
+/* `align-items: flex-start` on both column types is the .brxe-block default
+   (themes/bricks/.../frontend.min.css), not decoration. */
+.brandColumn {
+  inline-size: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-s);
+  padding-inline-start: var(--space-xs);
+}
+
+.logo {
+  inline-size: 100px;
+  block-size: auto;
+}
+
+.linkColumn {
+  inline-size: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+}
+
+h3.officesTitle {
+  color: var(--base);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  /* Measured 25.2px on the live site — the inherited 1.8, not `normal`. */
+  line-height: var(--text-line-height);
+}
+
+/* Source div#jhivdt / div#xeqblv: flex column, row-gap var(--space-xs).
+   Separation between the two offices comes from .linkColumn's own gap, so
+   there is no trailing margin here. */
+.office {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-xs);
+}
+
+/* The -8px pulls the address back up against the label, cancelling most of the
+   space-xs row gap above. Verbatim from #brxe-qsoapx / #brxe-qnhsee. */
+.officeLabel {
+  margin-block-end: -8px;
+  color: var(--white);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Only the addresses carry the hover in the source, not the labels. */
+.officeAddress {
+  color: var(--base);
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+}
+
+.officeAddress:hover {
+  color: var(--secondary);
+}
+
+/* NextBricks glowingbutton (plugins/nextbricks/elements/css/bc_glowing_button.css)
+   with the page overrides from #brxe-rpkzsp: 16px radius, 8px/24px padding,
+   #1b1b43 fill, label var(--text-xs)/500, and a spark ring running
+   var(--primary) → rgba(152,162,179,0.1).
+
+   The ring is a conic gradient on a 1000%-square layer spinning 3s linear,
+   clipped by the root's `overflow: hidden` so only the 1px padding edge shows. */
+.glowButton {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  inline-size: fit-content;
+  block-size: fit-content;
+  padding: 1px;
+  margin-block-start: 15px;
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all 0.4s;
+}
+
+.glowButton:hover {
+  transform: scale(1.1);
+}
+
+.glowRing {
+  position: absolute;
+  z-index: -1;
+  inline-size: 1000%;
+  min-block-size: 1000%;
+  background: conic-gradient(
+    from 0 at 50% 50%,
+    var(--primary) 0deg,
+    rgb(152 162 179 / 0.1) 60deg,
+    rgb(152 162 179 / 0.1) 310deg,
+    var(--primary) 360deg
+  );
+  animation: glow-spin 3s linear infinite;
+}
+
+@keyframes glow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.glowBackground {
+  position: relative;
+  z-index: 0;
+  padding: 8px 24px;
+  border-radius: var(--radius-lg);
+  background-color: var(--surface-tint);
+}
+
+.glowTitle {
+  white-space: nowrap;
+  color: var(--white);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Source container#yieycv: .grid--auto-2 + `align-items: center`.
+   ACSS applies the grid with `!important`:
+     [class*="grid--auto"]:where(:not([class*="rows"]))
+       { display: grid !important; grid-template-columns: var(--grid-template-columns);
+         gap: var(--grid-gap); inline-size: 100% }
+   so it beats the element's own `display: flex` despite the ID specificity.
+   Two equal auto-fit columns: copyright left, socials right — and it collapses
+   to one column on its own once the tracks no longer fit, which is what
+   #brxe-hgyubc's `justify-content: center` below 478px is there for. */
+.bottomRow {
+  --column-count: 2;
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+  align-items: center;
+  gap: var(--grid-gap);
+  inline-size: 100%;
+  z-index: 10;
+}
+
+/* Tag-qualified to beat Text's .size-s (16px); the source is a literal 14px. */
+p.copyright {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.poweredBy {
+  color: var(--white);
+  transition: var(--transition-fast);
+}
+
+.poweredBy:hover {
+  color: var(--secondary);
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .columns {
+    flex-wrap: wrap;
+  }
+
+  .brandColumn {
+    inline-size: 100%;
+  }
+
+  .linkColumn {
+    inline-size: 30%;
+  }
+}
+
+/* Below mobile_portrait the three link columns diverge in the source:
+   Quick Links 50% (#brxe-wurhwy), Our Services 40% (#brxe-gbjdev), and Offices
+   no rule at all — so it keeps 30% and the addresses get very cramped.
+   Reproduced rather than evened out; logged as a source defect. */
+@media (max-width: 478px) {
+  .quickLinksColumn {
+    inline-size: 50%;
+  }
+
+  .servicesColumn {
+    inline-size: 40%;
+  }
+
+  .socials {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,65 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Measured 31px between the tab row and the panel on the live page. */
+  row-gap: var(--space-m);
+  inline-size: 100%;
+}
+
+.tabList {
+  display: flex;
+  justify-content: center;
+}
+
+/* Bricks tab titles: 10/20 padding, 250px radius, 1px #1b1b43,
+   var(--accent) fill, white label. The active tab fills var(--secondary)
+   at 14px/500. */
+.tab {
+  padding: 10px 20px;
+  /* Both tabs measure 47px tall on the live page, i.e. 14px copy — the source
+     declares the size on the active title only. */
+  font-size: 14px;
+  border: 1px solid #1b1b43;
+  border-radius: var(--radius-round);
+  background-color: var(--accent);
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.tabActive {
+  background-color: var(--secondary);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+}
+
+/* contentPadding: 24px top and bottom */
+.panel {
+  inline-size: 100%;
+  padding-block: 24px;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+/* .grid--auto-3 */
+.grid {
+  --column-count: 3;
+  --grid-gap: var(--space-m);
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+  gap: var(--grid-gap);
+  align-items: stretch;
+  inline-size: 100%;
+}

@@ -1,0 +1,8 @@
+.stars {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  justify-content: center;
+  column-gap: 12px;
+  inline-size: auto;
+}

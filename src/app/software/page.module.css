@@ -1,0 +1,33 @@
+/* Source: section#pggkuj — padding-top var(--space-xxl), padding-bottom
+   var(--space-l), background var(--accent), flex column, centred, relative.
+   PageHero's `large` spacing gives xxl/xl, so only the bottom differs.
+
+   Identical to Hardware's hero (#mzdpgn) but for one line: Hardware repeats
+   `padding-top: var(--space-xxl)` at mobile_landscape, which is a no-op since
+   it matches the base value. Nothing to reproduce. */
+.hero {
+  padding-block-end: var(--space-l);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Source: container#hmtfto — margin-top var(--space-xxl), row-gap
+   var(--space-xs). The margin-top lives on PageHero's `.inner`; only the
+   tighter row gap is page-specific. PageHero's column defaults to space-s,
+   which is Home's spacing. */
+.heroInner > * {
+  row-gap: var(--space-xs);
+}
+
+/* Source: container#npihig — grid--auto-3, gap var(--space-m), align-items
+   stretch, z-index 10.
+
+   Its section (#maftgs) also carries ACSS `owl--s`, which spaces sibling
+   children. The section has exactly one child, so it never applies; not
+   reproduced. */
+.serviceGrid {
+  align-items: stretch;
+  z-index: 10;
+}

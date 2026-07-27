@@ -1,0 +1,45 @@
+import type { ElementType, ReactNode } from "react";
+
+import styles from "./Text.module.css";
+
+export interface TextProps {
+  children: ReactNode;
+  /** Defaults to <p>. */
+  as?: "p" | "span" | "div" | "li" | "strong" | "em" | undefined;
+  /** Maps to the fluid text scale. Defaults to `s` — the theme-style default. */
+  size?: "xs" | "s" | "m" | "l" | "xl" | "xxl" | undefined;
+  /** `base` is body copy, `muted` is the #98a2b3 caption colour, `white` is emphasis. */
+  tone?: "base" | "muted" | "white" | undefined;
+  weight?: 400 | 500 | 600 | undefined;
+  className?: string | undefined;
+}
+
+/**
+ * Text — maps the Bricks `text-basic` element (290 instances).
+ *
+ * Defaults reproduce the theme style: var(--base) at var(--text-s).
+ * Note this is NOT the document body colour (#cdd2db) — Bricks overrides
+ * every text element to var(--base), and virtually all copy is in text
+ * elements. See PHASE-2 §4.2.
+ */
+export function Text({
+  children,
+  as = "p",
+  size = "s",
+  tone = "base",
+  weight,
+  className,
+}: TextProps) {
+  const Tag = as as ElementType;
+
+  return (
+    <Tag
+      className={[styles.text, styles[`size-${size}`], styles[`tone-${tone}`], className]
+        .filter(Boolean)
+        .join(" ")}
+      style={weight ? { fontWeight: weight } : undefined}
+    >
+      {children}
+    </Tag>
+  );
+}

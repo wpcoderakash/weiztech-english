@@ -1,0 +1,85 @@
+/* Measured off the live timeline at 1440. Each item is a three-column grid
+   384/192/384 inside the 960px width--xl rail (2fr / 1fr / 2fr), padded 40px
+   top and bottom, with a 3px progress rail running down the centre and a 15px
+   dot per step. There is no left/right alternation — every step reads
+   heading-left, panel-right. */
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  inline-size: 100%;
+}
+
+/* .next-timeline--progress */
+.timeline::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 50%;
+  inline-size: 3px;
+  transform: translateX(-50%);
+  /* Measured #414141 on the live rail. */
+  background-color: #414141;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  align-items: start;
+  inline-size: calc(var(--content-width) * 0.8);
+  max-inline-size: 100%;
+  margin-inline: auto;
+  padding-block: 40px;
+}
+
+.marker {
+  grid-column: 2;
+  justify-self: center;
+  inline-size: 15px;
+  block-size: 15px;
+  border-radius: var(--radius-circle);
+  background-color: var(--primary);
+}
+
+/* .timeline-content-text — space-s padding, rgba(13,13,33,0.59), 8px radius. */
+.content {
+  grid-column: 3;
+  padding: var(--space-s);
+  border-radius: var(--radius-md);
+  background-color: rgb(13 13 33 / 59%);
+}
+
+/* The heading sits in the first column, on the same row as the marker.
+   Measured 22px / 39.6px on the live page — neither the h2 nor the h3 step of
+   the scale, so it is set literally. */
+.title {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  font-size: 22px;
+  line-height: var(--text-line-height);
+}
+
+@media (max-width: 767px) {
+  .timeline::before {
+    inset-inline-start: 7px;
+  }
+
+  .step {
+    grid-template-columns: 15px 1fr;
+    column-gap: var(--space-s);
+  }
+
+  .title,
+  .content {
+    grid-column: 2;
+  }
+
+  .marker {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}

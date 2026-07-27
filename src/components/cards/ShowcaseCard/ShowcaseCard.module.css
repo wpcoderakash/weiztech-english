@@ -1,0 +1,104 @@
+/* .demo-card — 1px #1c1542, 16px radius, rgba(3,1,22,0.34), space-xs row gap,
+   `all 0.2s ease-in`. On hover the fill lifts to rgba(27,27,67,0.52). */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: var(--space-xs);
+  /* Measured 30px on all six live cards — var(--space-m), which the class
+     itself does not declare but every card resolves to. */
+  padding: var(--space-m);
+  border: 1px solid var(--tertiary);
+  border-radius: var(--radius-lg);
+  background-color: rgb(3 1 22 / 34%);
+  transition: var(--transition-fast);
+}
+
+.card:hover,
+.card:focus-within {
+  background-color: rgb(27 27 67 / 52%);
+  backdrop-filter: blur(10px);
+}
+
+/* .demo-image — 8px radius, 8px bottom margin. */
+.image {
+  inline-size: 100%;
+  block-size: auto;
+  margin-block-end: 8px;
+  border-radius: var(--radius-md);
+}
+
+/* .demo-heading / .demo-text */
+.title {
+  font-size: var(--text-l);
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-fast);
+}
+
+.body {
+  font-size: var(--text-s);
+  font-weight: 400;
+  transition: var(--transition-fast);
+}
+
+/* .demo-hover-link — covers the card, centred, blurred. Measured at
+   `opacity: 0` on the live page, so it is a hover reveal despite carrying no
+   Bricksforge timeline of its own; only the card's entrance is scripted. */
+.overlay {
+  opacity: 0;
+  transition: opacity var(--transition-duration) var(--transition-timing);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  min-block-size: 100%;
+  inline-size: 100%;
+  border-radius: var(--radius-lg);
+  background-color: rgb(27 27 67 / 70%);
+  backdrop-filter: blur(4px);
+}
+
+/* .dh-link */
+.card:hover .overlay,
+.card:focus-within .overlay {
+  opacity: 1;
+}
+
+/* .dh-link */
+.demoLink {
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+}
+
+/* The link covers the whole card so the tile is a single target. */
+.demoLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+}
+
+/* .dh-icon — 38x38 circle, #1b1b43 */
+.demoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 38px;
+  block-size: 38px;
+  border-radius: var(--radius-circle);
+  background-color: #1b1b43;
+}
+
+/* .dh-text-link — 14px/500 white with a 1px secondary underline 4px below. */
+.demoText {
+  padding-block-end: 4px;
+  border-block-end: 1px solid var(--secondary);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+}

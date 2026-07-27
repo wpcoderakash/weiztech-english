@@ -1,0 +1,32 @@
+/* Source: section#mzdpgn — padding-top var(--space-xxl), padding-bottom
+   var(--space-l). PageHero's `large` spacing gives xxl/xl, so only the bottom
+   differs. The hero also carries the intro band and the logo marquee, which is
+   why it is taller here than on Home.
+
+   The source section is `.brxe-section`'s default flex column, centred, with
+   NO row gap — the three containers sit flush and all the vertical space comes
+   from #brxe-pmlvli's own margin-top. Reproduced rather than "improved". */
+.hero {
+  padding-block-end: var(--space-l);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Source: container#pmlvli — margin-top var(--space-xxl), row-gap
+   var(--space-xs). The margin-top now lives on PageHero's `.inner`, since all
+   14 source pages repeat it; only the tighter row gap is page-specific.
+
+   PageHero's inner column defaults to space-s between heading and body, which
+   is Home's spacing. Hardware's container sets space-xs. */
+.heroInner > * {
+  row-gap: var(--space-xs);
+}
+
+/* Source: container#fsfznk — grid--auto-3, gap var(--space-m),
+   align-items stretch. */
+.categoryGrid {
+  align-items: stretch;
+  z-index: 10;
+}

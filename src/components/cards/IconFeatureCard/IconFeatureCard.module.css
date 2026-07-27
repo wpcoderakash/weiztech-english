@@ -1,0 +1,36 @@
+/* .wd3-cards — 1px #1c1542 border, rgba(3,1,22,0.34) fill, 16px radius,
+   space-m padding, space-xs row gap, `all 0.3s ease-in-out`. */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: var(--space-xs);
+  padding: var(--space-m);
+  border: 1px solid var(--tertiary);
+  border-radius: var(--radius-lg);
+  background-color: rgb(3 1 22 / 34%);
+  transition: var(--transition-base);
+}
+
+/* Bricksforge "Card Animation": hover, `to y: -5px`, 0.3s, power1.out.
+   power1.out is easeOutQuad. Phase 11 verifies against the GSAP original. */
+.card:hover,
+.card:focus-visible {
+  transform: translateY(-5px);
+}
+
+/* .wd3-heading — --text-l at 500, and `all 0.2s ease-in` on hover. */
+.title {
+  font-size: var(--text-l);
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-fast);
+}
+
+/* .wd3-text */
+/* Anchor copy — 500, as on every link. See global.css. */
+.body {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-s);
+  transition: var(--transition-fast);
+}

@@ -1,0 +1,26 @@
+/* .industry-cards — as .wd3-cards but rgba(3,1,22,0.35) and no transition. */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: var(--space-xs);
+  padding: var(--space-m);
+  border: 1px solid var(--tertiary);
+  border-radius: var(--radius-lg);
+  background-color: rgb(3 1 22 / 35%);
+}
+
+/* #brxe-vvmafe and siblings — var(--secondary) at 500. */
+.number {
+  color: var(--secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* #brxe-kvjgqs and siblings — --text-xs, not the --text-s of .wd3-text. */
+/* The card is an anchor, so its copy inherits the 500 links carry. Text
+   sets its own weight, so it has to be restated here. */
+.body {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-xs);
+}

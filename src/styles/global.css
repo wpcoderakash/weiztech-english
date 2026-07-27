@@ -1,0 +1,187 @@
+/* ============================================================================
+   GLOBAL BASE STYLES
+   Reproduces the Bricks "weiz" theme style plus the site's global custom CSS.
+   Source: wp_options.bricks_theme_styles, bricks_global_settings.customCss,
+           wp_posts custom_css #7046 (WP Customizer)
+   ========================================================================== */
+
+body {
+  background-color: var(--body-bg-color);
+  color: var(--body-color);
+  font-family: var(--text-font-family);
+  font-size: var(--text-s);
+  font-weight: var(--text-font-weight);
+  line-height: var(--text-line-height);
+  text-wrap: var(--text-text-wrap);
+}
+
+/* --------------------------------------------------------------------------
+   Headings — Rubik 600, white. Sizes come from the fluid scale.
+   -------------------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--heading-color);
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  line-height: var(--heading-line-height);
+  text-wrap: var(--heading-text-wrap);
+}
+
+h1 {
+  font-size: var(--h1);
+  line-height: var(--h1-line-height);
+}
+h2 {
+  font-size: var(--h2);
+  line-height: var(--h2-line-height);
+}
+h3 {
+  font-size: var(--h3);
+  line-height: var(--h3-line-height);
+}
+h4 {
+  font-size: var(--h4);
+  line-height: var(--h4-line-height);
+}
+h5 {
+  font-size: var(--h5);
+  line-height: var(--h5-line-height);
+}
+h6 {
+  font-size: var(--h6);
+  line-height: var(--h6-line-height);
+}
+
+/* Links carry the theme's 500. Measured by injecting a bare <a> into the live
+   page: computed font-weight 500 against the body's 400. It matters wherever
+   unstyled text sits inside a link — the Web Design page's icon-feature and
+   industry cards are anchors, and their copy renders a weight heavier than
+   plain body text, which changes where it wraps. */
+a {
+  font-weight: var(--font-weight-medium);
+}
+
+/* Body copy defaults to --base (#aea6ba), not --body-color.
+   This mirrors the theme style's override on .brxe-text / .brxe-text-basic. */
+p {
+  color: var(--text-color);
+  font-size: var(--text-s);
+}
+
+/* --------------------------------------------------------------------------
+   Stacking
+   BgGlow is position:fixed at --z-glow (1). Page content must sit above it or
+   the 50%-opacity orb washes over the text. In the original, Bricks sets
+   position:relative on sections and z-index:10 on containers to achieve this;
+   here one rule on <main> covers every page.
+   -------------------------------------------------------------------------- */
+
+main {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+/* --------------------------------------------------------------------------
+   Focus — DELIBERATE DEVIATION FROM SOURCE
+   The original disables focus indication site-wide:
+     body.bricks-is-frontend :focus { outline: none }
+   plus --focus-width: 0 and --focus-color: transparent.
+   That is a WCAG 2.4.7 failure on a site that publicly links to an
+   accessibility statement, so it is not ported. Change-log item #7.
+   To revert to source behaviour, set --focus-width: 0 in tokens.css.
+   -------------------------------------------------------------------------- */
+
+:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-sm);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbar — ported verbatim from bricks_global_settings.customCss
+   -------------------------------------------------------------------------- */
+
+::-webkit-scrollbar {
+  inline-size: 8px;
+  background-color: var(--black);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--secondary);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: none;
+  background-color: var(--black);
+}
+
+html {
+  scrollbar-color: var(--secondary) var(--black);
+}
+
+::selection {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+/* --------------------------------------------------------------------------
+   Motion gate — REPLACES the Bricksforge FOUC guard
+   Source behaviour: Bricksforge stamps .brf-prevent-fouc (opacity: 0) onto
+   ~90 elements BEFORE GSAP runs. If GSAP fails to load, those elements stay
+   invisible permanently.
+   Here the hidden state is scoped to [data-motion="ready"], which
+   MotionProvider sets only after GSAP has resolved. Net effect:
+     - GSAP loads      -> hide, then animate in (identical to source)
+     - GSAP fails/no JS-> attribute never set, content renders visible
+     - Reduced motion  -> attribute never set, content renders visible
+   See PHASE-6 §11.4.
+   -------------------------------------------------------------------------- */
+
+:root[data-motion="ready"] [data-animate] {
+  opacity: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  :root[data-motion="ready"] [data-animate] {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility helpers
+   -------------------------------------------------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,52 @@
+/* Padding patterns counted across the 57 sections in the source.
+   See PHASE-2-DESIGN-TOKENS.md §6.4.
+
+   Every rule is wrapped in :where() for zero specificity. Section always
+   receives both a spacing class and, often, a per-page className that adjusts
+   the padding (Hardware's hero ends on --space-l rather than --space-xl).
+   Those classNames live in other CSS modules, so at equal specificity the
+   winner would come down to Next.js's stylesheet injection order instead of
+   intent. :where() makes the caller's className reliably win. */
+
+/* Bricks sections are flex columns, and ACSS gives every one of them a gap:
+     automatic.css:  section:where(:not(.bricks-shape-divider)) { gap: var(--container-gap) }
+     :root { --container-gap: var(--space-xl) }
+   which resolves to 67.5px at 1440 (the clamp's max, on ACSS's 62.5% root).
+   Measured on the live Software page: every section reports row-gap 67.5px.
+
+   Sections with one container are unaffected. Where it shows is the two
+   product heroes, whose three stacked containers were sitting flush — 135px
+   of accumulated drift on /software/ before this. A section that declares its
+   own gap in the source still overrides it (Home's Services uses --space-m). */
+:where(.section) {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-xl);
+  padding-inline: var(--space-m);
+}
+
+/* 24 of 57 sections — the standard */
+:where(.default) {
+  padding-block: var(--space-xl);
+}
+
+/* 7 of 57 */
+:where(.large) {
+  padding-block-start: var(--space-xxl);
+  padding-block-end: var(--space-xl);
+}
+
+/* 5 of 57 */
+:where(.compact) {
+  padding-block: var(--space-m);
+}
+
+/* 2 of 57 */
+:where(.tight) {
+  padding-block: var(--space-l);
+}
+
+:where(.none) {
+  padding-block: 0;
+}

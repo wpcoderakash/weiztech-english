@@ -1,0 +1,43 @@
+/* Bricks base (themes/bricks/assets/css/frontend.min.css):
+     .brxe-social-icons      { display:flex; list-style:none; margin:0; padding:0 }
+     .brxe-social-icons li,
+     .brxe-social-icons li a { display:flex; flex:1; align-items:center;
+                               justify-content:center; gap:5px }
+   Page override (uploads/bricks/css/post-303.min.css):
+     #brxe-pthoom li.has-link a, #brxe-pthoom li.no-link { padding: 15px }
+     per item: color var(--base), hover var(--secondary)
+
+   The 15px is padding on each LINK, not on the list — that is what spaces the
+   three icons apart and gives the group its width. It was previously a single
+   15px pad on the <ul> plus a 15px gap, which made the block narrower than the
+   original and the hit targets smaller. */
+
+.list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list li {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.link {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 15px;
+  color: var(--base);
+  transition: all 0.2s ease-in-out;
+}
+
+.link:hover {
+  color: var(--secondary);
+}

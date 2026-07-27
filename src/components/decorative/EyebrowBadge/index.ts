@@ -1,0 +1,1 @@
+export { EyebrowBadge } from "./EyebrowBadge";

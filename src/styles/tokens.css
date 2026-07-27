@@ -1,0 +1,239 @@
+/* ============================================================================
+   DESIGN TOKENS — Weiz Technologies
+   ----------------------------------------------------------------------------
+   Transcribed from the original site. Provenance for every value:
+     - Fluid scales      uploads/automatic-css/automatic.css  (@supports clamp blocks)
+     - Colour ramps      uploads/automatic-css/automatic-variables.css
+     - Body/heading      wp_options.bricks_theme_styles  ("weiz" theme style)
+     - Surfaces, radius  wp_options.bricks_global_classes (84 project classes)
+   Full analysis: ../../PHASE-2-DESIGN-TOKENS.md
+
+   DO NOT "tidy" these numbers. Several look wrong and are faithful (see notes).
+   ========================================================================== */
+
+:root {
+  /* ==========================================================================
+     1. FLUID ENGINE
+     Root font-size is 62.5% => 1rem = 10px. Every rem below reads as x10 px.
+     Scales interpolate 320px -> 1200px viewport, then lock (min-width: 1181px).
+     ========================================================================== */
+
+  /* ==========================================================================
+     2. COLOUR
+     Only the steps the site actually references are ported. ACSS generates
+     ~230 ramp steps; 15 are used.
+     ========================================================================== */
+
+  /* Brand */
+  --primary: #8015e8;
+  --primary-hover: #9339ed;
+  --secondary: #9664ff;
+  --tertiary: #1c1542;
+  --tertiary-ultra-dark: #100c27;
+  --tertiary-dark: #291f61;
+  --tertiary-semi-dark: #392b88;
+
+  /* ACSS translucent variants. Only the ones the site actually uses are
+     carried; both verified against the live computed values. */
+  --primary-trans-70: rgb(128 21 232 / 70%);
+  --tertiary-dark-trans-20: rgb(41 31 97 / 20%);
+
+  /* Neutral */
+  --accent: #121212; /* page background */
+  --base: #aea6ba;
+  --base-light: #d8d4de;
+  --base-ultra-light: #f2f1f4;
+  --white: #fff;
+  --black: #000;
+
+  /* Semantic text
+     NOTE: two body colours are live. The document default is #cdd2db, but the
+     Bricks theme style overrides every text element to var(--base). Since
+     virtually all copy sits in text elements, --text-color is what you see. */
+  --body-bg-color: var(--accent);
+  --body-color: #cdd2db;
+  --text-color: var(--base);
+  --heading-color: var(--white);
+  --text-muted: #98a2b3;
+
+  /* Surfaces — the "glass card" system. Depth comes from translucent fills
+     over the dark background plus backdrop-filter, not from shadows. */
+  --surface-card: rgb(3 1 22 / 0.35);
+  --surface-card-alt: rgb(3 1 22 / 0.34);
+  --surface-card-hover: rgb(27 27 67 / 0.52);
+  --surface-overlay: rgb(27 27 67 / 0.5);
+  --surface-overlay-hover: rgb(3 1 24 / 0.7);
+  --surface-scrim: rgb(27 27 67 / 0.9);
+  --surface-scrim-soft: rgb(27 27 67 / 0.7);
+  --surface-field: rgb(0 0 0 / 0.6);
+  --surface-tint: #1b1b43;
+  --surface-deep: #06041d;
+
+  /* Borders */
+  --border-card: var(--tertiary);
+  --border-card-alt: #2f2f6a;
+  --border-button: #9b62ff;
+
+  /* Gradients */
+  --gradient-brand: linear-gradient(var(--primary), var(--secondary));
+  --gradient-glow: radial-gradient(50% 50% at 50% 50%, #20008e 0%, #121212 100%);
+  --gradient-glow-alt: radial-gradient(50% 50% at 50% 50%, rgb(50 31 116) 0%, rgb(1 4 26) 100%);
+
+  /* Accent */
+  --star: #ffd900;
+
+  /* ==========================================================================
+     3. TYPOGRAPHY
+     --font-rubik is injected by next/font/local in the root layout.
+     ========================================================================== */
+
+  --heading-font-family: var(--font-rubik);
+  --text-font-family: var(--font-rubik);
+  --heading-font-weight: 600;
+  --text-font-weight: 400;
+  --font-weight-medium: 500; /* used 89x — more than 400 and 600 combined */
+
+  /* Fluid type scale.
+     NOTE: --h5 and --h6 are intentionally static and smaller than body text. */
+  --h1: clamp(3.6rem, calc(2.7272727273vw + 2.7272727273rem), 6rem);
+  --h2: clamp(2.016rem, calc(0.9397981818vw + 1.7152645818rem), 2.8430224rem);
+  --h3: clamp(1.68rem, calc(0.5145454545vw + 1.5153454545rem), 2.1328rem);
+  --h4: clamp(1.4rem, calc(0.2272727273vw + 1.3272727273rem), 1.6rem);
+  --h5: clamp(1.2rem, calc(0vw + 1.2rem), 1.2rem);
+  --h6: clamp(1.1rem, calc(0vw + 1.1rem), 1.1rem);
+
+  --text-xs: clamp(1.2rem, calc(0.2272727273vw + 1.1272727273rem), 1.4rem);
+  --text-s: clamp(1.4rem, calc(0.2272727273vw + 1.3272727273rem), 1.6rem);
+  --text-m: clamp(1.6rem, calc(0.2272727273vw + 1.5272727273rem), 1.8rem);
+  --text-l: clamp(1.8rem, calc(0.2272727273vw + 1.7272727273rem), 2rem);
+  --text-xl: clamp(2rem, calc(0.2272727273vw + 1.9272727273rem), 2.2rem);
+  --text-xxl: clamp(1.8rem, calc(0.6818181818vw + 1.5818181818rem), 2.4rem);
+
+  /* Line heights.
+     NOTE: h2/h3 at 1.8 is unusually loose for headings. It is the current look.
+     h4 uses an ex-unit calc that depends on Rubik's x-height — do not hardcode. */
+  --heading-line-height: calc(4px + 2ex);
+  --h1-line-height: 1.2;
+  --h2-line-height: 1.8;
+  --h3-line-height: 1.8;
+  --h4-line-height: calc(4px + 2ex);
+  --h5-line-height: 1.2;
+  --h6-line-height: 1.2;
+
+  --text-line-height: 1.8;
+  --text-xs-line-height: 1.7;
+  --text-s-line-height: 1.7;
+  --text-m-line-height: 1.8;
+  --text-l-line-height: 1.7;
+  --text-xl-line-height: 1.7;
+  --text-xxl-line-height: 1.7;
+
+  --heading-text-wrap: pretty;
+  --text-text-wrap: pretty;
+  --text-xxl-max-width: 20ch;
+
+  /* ==========================================================================
+     4. SPACING
+     ========================================================================== */
+
+  /* NOTE: --space-xs is a DEGENERATE clamp — its min (1.35067rem) exceeds its
+     max (1.33333rem), so per spec the min always wins and the value is a
+     constant 13.507px at every viewport. Reproduced verbatim from source so the
+     computed value matches exactly. Do not "fix" the bounds. */
+  --space-xs: clamp(1.3506752532rem, calc(-0.0197067271vw + 1.3569814059rem), 1.3333333333rem);
+  --space-s: clamp(1.8004501125rem, calc(0.2267612358vw + 1.7278865171rem), 2rem);
+  --space-m: clamp(2.4rem, calc(0.6818181818vw + 2.1818181818rem), 3rem);
+  --space-l: clamp(3.1992rem, calc(1.4781818182vw + 2.7261818182rem), 4.5rem);
+  --space-xl: clamp(4.2645336rem, calc(2.8243936364vw + 3.3607276364rem), 6.75rem);
+  --space-xxl: clamp(5.6846232888rem, calc(5.0458826264vw + 4.0699408484rem), 10.125rem);
+
+  --gutter: clamp(2.4rem, calc(0.6818181818vw + 2.1818181818rem), 3rem);
+  --section-padding-x: var(--gutter);
+
+  /* The standard section: 24 sections of 57 use exactly this. */
+  --section-padding-block: var(--space-xl);
+
+  --content-gap: var(--space-m);
+  --grid-gap: var(--space-m);
+
+  /* ACSS also defines --section-space-xs..xxl. The site never uses them —
+     all vertical rhythm comes from --space-* as section padding. Not ported. */
+
+  /* ==========================================================================
+     5. LAYOUT
+     ========================================================================== */
+
+  --content-width: 120rem; /* 1200px — matches .brxe-container in the theme style */
+  --content-width-safe: min(var(--content-width), calc(100% - var(--gutter) * 2));
+
+  /* Intrinsic grids: columns collapse without media queries. */
+  --grid-min-ratio: 0.7;
+  --grid-4: repeat(4, minmax(0, 1fr));
+  --grid-5: repeat(5, minmax(0, 1fr));
+  --grid-1-2: minmax(0, 1fr) minmax(0, 2fr);
+
+  /* Header occupies no layout space — it overlays the hero.
+     All four ACSS --header-height-* variants are 0 in the source. */
+  --header-height: 0rem;
+
+  /* ==========================================================================
+     6. RADIUS
+     Derived from observed usage, not the ACSS scale (which the design ignores).
+     16px appears on 40 elements and is the signature radius.
+     ========================================================================== */
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-pill: 50px;
+  --radius-round: 250px;
+  --radius-full: 9999px;
+  --radius-circle: 100%;
+
+  /* ==========================================================================
+     7. ELEVATION
+     ACSS defines three layered shadows tinted rgb(3 1 24). No element uses
+     them — at 2–10% alpha on a #121212 background they are invisible.
+     The only real shadow on the site is this inset highlight.
+     ========================================================================== */
+
+  --shadow-inset-highlight: inset 0 0 2px rgb(255 255 255 / 0.25);
+
+  /* Backdrop blurs — a defining trait of the design. */
+  --blur-sm: blur(2px);
+  --blur-md: blur(4px);
+  --blur-lg: blur(5px);
+  --blur-xl: blur(10px);
+
+  /* ==========================================================================
+     8. MOTION
+     ========================================================================== */
+
+  --transition-duration: 0.3s;
+  --transition-timing: ease-in-out;
+  --transition-delay: 0s;
+  --transition-fast: all 0.2s ease-in;
+  --transition-base: all 0.3s ease-in-out;
+  --hover-lift: -4px;
+
+  /* ==========================================================================
+     9. Z-INDEX
+     ========================================================================== */
+
+  --z-glow: 1;
+  --z-content: 2;
+  --z-header: 100;
+  --z-backdrop: 900;
+  --z-overlay: 1000;
+
+  /* ==========================================================================
+     10. FOCUS
+     The source disables focus indication at three levels (--focus-width: 0,
+     --focus-color: transparent, and `:focus { outline: none }`). That is a
+     WCAG 2.4.7 failure, so it is NOT ported. See global.css and change-log #7.
+     ========================================================================== */
+
+  --focus-color: var(--secondary);
+  --focus-width: 2px;
+  --focus-offset: 2px;
+}

@@ -1,0 +1,80 @@
+.heroActions {
+  display: flex;
+  column-gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sectionInner {
+  row-gap: var(--space-l);
+  z-index: 10;
+}
+
+/* Source: section#kwgztb — row-gap var(--space-m) between its three
+   containers (header, 3-card grid, 2-card grid). */
+.servicesSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: var(--space-m);
+}
+
+/* Source: container#yumjkl — margin-bottom var(--space-m) on top of the
+   section's row-gap, so the header clears the cards by space-m twice over. */
+.servicesHeader {
+  margin-block-end: var(--space-m);
+  z-index: 10;
+}
+
+/* Source: container#ivvgrn — display grid, var(--grid-auto-3),
+   gap var(--space-s), align-items stretch. */
+.serviceGrid {
+  align-items: stretch;
+  z-index: 10;
+}
+
+/* Source: container#ifqnwl — var(--grid-auto-2), gap var(--space-m),
+   margin-top 12px. Two columns, so these two cards are half-width and
+   noticeably wider than the three above. */
+.serviceGridWide {
+  align-items: stretch;
+  margin-block-start: 12px;
+  z-index: 10;
+}
+
+/* Source: container ciyind — grid--auto-4, gap--s, centred.
+   Reproduces the ACSS intrinsic grid so the four cards sit on one row at
+   desktop and collapse without media queries below it. */
+.flipGrid {
+  --column-count: 4;
+  --grid-gap: var(--space-s);
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+  gap: var(--grid-gap);
+  justify-items: center;
+  align-items: center;
+  inline-size: 100%;
+}
+
+/* Source: container elztco — grid--auto-1-2 with gap--m. */
+.faqGrid {
+  display: grid;
+  grid-template-columns: var(--grid-1-2);
+  gap: var(--space-m);
+  z-index: 10;
+}
+
+@media (max-width: 767px) {
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+}

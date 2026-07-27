@@ -1,0 +1,96 @@
+/* .contact-form, plus Bricks' own form CSS.
+
+   Every metric below is measured off the live site at 1440 rather than read
+   off the class settings — the settings do not mention the wrapping row, the
+   20px group padding or the 90px textarea floor, all of which come from
+   Bricks' and ACSS's base stylesheets:
+     :where(.brxe-form) { display: flex; flex-wrap: wrap; width: 100% }
+     :where(.brxe-form) .form-group { display: flex; flex-direction: column;
+                                      padding: 0 0 20px; width: 100% }
+     #brxe-… .form-group:nth-child(2), :nth-child(3) { width: 50% } */
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  inline-size: 100%;
+  transition: var(--transition-fast);
+}
+
+/* `fieldMargin.right: 8` from the contact-form class lands on the group as
+   padding-right; the 20px bottom is Bricks' own. */
+.field {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  padding-block-end: 20px;
+  padding-inline-end: 8px;
+}
+
+/* Fields 2 and 3 — Phone and Email — share a row on all six pages. */
+.fieldHalf {
+  inline-size: 50%;
+}
+
+.input,
+.textarea {
+  inline-size: 100%;
+  /* Vertical padding is per-page: the Bricks `fieldPadding` setting is 8px on
+     Home and Software and absent on Hardware, where ACSS's own value applies
+     (0 for inputs, 10px for the textarea). */
+  padding-block: var(--field-padding-block, 0);
+  padding-inline: 12px;
+  border: 1px solid var(--border-card-alt);
+  border-radius: var(--radius-md);
+  background-color: var(--surface-field);
+  color: var(--base-ultra-light);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--text-line-height);
+}
+
+.textarea {
+  padding-block: var(--field-padding-block, 10px);
+  /* ACSS floor; with the default 2 rows it is what actually sets the height. */
+  min-block-size: 90px;
+  resize: vertical;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--base);
+}
+
+/* .submit-button-wrapper — `width: auto`, and the 18/8 margin from
+   `submitButtonMargin`. */
+.submitWrapper {
+  display: flex;
+  inline-size: 100%;
+  margin-block-start: 18px;
+  padding-inline-end: 8px;
+}
+
+.submit {
+  inline-size: 100%;
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  background-color: var(--primary);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  line-height: 2;
+  transition: var(--transition-fast);
+}
+
+.submit:hover {
+  background-color: var(--secondary);
+}
+
+/* The 50% widths carry no breakpoint in the source — Bricks emits them
+   unconditionally — so Phone and Email stay side by side on mobile too. Left
+   as the original has it rather than collapsed. */
+
+@media (max-width: 478px) {
+  .form {
+    text-align: center;
+  }
+}

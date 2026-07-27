@@ -1,0 +1,64 @@
+/* .service-page-card */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  justify-content: flex-start;
+  row-gap: var(--space-s);
+  padding: var(--space-s) var(--space-m);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface-card);
+  overflow: hidden;
+}
+
+/* Card headings are h3 at weight 500 in the source, not the 600 heading default. */
+.title {
+  font-weight: var(--font-weight-medium);
+}
+
+/* .service-hover — full-cover scrim revealed on hover */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  padding: 8px 16px;
+  border-radius: var(--radius-lg);
+  background-color: var(--surface-scrim);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+
+  /* Matches the Bricksforge hover timeline: from y 25px / opacity 0 / scale 0,
+     0.3s, circ.inOut. */
+  opacity: 0;
+  transform: translateY(25px) scale(0);
+  transition:
+    opacity 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+    transform 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+}
+
+.card:hover .overlay,
+.card:focus-within .overlay {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.cta {
+  color: var(--white);
+  font-size: var(--text-s);
+  border-block-end: 1px solid var(--primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition: opacity 0.01ms;
+    transform: none;
+  }
+}

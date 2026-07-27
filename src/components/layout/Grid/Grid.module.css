@@ -1,0 +1,43 @@
+/* Intrinsic grid patterns, transcribed from ACSS. Columns collapse without
+   media queries — see PHASE-2-DESIGN-TOKENS.md §7.2. */
+
+.grid {
+  display: grid;
+  gap: var(--grid-gap);
+  inline-size: 100%;
+}
+
+.c-auto-2,
+.c-auto-3,
+.c-auto-4 {
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+}
+
+.c-auto-2 {
+  --column-count: 2;
+}
+.c-auto-3 {
+  --column-count: 3;
+}
+.c-auto-4 {
+  --column-count: 4;
+}
+
+.c-1-2 {
+  grid-template-columns: var(--grid-1-2);
+}
+.c-4 {
+  grid-template-columns: var(--grid-4);
+}
+.c-5 {
+  grid-template-columns: var(--grid-5);
+}

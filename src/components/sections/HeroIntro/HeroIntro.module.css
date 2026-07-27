@@ -1,0 +1,62 @@
+/* Source: container#dbyfzm — direction row, align-items center,
+   column/row gap var(--space-m), z-index 10. */
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-m);
+  z-index: 10;
+}
+
+/* Source: block#mrhthm — 33% wide, row-gap xs, 1px right rule. */
+.lead {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-xs);
+  inline-size: 33%;
+  border-inline-end: 1px solid var(--tertiary-dark);
+}
+
+/* The heading is white at the h2 default weight (600) — unlike the section
+   headings elsewhere, which the source drops to 500. */
+.lead h2 {
+  color: var(--white);
+}
+
+/* Source: block#sysfpd — 67% wide. */
+.body {
+  inline-size: 67%;
+}
+
+/* Software only: the ACSS `.text--xs` the source paragraph carries contributes
+   nothing but its line-height — see HeroIntro.tsx. */
+.bodyTight p,
+p.bodyTight {
+  line-height: var(--text-xs-line-height);
+}
+
+/* mobile_landscape: both blocks full width, rule removed */
+@media (max-width: 767px) {
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .lead,
+  .body {
+    inline-size: 100%;
+    border-inline-end: none;
+  }
+}
+
+/* mobile_portrait: the source centres the lead column and its body copy */
+@media (max-width: 478px) {
+  .lead {
+    align-items: center;
+    text-align: center;
+  }
+
+  .body {
+    text-align: center;
+  }
+}

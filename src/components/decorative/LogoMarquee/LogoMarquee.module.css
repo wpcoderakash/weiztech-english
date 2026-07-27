@@ -1,0 +1,68 @@
+/* speed 24 -> 24s per loop. blurEdges with edgesWidth 20% and edgesColor
+   #121212 is reproduced with a mask so it works over any background. */
+
+.viewport {
+  position: relative;
+  inline-size: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
+}
+
+.track {
+  display: flex;
+  inline-size: max-content;
+  will-change: transform;
+  animation: marquee-horizontal 24s linear infinite;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+}
+
+/* .logo-slider-item */
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  inline-size: 150px;
+  flex: 0 0 150px;
+  padding: var(--space-xs) var(--space-s);
+}
+
+/* Bricks puts `.brxe-image` on the <img> itself, so its `img { width: 100% }`
+   rule never matches — the logo keeps its intrinsic size, capped at the slide's
+   110px content box. Measured on the live Hardware marquee: Fujitsu 82x40 and
+   Dell 85x26 at natural size, Panasonic/Samsung/Toshiba capped to 110 and
+   scaled down to 17. Where the source sets a height (three of Hardware's
+   eleven, all nine of Software's) --logo-height carries it. */
+.item img {
+  inline-size: auto;
+  max-inline-size: 100%;
+  block-size: var(--logo-height, auto);
+  object-fit: contain;
+}
+
+@keyframes marquee-horizontal {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

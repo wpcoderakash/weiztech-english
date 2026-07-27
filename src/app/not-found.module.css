@@ -1,0 +1,27 @@
+/* Bricks template 6222: container center--all, margin-top var(--space-xl),
+   row-gap var(--space-s); heading constrained to width--l. */
+
+.inner {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-s);
+  margin-block-start: var(--space-xl);
+  z-index: 10;
+}
+
+.heading {
+  inline-size: calc(var(--content-width) * 0.6);
+  max-inline-size: 100%;
+}
+
+.subtext {
+  inline-size: calc(var(--content-width) * 0.6);
+  max-inline-size: 100%;
+  margin-block-end: var(--space-xs);
+}
+
+.actions {
+  display: flex;
+  column-gap: 16px;
+}

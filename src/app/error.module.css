@@ -1,0 +1,16 @@
+.inner {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-s);
+  margin-block-start: var(--space-xl);
+  z-index: 10;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 16px;
+  row-gap: 12px;
+}

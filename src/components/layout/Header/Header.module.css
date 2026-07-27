@@ -1,0 +1,144 @@
+/* Bricks template 8.
+   Ground truth: uploads/bricks/css/post-8.min.css
+     #brxe-bhwvdp { padding: var(--space-m); z-index: 5; top: 0;
+                    position: absolute; background-color: var(--accent);
+                    backdrop-filter: blur(4px) }
+   inside Bricks' sticky wrapper (themes/bricks/.../frontend.min.css)
+     #brx-header.brx-sticky { position: fixed; left:0; right:0; top:0;
+                              width:100%; transition: background-color .2s,
+                              transform .4s }
+     #brx-header.brx-sticky.scrolling > .brxe-section
+                            { background-color: rgba(18,18,18,0.8) }
+
+   FIXED, not sticky: the header takes no space in the document flow and
+   overlays the hero — which is why --header-height is 0 site-wide and why
+   every hero carries padding-block-start: var(--space-xxl) to clear it.
+   As `position: sticky` it occupied its own height and pushed every hero
+   roughly 100px further down than the original. */
+
+.header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  inline-size: 100%;
+  z-index: var(--z-header);
+  padding: var(--space-m);
+  background-color: var(--accent);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  transition: background-color 0.2s ease-in;
+}
+
+.scrolled {
+  background-color: rgb(18 18 18 / 0.8);
+}
+
+.inner {
+  flex-direction: row;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Widths transcribed from the source: 20% / 60% / 20%.
+
+   `flex-direction: column` is essential, not cosmetic. The source block is
+   `.brxe-block` (flex COLUMN), so its `justify-content: center` centres
+   vertically and `align-items: flex-start` pins the logo to the left edge.
+   Without the column direction those two axes swap: the logo was being
+   centred horizontally inside the 240px block, pushing it 74px right of the
+   container edge and misaligning the header with the footer below it. */
+.logoBlock {
+  inline-size: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  align-self: center;
+}
+
+.logo {
+  inline-size: 92px;
+  block-size: auto;
+}
+
+.navBlock {
+  inline-size: 60%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+/* The pill behind the nav links. Custom CSS in the source:
+   background rgb(15 4 40 / 50%), backdrop-filter blur(5px). */
+.navPill {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border: 1px solid #1b1b44;
+  border-radius: var(--radius-pill);
+  background: rgb(15 4 40 / 50%);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  transition: var(--transition-fast);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  justify-content: space-between;
+  column-gap: 28px;
+}
+
+.menuTrigger {
+  display: none;
+  padding: 8px 16px;
+  border: 1px solid var(--surface-tint);
+  border-radius: var(--radius-md);
+}
+
+.langBlock {
+  inline-size: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  align-self: center;
+}
+
+/* Bricks mobile_landscape breakpoint. */
+@media (max-width: 767px) {
+  .logoBlock {
+    inline-size: 50%;
+  }
+
+  .navBlock {
+    inline-size: 50%;
+    align-items: flex-start;
+    align-self: center;
+    justify-content: flex-end;
+  }
+
+  .navPill {
+    display: none;
+  }
+
+  .menuTrigger {
+    display: block;
+  }
+
+  .langBlock {
+    display: none;
+  }
+}
+
+/* Bricks mobile_portrait breakpoint. */
+@media (max-width: 478px) {
+  .navPill {
+    padding: 12px;
+    border-radius: var(--radius-md);
+  }
+}

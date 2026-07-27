@@ -1,0 +1,54 @@
+/* In the source the heading and the nav menu are direct children of the 20%
+   block (#brxe-wurhwy / #brxe-ogmhul), which is `align-items: flex-start`.
+   This component adds a wrapper the source has no equivalent for, so the
+   wrapper must fill the column (`inline-size: 100%`) and pass the flex-start
+   alignment down — otherwise it shrinks to its content and the title's
+   underline and the links' hit area come out narrower than the original. */
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  inline-size: 100%;
+  gap: var(--space-xs);
+}
+
+/* Tag-qualified so it beats Heading's own .h3 rule regardless of which
+   stylesheet Next.js injects first — the specificity race of PHASE-9 §1.1.
+   Unqualified, these titles rendered at the h3 default (21.3px/600) against
+   the source's 14px/500. */
+h3.title {
+  color: var(--base);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  /* Measured 25.2px on the live site — the inherited 1.8, not `normal`. */
+  line-height: var(--text-line-height);
+}
+
+/* Only the first footer column carries the hairline rule in the source. */
+h3.titleUnderlined {
+  margin-block-end: 6px;
+  padding-block-end: 2px;
+  border-block-end: 0.5px solid #0f0e2d;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Source: #brxe-utmnew / #brxe-ogmhul — 4px block margins on the li,
+   transition `all 0.2s ease-in-out` (not the 0.3s base). */
+.link {
+  display: block;
+  margin-block: 4px;
+  color: var(--white);
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+}
+
+.link:hover {
+  color: var(--secondary);
+}

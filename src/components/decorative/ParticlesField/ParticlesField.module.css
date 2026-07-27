@@ -1,0 +1,8 @@
+/* The source positions next_particles absolutely to fill its section. */
+.canvas {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}

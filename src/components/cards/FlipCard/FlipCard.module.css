@@ -1,0 +1,73 @@
+/* Ground truth, in two parts.
+
+   Plugin base — plugins/nextbricks/elements/css/bc_flipbox.css
+     .bc-flipbox { width: 300px; --height: 300px; height: var(--height);
+                   perspective: 800px }
+   Bricks global class "flipcard" (id djqdvy), from the DB dump 127_0_0_1.sql
+     width 324px, height 324px, padding 12/24, radius 16, duration 1.8,
+     background-image why-choose-bg.png
+
+   plugins/nextbricks/elements/bc_flipbox.php maps those controls:
+     width      -> `width`     on .bc-flipbox
+     height     -> `--height`  on .bc-flipbox  (base CSS reads it as `height`)
+     padding    -> .bc-flipbox__flip
+     background -> .bc-flipbox__flip
+     border     -> .bc-flipbox__wrapper, .bc-flipbox__flip
+     duration   -> --trans-duration on .bc-flipbox__wrapper
+
+   So the card is 324 WIDE and 324 TALL independently — not a square that
+   tracks its own width. Only the width is squeezed: the container is a
+   grid--auto-4 inside 1200px, whose track is (1200 - 3*20)/4 = 285px, and
+   4 x 324 + gaps would overflow. The HEIGHT is untouched by that, and stays
+   324 at every breakpoint (the global class has no responsive override).
+
+   `aspect-ratio: 1 / 1` was tying the two together, which made the cards
+   285x285 — 39px short, and square where the source is portrait. */
+.scene {
+  inline-size: 100%;
+  max-inline-size: 324px;
+  block-size: 324px;
+  perspective: 800px;
+}
+
+.inner {
+  position: relative;
+  inline-size: 100%;
+  block-size: 100%;
+  transform-style: preserve-3d;
+  /* The global class overrides only the duration (1.8s). The easing is the
+     plugin default, which overshoots slightly on settle. */
+  transition: transform 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.scene:hover .inner,
+.scene:focus-within .inner {
+  transform: rotateX(180deg);
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-image: url("/images/why-choose-bg.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.back {
+  transform: rotateX(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inner {
+    transition-duration: 0.01ms;
+  }
+}
