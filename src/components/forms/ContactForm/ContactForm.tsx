@@ -1,6 +1,16 @@
+"use client";
+
+import { useActionState, useId } from "react";
 import type { CSSProperties } from "react";
 
+import { usePathname } from "next/navigation";
+
+import { submitContactForm } from "@/lib/actions/submitContactForm";
+import { CONTACT_FORM_INITIAL_STATE } from "@/lib/forms/contact-state";
+import type { FieldError, FieldName } from "@/lib/forms/schema";
+
 import styles from "./ContactForm.module.css";
+import { SubmitButton } from "./SubmitButton";
 
 export interface ContactFormProps {
   submitLabel?: string | undefined;
@@ -22,17 +32,16 @@ export interface ContactFormProps {
 /**
  * ContactForm — the standard four-field contact form used on six pages.
  *
- * PRESENTATION ONLY for now. Phase 10 adds the Server Action, Zod validation
- * derived from these field definitions, server-side Turnstile verification,
- * the mail adapter and the success/error states. The markup and styling here
- * are final, transcribed from the `.contact-form` global class and measured
- * against the live site:
- *   fields  rgba(0,0,0,0.6) fill, 1px #2f2f6a border, 8px radius, 14px/500,
- *           var(--base-ultra-light) text, 12px inline padding, 8px group gutter
- *   layout  a wrapping flex row — Phone and Email are 50% wide and share a
- *           line, which this component previously stacked
- *   submit  100% width, var(--primary) -> hover var(--secondary), 8px radius,
- *           14px/500 white, line-height 2, 18px top margin
+ * Markup and styling are transcribed from the `.contact-form` global class
+ * and measured against the live site; the layout is a wrapping flex row, so
+ * Phone and Email share a line at 50% each.
+ *
+ * Phase 10 wires it to the Server Action: `useActionState` holds the result,
+ * the fields stay uncontrolled and submit as FormData, and the status renders
+ * inline with no redirect — which is what Bricks did. Field requirements come
+ * from the source: name is optional, the other three are required. Validation
+ * is server-side, with `noValidate` so the browser does not pre-empt it and
+ * show its own inconsistent bubbles.
  */
 export function ContactForm({
   submitLabel = "Send Message",
@@ -40,8 +49,27 @@ export function ContactForm({
   phonePlaceholder = "Phone",
   fieldPaddingBlock,
 }: ContactFormProps) {
+  const [state, formAction] = useActionState(submitContactForm, CONTACT_FORM_INITIAL_STATE);
+  const pathname = usePathname();
+  const id = useId();
+
+  const errorFor = (field: FieldName) =>
+    state.errors?.find((e: FieldError) => e.field === field)?.message;
+
+  const describedBy = (field: FieldName) => (errorFor(field) ? `${id}-${field}-error` : undefined);
+
+  /* A successful submission replaces the form, as the original did. */
+  if (state.status === "success") {
+    return (
+      <p className={styles.success} role="status">
+        {state.message}
+      </p>
+    );
+  }
+
   return (
     <form
+      action={formAction}
       className={styles.form}
       noValidate
       style={
@@ -50,66 +78,112 @@ export function ContactForm({
           : undefined
       }
     >
+      {state.status === "error" && state.message ? (
+        <p className={styles.formError} role="alert">
+          {state.message}
+        </p>
+      ) : null}
+
+      <input type="hidden" name="pagePath" value={pathname} />
+
+      {/* Honeypot — hidden from people, irresistible to bots. */}
+      <div className={styles.honeypot} aria-hidden="true">
+        <label htmlFor={`${id}-company`}>Company</label>
+        <input id={`${id}-company`} name="company" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
       <div className={styles.field}>
-        <label className="visually-hidden" htmlFor="cf-name">
+        <label className="visually-hidden" htmlFor={`${id}-name`}>
           {nameLabel}
         </label>
         <input
-          id="cf-name"
+          id={`${id}-name`}
           name="name"
           type="text"
+          autoComplete="name"
           placeholder="Full name"
           className={styles.input}
+          aria-describedby={describedBy("name")}
         />
+        {errorFor("name") ? (
+          <span id={`${id}-name-error`} className={styles.fieldError}>
+            {errorFor("name")}
+          </span>
+        ) : null}
       </div>
 
       <div className={`${styles.field} ${styles.fieldHalf}`}>
-        <label className="visually-hidden" htmlFor="cf-phone">
+        <label className="visually-hidden" htmlFor={`${id}-phone`}>
           Phone
         </label>
         <input
-          id="cf-phone"
+          id={`${id}-phone`}
           name="phone"
           type="tel"
           required
+          autoComplete="tel"
           placeholder={phonePlaceholder}
           className={styles.input}
+          aria-invalid={errorFor("phone") ? true : undefined}
+          aria-describedby={describedBy("phone")}
         />
+        {errorFor("phone") ? (
+          <span id={`${id}-phone-error`} className={styles.fieldError}>
+            {errorFor("phone")}
+          </span>
+        ) : null}
       </div>
 
       <div className={`${styles.field} ${styles.fieldHalf}`}>
-        <label className="visually-hidden" htmlFor="cf-email">
+        <label className="visually-hidden" htmlFor={`${id}-email`}>
           Email
         </label>
         <input
-          id="cf-email"
+          id={`${id}-email`}
           name="email"
           type="email"
           required
+          autoComplete="email"
           placeholder="Email address"
           className={styles.input}
+          aria-invalid={errorFor("email") ? true : undefined}
+          aria-describedby={describedBy("email")}
         />
+        {errorFor("email") ? (
+          <span id={`${id}-email-error`} className={styles.fieldError}>
+            {errorFor("email")}
+          </span>
+        ) : null}
       </div>
 
       <div className={styles.field}>
-        <label className="visually-hidden" htmlFor="cf-message">
+        <label className="visually-hidden" htmlFor={`${id}-message`}>
           Message
         </label>
         <textarea
-          id="cf-message"
+          id={`${id}-message`}
           name="message"
           required
           placeholder="How can we help you?"
           className={styles.textarea}
+          aria-invalid={errorFor("message") ? true : undefined}
+          aria-describedby={describedBy("message")}
         />
+        {errorFor("message") ? (
+          <span id={`${id}-message-error`} className={styles.fieldError}>
+            {errorFor("message")}
+          </span>
+        ) : null}
       </div>
 
-      {/* Cloudflare Turnstile widget mounts here in Phase 10. */}
+      {/*
+        Turnstile mounts here once NEXT_PUBLIC_TURNSTILE_SITE_KEY is set. The
+        server already verifies the token and skips the check when no secret
+        is configured, so the form works either way.
+      */}
 
       <div className={styles.submitWrapper}>
-        <button type="submit" className={styles.submit}>
-          {submitLabel}
-        </button>
+        <SubmitButton className={styles.submit}>{submitLabel}</SubmitButton>
       </div>
     </form>
   );
