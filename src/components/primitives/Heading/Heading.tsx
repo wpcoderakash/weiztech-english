@@ -15,6 +15,8 @@ export interface HeadingProps {
   size?: HeadingLevel | undefined;
   className?: string | undefined;
   id?: string | undefined;
+  /** Animation role, read by Reveal. Phase 11. */
+  "data-anim"?: string | undefined;
 }
 
 /**
@@ -23,12 +25,23 @@ export interface HeadingProps {
  * The source's tag distribution is h2 x122, h3 x24, h1 x14, h4 x4, h5 x2.
  * Bricks defaults untagged headings to h2, so that is the default here too.
  */
-export function Heading({ children, as = "h2", size, className, id }: HeadingProps) {
+export function Heading({
+  children,
+  as = "h2",
+  size,
+  className,
+  id,
+  "data-anim": dataAnim,
+}: HeadingProps) {
   const Tag = as as ElementType;
   const visual = size ?? as;
 
   return (
-    <Tag id={id} className={[styles.heading, styles[visual], className].filter(Boolean).join(" ")}>
+    <Tag
+      id={id}
+      data-anim={dataAnim}
+      className={[styles.heading, styles[visual], className].filter(Boolean).join(" ")}
+    >
       {children}
     </Tag>
   );

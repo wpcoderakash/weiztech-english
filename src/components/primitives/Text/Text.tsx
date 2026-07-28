@@ -12,6 +12,8 @@ export interface TextProps {
   tone?: "base" | "muted" | "white" | undefined;
   weight?: 400 | 500 | 600 | undefined;
   className?: string | undefined;
+  /** Animation role, read by Reveal. Phase 11. */
+  "data-anim"?: string | undefined;
 }
 
 /**
@@ -29,11 +31,13 @@ export function Text({
   tone = "base",
   weight,
   className,
+  "data-anim": dataAnim,
 }: TextProps) {
   const Tag = as as ElementType;
 
   return (
     <Tag
+      data-anim={dataAnim}
       className={[styles.text, styles[`size-${size}`], styles[`tone-${tone}`], className]
         .filter(Boolean)
         .join(" ")}

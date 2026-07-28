@@ -24,7 +24,7 @@ export interface ServiceCardProps {
  */
 export function ServiceCard({ icon, title, body, ctaLabel, href }: ServiceCardProps) {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} data-anim="card">
       {/* iconColor is var(--primary) at 38px in the source, not white. */}
       <Icon name={icon} size="38px" color="var(--primary)" />
       <Heading as="h3" className={styles.title}>

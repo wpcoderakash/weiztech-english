@@ -71,13 +71,23 @@ export function PageHero({
       >
         <div className={styles.column}>
           {eyebrow ? (
-            <EyebrowBadge variant="hero" label={eyebrow.label} chip={eyebrow.chip} />
+            <EyebrowBadge
+              variant="hero"
+              label={eyebrow.label}
+              chip={eyebrow.chip}
+              data-anim="badge"
+            />
           ) : null}
-          <Heading as="h1" id={headingId}>
+          <Heading as="h1" id={headingId} data-anim="heading">
             {heading}
           </Heading>
           {body ? (
-            <Text size={bodySize} tone={bodyTone} className={styles[`gap-${bodyGap}`]}>
+            <Text
+              size={bodySize}
+              tone={bodyTone}
+              className={styles[`gap-${bodyGap}`]}
+              data-anim="body"
+            >
               {body}
             </Text>
           ) : null}

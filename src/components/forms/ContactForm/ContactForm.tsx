@@ -70,6 +70,7 @@ export function ContactForm({
   return (
     <form
       action={formAction}
+      data-anim="form"
       className={styles.form}
       noValidate
       style={

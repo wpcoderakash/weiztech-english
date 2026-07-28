@@ -14,6 +14,8 @@ export interface IconProps {
   /** Accessible label. Omit for purely decorative icons (default). */
   label?: string | undefined;
   className?: string | undefined;
+  /** Animation role, read by Reveal. Phase 11. */
+  "data-anim"?: string | undefined;
 }
 
 /**
@@ -23,11 +25,19 @@ export interface IconProps {
  * the original loads. Path data is extracted from those exact fonts, so
  * geometry is identical — see icons.ts.
  */
-export function Icon({ name, size = "1em", color, label, className }: IconProps) {
+export function Icon({
+  name,
+  size = "1em",
+  color,
+  label,
+  className,
+  "data-anim": dataAnim,
+}: IconProps) {
   const icon = ICONS[name];
 
   return (
     <svg
+      data-anim={dataAnim}
       viewBox={`0 0 ${icon.w} ${icon.h}`}
       fill={color ?? "currentColor"}
       className={className}

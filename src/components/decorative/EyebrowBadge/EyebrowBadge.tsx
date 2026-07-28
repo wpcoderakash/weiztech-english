@@ -10,6 +10,8 @@ export interface EyebrowBadgeProps {
   variant?: "section" | "hero" | undefined;
   /** Hero variant only — the gradient chip before the label. */
   chip?: string | undefined;
+  /** Animation role, read by Reveal. Phase 11. */
+  "data-anim"?: string | undefined;
 }
 
 /**
@@ -22,9 +24,15 @@ export interface EyebrowBadgeProps {
  *    rgba(0,0,0,0.1) fill, backdrop-filter blur(2px), and a gradient "Weiz"
  *    chip before the label.
  */
-export function EyebrowBadge({ label, icon, variant = "section", chip }: EyebrowBadgeProps) {
+export function EyebrowBadge({
+  label,
+  icon,
+  variant = "section",
+  chip,
+  "data-anim": dataAnim,
+}: EyebrowBadgeProps) {
   return (
-    <div className={[styles.badge, styles[variant]].join(" ")}>
+    <div data-anim={dataAnim} className={[styles.badge, styles[variant]].join(" ")}>
       {chip ? <span className={styles.chip}>{chip}</span> : null}
       {icon ? <Icon name={icon} size="16px" color="var(--white)" /> : null}
       <span className={styles.label}>{label}</span>

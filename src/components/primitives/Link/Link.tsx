@@ -15,6 +15,8 @@ export interface LinkProps {
   onClick?: MouseEventHandler<HTMLAnchorElement> | undefined;
   "aria-label"?: string | undefined;
   "aria-current"?: "page" | undefined;
+  /** Animation role, read by Reveal. Phase 11. */
+  "data-anim"?: string | undefined;
 }
 
 /** True for anything that leaves the site or is not a page navigation. */
@@ -54,6 +56,7 @@ export function Link({
   onClick,
   "aria-label": ariaLabel,
   "aria-current": ariaCurrent,
+  "data-anim": dataAnim,
 }: LinkProps) {
   const isExternal = external ?? isExternalHref(href);
 
@@ -71,6 +74,7 @@ export function Link({
     tabIndex,
     "aria-label": ariaLabel,
     "aria-current": ariaCurrent,
+    "data-anim": dataAnim,
     ...(onClick !== undefined ? { onClick } : {}),
   };
 

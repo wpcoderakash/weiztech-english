@@ -43,7 +43,7 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
         const isOpen = open.has(index);
         const panelId = `${baseId}-panel-${index}`;
         return (
-          <div key={item.question} className={styles.item}>
+          <div key={item.question} className={styles.item} data-anim="faq-item">
             <button
               type="button"
               className={styles.question}

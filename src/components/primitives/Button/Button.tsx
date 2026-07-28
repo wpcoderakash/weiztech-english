@@ -16,6 +16,8 @@ interface CommonProps {
   iconPosition?: "left" | "right" | undefined;
   iconSize?: string | undefined;
   className?: string | undefined;
+  /** Animation role, read by Reveal. Phase 11. */
+  "data-anim"?: string | undefined;
 }
 
 type AsLink = CommonProps & { href: string; onClick?: never; type?: never };
@@ -38,6 +40,7 @@ export function Button(props: ButtonProps) {
     iconPosition = "left",
     iconSize = "18px",
     className,
+    "data-anim": dataAnim,
   } = props;
 
   const classes = [
@@ -58,7 +61,7 @@ export function Button(props: ButtonProps) {
 
   if ("href" in props && props.href !== undefined) {
     return (
-      <Link href={props.href} className={classes}>
+      <Link href={props.href} className={classes} data-anim={dataAnim}>
         {content}
       </Link>
     );
@@ -71,11 +74,12 @@ export function Button(props: ButtonProps) {
     iconPosition: _p,
     iconSize: _s,
     className: _cl,
+    "data-anim": _da,
     ...buttonProps
   } = props as AsButton;
 
   return (
-    <button type="button" className={classes} {...buttonProps}>
+    <button type="button" className={classes} data-anim={dataAnim} {...buttonProps}>
       {content}
     </button>
   );

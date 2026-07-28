@@ -55,10 +55,13 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className={[styles.header, styles[align]].join(" ")}>
-      {eyebrow ? <EyebrowBadge label={eyebrow.label} icon={eyebrow.icon} /> : null}
+      {eyebrow ? (
+        <EyebrowBadge label={eyebrow.label} icon={eyebrow.icon} data-anim="eyebrow" />
+      ) : null}
       <Heading
         as="h2"
         id={headingId}
+        data-anim="heading"
         className={[styles[`weight-${headingWeight}`], styles[`body-${headingWidth}`]].join(" ")}
       >
         {heading}
@@ -67,6 +70,7 @@ export function SectionHeader({
         <Text
           size="s"
           tone={bodyTone}
+          data-anim="body"
           className={[styles[`body-${bodyWidth}`], bodyClassName].filter(Boolean).join(" ")}
         >
           {body}

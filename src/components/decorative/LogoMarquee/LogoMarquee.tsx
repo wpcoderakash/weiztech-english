@@ -44,6 +44,7 @@ export interface LogoMarqueeProps {
 export function LogoMarquee({ logos, logoHeight }: LogoMarqueeProps) {
   return (
     <div
+      data-anim="marquee"
       className={styles.viewport}
       style={logoHeight ? ({ "--logo-height": logoHeight } as CSSProperties) : undefined}
     >
