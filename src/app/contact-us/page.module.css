@@ -1,0 +1,49 @@
+/* Source: section#iwxcpj — padding-top var(--space-xxl), bottom
+   var(--space-xl) over the accent fill. */
+.hero {
+  padding-block-end: var(--space-xl);
+}
+
+/* div#pbenaf — a width--l block with a var(--space-s) gap. PageHero's own
+   column is the same width, but its children shrink to fit; the source's
+   heading and body fill the block. */
+.heroInner > * > * {
+  inline-size: 100%;
+}
+
+/* Source: section#exvyzt — var(--space-m) block padding over the accent fill,
+   with `purple-earth.webp` fixed at 40%, centred.
+
+   That image is served from weiz.b-cdn.net and is NOT in the WordPress export
+   — one of the 38 missing images carried since Phase 1. The section renders on
+   the flat accent fill until it is supplied. */
+.pointsSection {
+  background-color: var(--accent);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: 40%;
+  position: relative;
+}
+
+/* Source: container#dmggqd — grid--auto-3 at gap--m, align-content centre,
+   items stretch. */
+.pointsGrid {
+  --column-count: 3;
+  --grid-gap: var(--space-m);
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+  gap: var(--grid-gap);
+  align-content: center;
+  align-items: stretch;
+  z-index: 10;
+}

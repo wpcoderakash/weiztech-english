@@ -1,3 +1,5 @@
+export { ContactCard } from "./ContactCard";
+export type { ContactCardProps } from "./ContactCard";
 export { ExperienceCard } from "./ExperienceCard";
 export type { ExperienceCardProps } from "./ExperienceCard";
 export { FlipCard } from "./FlipCard";

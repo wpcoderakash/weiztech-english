@@ -1,0 +1,62 @@
+/* .contact-us-card — 1px #2f2f6a, 16px radius, space-m padding, 12px row gap,
+   `all 0.3s ease-in-out`. */
+.card {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  padding: var(--space-m);
+  border: 1px solid #2f2f6a;
+  border-radius: var(--radius-lg);
+  transition: var(--transition-base);
+}
+
+/* div#cldeps and its siblings — a 6px column. */
+.item {
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+}
+
+/* A linked icon sits in Bricks' 32px anchor line box; an unlinked one is the
+   glyph's own 24px. See ContactPoint.iconLinked. */
+.iconRow {
+  display: flex;
+  align-items: center;
+  block-size: 32px;
+}
+
+.iconRowBare {
+  block-size: 24px;
+}
+
+/* .cuc-heading — --text-m at 500 in var(--base). */
+.label {
+  color: var(--base);
+  font-size: var(--text-m);
+  font-weight: var(--font-weight-medium);
+}
+
+/* .cuc-text — --text-s white, turning --secondary on hover. */
+.value {
+  color: var(--white);
+  font-size: var(--text-s);
+  font-weight: 400;
+  transition: all 0.2s ease-in-out;
+}
+
+.item:hover .value {
+  color: var(--secondary);
+}
+
+/* mobile_portrait: the source centres the whole card. */
+@media (max-width: 478px) {
+  .card {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .item {
+    align-items: center;
+    text-align: center;
+  }
+}
