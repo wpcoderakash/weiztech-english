@@ -1,3 +1,5 @@
+export { ExperienceCard } from "./ExperienceCard";
+export type { ExperienceCardProps } from "./ExperienceCard";
 export { FlipCard } from "./FlipCard";
 export type { FlipCardProps } from "./FlipCard";
 export { IconFeatureCard } from "./IconFeatureCard";

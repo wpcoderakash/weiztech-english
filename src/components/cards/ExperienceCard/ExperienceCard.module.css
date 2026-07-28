@@ -1,0 +1,57 @@
+/* .oe-card — flex column, space-s row gap, 1px #1b1b43, 16px radius. */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  row-gap: var(--space-s);
+  border: 1px solid #1b1b43;
+  border-radius: var(--radius-lg);
+}
+
+.banner {
+  inline-size: 100%;
+}
+
+/* .oe-card-image — 16px top corners, 1px #1b1b43 bottom rule, full width. */
+.image {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  border-start-start-radius: var(--radius-lg);
+  border-start-end-radius: var(--radius-lg);
+  border-block-end: 1px solid #1b1b43;
+}
+
+/* .oe-card-main — full width, space-s inline padding, space-xs bottom margin. */
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  align-self: center;
+  row-gap: var(--space-xs);
+  inline-size: 100%;
+  padding-inline: var(--space-s);
+  margin-block-end: var(--space-xs);
+}
+
+/* .oe-card-button — transparent pill, 1px #1b1b43, --text-xs at 500. */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  padding: 6px 12px;
+  border: 1px solid #1b1b43;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: var(--white);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-fast);
+}
+
+.button:hover {
+  border-color: var(--primary);
+}

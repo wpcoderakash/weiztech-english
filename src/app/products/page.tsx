@@ -34,6 +34,7 @@ export default function ProductsPage() {
         innerClassName={styles.heroInner}
         headingId="hero-heading"
         heading={PRODUCTS_HERO.heading}
+        bodyTone="muted"
         body={PRODUCTS_HERO.body}
         after={
           <>

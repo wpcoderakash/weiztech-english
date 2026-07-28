@@ -9,6 +9,18 @@ export interface PageHeroProps {
   heading: string;
   headingId?: string | undefined;
   body?: string | undefined;
+  /**
+   * Hero body colour. Home's (`#brxe-rmnpoh`) declares none and so inherits
+   * --base; Hardware, Software, Web Design and Cybersec all set #98a2b3.
+   */
+  bodyTone?: "base" | "muted" | undefined;
+  /**
+   * Trailing margin on the hero body, which varies per page:
+   *   Home      `margin-bottom: var(--space-s)`  (#brxe-rmnpoh)
+   *   Cybersec  ACSS `.margin-bottom--xs`        (#brxe-cjsoyo)
+   *   Hardware, Software                          none
+   */
+  bodyGap?: "none" | "xs" | "s" | undefined;
   containerId?: string | undefined;
   children?: React.ReactNode | undefined;
   /** Extra classes on the section — for the per-page padding variations. */
@@ -35,6 +47,8 @@ export function PageHero({
   heading,
   headingId,
   body,
+  bodyTone = "base",
+  bodyGap = "none",
   containerId,
   children,
   className,
@@ -55,7 +69,11 @@ export function PageHero({
           <Heading as="h1" id={headingId}>
             {heading}
           </Heading>
-          {body ? <Text>{body}</Text> : null}
+          {body ? (
+            <Text tone={bodyTone} className={styles[`gap-${bodyGap}`]}>
+              {body}
+            </Text>
+          ) : null}
           {children}
         </div>
       </Container>

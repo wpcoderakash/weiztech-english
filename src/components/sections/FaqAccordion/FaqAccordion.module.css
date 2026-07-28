@@ -41,7 +41,11 @@ h3.label {
   color: var(--base);
   font-size: var(--text-s);
   font-weight: var(--font-weight-medium);
-  line-height: var(--text-s-line-height);
+  /* Inherits body's 1.8; the --text-s-line-height token (1.7) is only applied
+     by ACSS's .text--s utility, which this heading does not carry. Measured
+     29px on the live question against our 27px — 2px per row, 10px over five.
+     Same mistake as PHASE-9-SOFTWARE §1b#4. */
+  line-height: var(--text-line-height);
   transition: var(--transition-fast);
 }
 

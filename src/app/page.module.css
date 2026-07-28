@@ -5,8 +5,10 @@
   justify-content: center;
 }
 
+/* #qoeyvy — the header container only. Its own row gap is var(--space-xs);
+   the space to the flip grid below comes from the section's gap, since the
+   grid is a sibling container. */
 .sectionInner {
-  row-gap: var(--space-l);
   z-index: 10;
 }
 

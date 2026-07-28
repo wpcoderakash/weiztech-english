@@ -1,0 +1,80 @@
+/* Source: section#dyxvig — padding-top var(--space-xxl), bottom var(--space-xl),
+   accent fill, column, justify flex-end, align centre. */
+.hero {
+  padding-block-end: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Source: container#sykaxk — margin-top var(--space-xxl), row-gap space-xs. */
+.heroInner > * {
+  row-gap: var(--space-xs);
+}
+
+/* Source: section#goulvu — var(--space-m) block padding over the accent fill.
+   Section's `compact` spacing already gives space-m. */
+.marqueeSection {
+  background-color: var(--accent);
+  position: relative;
+}
+
+/* container#zajlna sets z-index 100 rather than the site's usual 10. */
+.marqueeInner {
+  z-index: 100;
+}
+
+.section {
+  background-color: var(--accent);
+}
+
+/* Source: container#viatpj — an explicit `var(--grid-4)`, not an auto-fit
+   grid: four fixed columns collapsing to 2 below 767px and 1 below 478px. */
+.capabilityGrid {
+  display: grid;
+  grid-template-columns: var(--grid-4);
+  gap: var(--space-m);
+  align-items: stretch;
+  z-index: 10;
+}
+
+@media (max-width: 767px) {
+  .capabilityGrid {
+    grid-template-columns: var(--grid-2);
+  }
+}
+
+@media (max-width: 478px) {
+  .capabilityGrid {
+    grid-template-columns: var(--grid-1);
+  }
+}
+
+/* .ce-card differs from .software-page-card in two details: it pads
+   var(--space-m) top and bottom as well as the shared var(--space-s) inline,
+   and its heading/text sit in an inner block with an 8px gap rather than the
+   4px the product tiles use. */
+.capabilityCard {
+  padding-block: var(--space-m);
+  row-gap: 8px;
+}
+
+/* Source: section#ztpzeq — the ONLY section on this page with no background
+   colour, so the body background shows through. */
+.experienceSection {
+  position: relative;
+}
+
+.experienceHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Source: container#wfsovj — var(--grid-5), stepping down to 4 / 3 / 2. */
+.experienceGrid {
+  z-index: 10;
+}

@@ -36,3 +36,16 @@
   max-inline-size: 100%;
   text-align: center;
 }
+
+/* Trailing margin under the hero body — per page, see PageHero.tsx. */
+.gap-none {
+  margin-block-end: 0;
+}
+
+.gap-xs {
+  margin-block-end: var(--space-xs);
+}
+
+.gap-s {
+  margin-block-end: var(--space-s);
+}

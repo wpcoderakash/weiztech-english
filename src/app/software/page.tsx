@@ -34,6 +34,7 @@ export default function SoftwarePage() {
         innerClassName={styles.heroInner}
         headingId="hero-heading"
         heading={SOFTWARE_HERO.heading}
+        bodyTone="muted"
         body={SOFTWARE_HERO.body}
         after={
           <>

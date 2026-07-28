@@ -36,6 +36,7 @@ export default function HomePage() {
         eyebrow={HOME_HERO.eyebrow}
         heading={HOME_HERO.heading}
         body={HOME_HERO.body}
+        bodyGap="s"
       >
         <div className={styles.heroActions}>
           <Button href={HOME_HERO.primaryCta.href} variant="primary" icon="ion-ios-paper-plane">
@@ -93,7 +94,12 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* Why Choose Us */}
+      {/*
+        Why Choose Us — source section#mwtwmq holds TWO containers, #qoeyvy
+        (the header) and #ciyind (the flip grid), so Bricks' own section gap
+        of var(--space-xl) sits between them. Collapsing them into one
+        container with a var(--space-l) row gap left the section 22px short.
+      */}
       <Section>
         <Container className={styles.sectionInner}>
           <SectionHeader
@@ -104,6 +110,8 @@ export default function HomePage() {
           >
             <StarRating />
           </SectionHeader>
+        </Container>
+        <Container>
           <div className={styles.flipGrid}>
             {HOME_WHY_CHOOSE_US.cards.map((card) => (
               <FlipCard key={card.title} title={card.title} body={card.body} />

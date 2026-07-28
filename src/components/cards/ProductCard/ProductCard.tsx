@@ -9,17 +9,24 @@ export interface ProductCardProps {
   body: string;
   /** Background photo, served from /public/images. */
   image: string;
-  href: string;
+  /** Omit for a non-interactive tile — Cybersec's `.ce-card` carries no link. */
+  href?: string | undefined;
   /**
    * Bricks `_background.position`. Every tile but one is `center center`;
    * Software's "Tailored IT Solutions" (`#wtfgbc`) is `top center`.
    */
   backgroundPosition?: string | undefined;
+  /** Per-page overrides — `.ce-card` pads and gaps differently from `.software-page-card`. */
+  className?: string | undefined;
 }
 
 /**
- * ProductCard — the `.software-page-card` grid tile. 15 instances: 9 on
- * Hardware, 6 on Software (Phase 4 recorded 8 for Hardware; the export has 9).
+ * ProductCard — the `.software-page-card` grid tile. 19 instances: 9 on
+ * Hardware, 6 on Software, and 4 on Cybersec as `.ce-card`, which is the same
+ * tile under another name — 16px radius, 224px minimum, the same #1b1b43 scrim
+ * darkening to #030118 on hover, and the same `.product-card-heading` /
+ * `.product-card-text` inside. Cybersec's carry no link, so `href` is
+ * optional and the tile renders as a div.
  *
  * The whole tile is the link, over a `cover` background photo with a
  * translucent scrim that darkens on hover. In the source the scrim is a
@@ -46,22 +53,34 @@ export function ProductCard({
   image,
   href,
   backgroundPosition = "center center",
+  className,
 }: ProductCardProps) {
-  return (
-    <Link
-      href={href}
-      className={styles.card}
-      style={
-        {
-          "--card-image": `url("${image}")`,
-          "--card-image-position": backgroundPosition,
-        } as CSSProperties
-      }
-    >
+  const cardClass = [styles.card, className].filter(Boolean).join(" ");
+  const content = (
+    <>
       <Heading as="h3" className={styles.title}>
         {title}
       </Heading>
       <Text className={styles.body}>{body}</Text>
+    </>
+  );
+
+  const style = {
+    "--card-image": `url("${image}")`,
+    "--card-image-position": backgroundPosition,
+  } as CSSProperties;
+
+  if (!href) {
+    return (
+      <div className={cardClass} style={style}>
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <Link href={href} className={cardClass} style={style}>
+      {content}
     </Link>
   );
 }
