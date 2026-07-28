@@ -1,0 +1,42 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-s);
+  inline-size: 100%;
+}
+
+.heading {
+  margin-block-start: var(--space-s);
+  color: var(--white);
+  font-weight: var(--font-weight-medium);
+}
+
+.paragraph {
+  color: var(--text-color);
+  font-size: var(--text-s);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  margin: 0;
+  padding-inline-start: var(--space-s);
+  color: var(--text-color);
+  font-size: var(--text-s);
+  list-style: disc;
+}
+
+.list li {
+  list-style: inherit;
+}
+
+.link {
+  color: var(--secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link:hover {
+  color: var(--white);
+}

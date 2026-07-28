@@ -15,6 +15,12 @@ export interface PageHeroProps {
    */
   bodyTone?: "base" | "muted" | undefined;
   /**
+   * Hero body size. `s` everywhere except `/blog/`, whose `#brxe-swqfzc`
+   * sets `font-size: var(--text-m)` inline — 18px, and unlike the ACSS
+   * `.text--m` utility an inline rule does beat the theme style.
+   */
+  bodySize?: "s" | "m" | undefined;
+  /**
    * Trailing margin on the hero body, which varies per page:
    *   Home      `margin-bottom: var(--space-s)`  (#brxe-rmnpoh)
    *   Cybersec  ACSS `.margin-bottom--xs`        (#brxe-cjsoyo)
@@ -48,6 +54,7 @@ export function PageHero({
   headingId,
   body,
   bodyTone = "base",
+  bodySize = "s",
   bodyGap = "none",
   containerId,
   children,
@@ -70,7 +77,7 @@ export function PageHero({
             {heading}
           </Heading>
           {body ? (
-            <Text tone={bodyTone} className={styles[`gap-${bodyGap}`]}>
+            <Text size={bodySize} tone={bodyTone} className={styles[`gap-${bodyGap}`]}>
               {body}
             </Text>
           ) : null}

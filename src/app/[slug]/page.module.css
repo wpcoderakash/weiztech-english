@@ -1,0 +1,45 @@
+.hero {
+  padding-block-end: var(--space-xl);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Matches the category pill on the blog index. */
+.category {
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background-color: #1b1b43;
+  color: var(--white);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+}
+
+.date {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+.bodySection {
+  background-color: var(--accent);
+}
+
+/* Post bodies read at width--l, the same measure the marketing pages use for
+   long copy. */
+.bodyInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+.bodyInner > * {
+  inline-size: calc(var(--content-width) * 0.6);
+  max-inline-size: 100%;
+}

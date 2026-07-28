@@ -1,0 +1,44 @@
+/* Source: section#lefnrc — var(--space-xxl) top AND bottom, where the other
+   heroes close on var(--space-xl). */
+.hero {
+  padding-block-end: var(--space-xxl);
+}
+
+/* container#khzvyk uses a var(--space-xs) row gap; PageHero's column
+   defaults to var(--space-s), which is Home's spacing. */
+.heroInner > * {
+  row-gap: var(--space-xs);
+}
+
+/* #brxe-ndzpvv sets width: var(--width-l) on the h1 itself. (Its body sets
+   `var(--width--l)` — the doubled-dash typo seen on Software too, which is
+   invalid and resolves to auto.) */
+.heroInner h1 {
+  inline-size: calc(var(--content-width) * 0.6);
+  max-inline-size: 100%;
+}
+
+/* Source: section#ooixes — var(--space-m) block padding over the accent. */
+.postsSection {
+  background-color: var(--accent);
+}
+
+/* Source: container#vkkaaf holding div#kiarcu — grid--auto-3, stretch. */
+.grid {
+  --column-count: 3;
+  --grid-gap: var(--space-m);
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+  gap: var(--grid-gap);
+  align-items: stretch;
+  z-index: 10;
+}

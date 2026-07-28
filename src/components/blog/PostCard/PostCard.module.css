@@ -1,0 +1,50 @@
+/* div#vsdstz — 1px #1b1b43, 16px radius, column, space-between. The card
+   lifts 4px on hover (`_transform:hover translateY -4`, 0.2s ease-in). */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #1b1b43;
+  border-radius: var(--radius-lg);
+  transition: var(--transition-fast);
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-4px);
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+}
+
+/* div#pgthey — .pad--s .margin-bottom--xs, 12px column, left-aligned. */
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 12px;
+  padding: var(--space-s);
+  margin-block-end: var(--space-xs);
+}
+
+/* span#hlhqqt — 12px/500 uppercase white on #1b1b43, 8/16, pill. */
+.category {
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background-color: #1b1b43;
+  color: var(--white);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+}
+
+/* heading#twsoms — a literal 22px at 500, white. */
+.title {
+  color: var(--white);
+  font-size: 22px;
+  font-weight: var(--font-weight-medium);
+}
