@@ -72,14 +72,14 @@ export function ProductCard({
 
   if (!href) {
     return (
-      <div className={cardClass} style={style}>
+      <div className={cardClass} style={style} data-anim="card">
         {content}
       </div>
     );
   }
 
   return (
-    <Link href={href} className={cardClass} style={style}>
+    <Link href={href} className={cardClass} style={style} data-anim="card">
       {content}
     </Link>
   );

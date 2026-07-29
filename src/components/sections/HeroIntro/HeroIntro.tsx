@@ -38,11 +38,13 @@ export function HeroIntro({ eyebrow, heading, body, bodyTight = false }: HeroInt
   return (
     <Container className={styles.row}>
       <div className={styles.lead}>
-        <EyebrowBadge label={eyebrow.label} icon={eyebrow.icon} />
-        <Heading as="h2">{heading}</Heading>
+        <EyebrowBadge label={eyebrow.label} icon={eyebrow.icon} data-anim="intro-badge" />
+        <Heading as="h2" data-anim="intro-heading">
+          {heading}
+        </Heading>
       </div>
       <div className={styles.body}>
-        <Text size="s" className={bodyTight ? styles.bodyTight : undefined}>
+        <Text size="s" className={bodyTight ? styles.bodyTight : undefined} data-anim="intro-body">
           {body}
         </Text>
       </div>

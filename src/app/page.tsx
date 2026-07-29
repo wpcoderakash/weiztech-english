@@ -79,13 +79,7 @@ export default function HomePage() {
         output was identical. It is not — that left cards 4 and 5 at one-third
         width with an empty third column.
       */}
-      <Reveal
-        steps={HOME_SERVICES_STEPS}
-        trigger="scroll"
-        scrub
-        start="top 80%"
-        end="bottom bottom"
-      >
+      <Reveal steps={HOME_SERVICES_STEPS} trigger="scroll" scrub>
         <Section id="services" className={styles.servicesSection}>
           <Container className={styles.servicesHeader}>
             <SectionHeader
@@ -123,7 +117,7 @@ export default function HomePage() {
         of var(--space-xl) sits between them. Collapsing them into one
         container with a var(--space-l) row gap left the section 22px short.
       */}
-      <Reveal steps={HOME_WHY_STEPS} trigger="scroll" scrub start="top 80%" end="bottom bottom">
+      <Reveal steps={HOME_WHY_STEPS} trigger="scroll" scrub>
         <Section>
           <Container className={styles.sectionInner}>
             <SectionHeader
@@ -146,7 +140,7 @@ export default function HomePage() {
       </Reveal>
 
       {/* FAQ */}
-      <Reveal steps={HOME_FAQ_STEPS} trigger="scroll" scrub start="top 80%" end="bottom bottom">
+      <Reveal steps={HOME_FAQ_STEPS} trigger="scroll" scrub>
         <Section>
           <Container className={styles.faqGrid}>
             <div>
@@ -167,7 +161,7 @@ export default function HomePage() {
       {/* Home's form labels its first field "Full name" and placeholders the
           phone as "Phone number", where the product pages use "Name"/"Phone".
           Its body paragraph carries no ACSS text utility, unlike theirs. */}
-      <Reveal steps={HOME_CONTACT_STEPS} trigger="scroll" scrub start="top 80%" end="bottom bottom">
+      <Reveal steps={HOME_CONTACT_STEPS} trigger="scroll" scrub>
         <ContactCTA
           {...HOME_CONTACT_CTA}
           form={{

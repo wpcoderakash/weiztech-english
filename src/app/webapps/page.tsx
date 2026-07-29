@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { IconFeatureCard, IndustryCard, ShowcaseCard } from "@/components/cards";
 import { EyebrowBadge, ParticlesField } from "@/components/decorative";
 import { Container, Grid, Section } from "@/components/layout";
+import { Reveal } from "@/components/motion";
 import { Button, Heading, Text } from "@/components/primitives";
 import {
   CheckList,
@@ -14,6 +15,7 @@ import {
   ProcessTimeline,
   SectionHeader,
 } from "@/components/sections";
+import { WEBAPPS_SERVICES_STEPS, WEBAPPS_SHOWCASE_STEPS } from "@/content/animations/pages";
 import {
   WEBAPPS_CONTACT_CTA,
   WEBAPPS_FAQ,
@@ -76,25 +78,27 @@ export default function WebappsPage() {
       </Section>
 
       {/* Services — source section#3e7d12 */}
-      <Section id="services" className={styles.section}>
-        <Container className={styles.centeredHeader}>
-          {/* #brxe-c788b1 and #brxe-byxekl both set width: var(--width-m). */}
-          <SectionHeader
-            heading={WEBAPPS_SERVICES.heading}
-            headingWidth="m"
-            body={WEBAPPS_SERVICES.body}
-            bodyWidth="m"
-            bodyTone="muted"
-          />
-        </Container>
-        <Container>
-          <Grid columns="auto-2" gap="var(--space-m)" className={styles.stretchGrid}>
-            {WEBAPPS_SERVICES.cards.map((card) => (
-              <IconFeatureCard key={card.title} {...card} />
-            ))}
-          </Grid>
-        </Container>
-      </Section>
+      <Reveal steps={WEBAPPS_SERVICES_STEPS}>
+        <Section id="services" className={styles.section}>
+          <Container className={styles.centeredHeader}>
+            {/* #brxe-c788b1 and #brxe-byxekl both set width: var(--width-m). */}
+            <SectionHeader
+              heading={WEBAPPS_SERVICES.heading}
+              headingWidth="m"
+              body={WEBAPPS_SERVICES.body}
+              bodyWidth="m"
+              bodyTone="muted"
+            />
+          </Container>
+          <Container>
+            <Grid columns="auto-2" gap="var(--space-m)" className={styles.stretchGrid}>
+              {WEBAPPS_SERVICES.cards.map((card) => (
+                <IconFeatureCard key={card.title} {...card} />
+              ))}
+            </Grid>
+          </Container>
+        </Section>
+      </Reveal>
 
       {/* Industries — source section#kgbujs. One container holding both the
           header and the grid, with a space-l gap between them. */}
@@ -126,24 +130,26 @@ export default function WebappsPage() {
       </Section>
 
       {/* Showcase — source section#450756 */}
-      <Section id="showcase" className={styles.section}>
-        <Container className={styles.centeredHeader}>
-          <SectionHeader
-            heading={WEBAPPS_SHOWCASE.heading}
-            headingWidth="m"
-            body={WEBAPPS_SHOWCASE.body}
-            bodyWidth="m"
-            bodyTone="muted"
-          />
-        </Container>
-        <Container>
-          <Grid columns="auto-3" gap="var(--space-m)" className={styles.stretchGrid}>
-            {WEBAPPS_SHOWCASE.cards.map((card) => (
-              <ShowcaseCard key={card.title} {...card} demoLabel={WEBAPPS_SHOWCASE.demoLabel} />
-            ))}
-          </Grid>
-        </Container>
-      </Section>
+      <Reveal steps={WEBAPPS_SHOWCASE_STEPS}>
+        <Section id="showcase" className={styles.section}>
+          <Container className={styles.centeredHeader}>
+            <SectionHeader
+              heading={WEBAPPS_SHOWCASE.heading}
+              headingWidth="m"
+              body={WEBAPPS_SHOWCASE.body}
+              bodyWidth="m"
+              bodyTone="muted"
+            />
+          </Container>
+          <Container>
+            <Grid columns="auto-3" gap="var(--space-m)" className={styles.stretchGrid}>
+              {WEBAPPS_SHOWCASE.cards.map((card) => (
+                <ShowcaseCard key={card.title} {...card} demoLabel={WEBAPPS_SHOWCASE.demoLabel} />
+              ))}
+            </Grid>
+          </Container>
+        </Section>
+      </Reveal>
 
       {/* Development process — source section#dsvmbh */}
       <Section id="process" className={styles.section}>

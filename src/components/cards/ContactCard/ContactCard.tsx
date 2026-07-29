@@ -23,7 +23,7 @@ export interface ContactCardProps {
  */
 export function ContactCard({ items }: ContactCardProps) {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} data-anim="card">
       {items.map((item) => (
         <Link key={item.label} href={item.href} className={styles.item}>
           <span

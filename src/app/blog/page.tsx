@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 
 import { PostCard } from "@/components/blog";
 import { Container, Section } from "@/components/layout";
+import { Reveal } from "@/components/motion";
 import { PageHero } from "@/components/sections";
+import { BLOG_HERO_STEPS, BLOG_POSTS_STEPS } from "@/content/animations/pages";
 import { POSTS } from "@/content/posts";
 
 import styles from "./page.module.css";
@@ -25,23 +27,27 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <>
-      <PageHero
-        className={styles.hero}
-        innerClassName={styles.heroInner}
-        headingId="hero-heading"
-        heading="Our Blog"
-        body="Learn about IT with our blog. We share helpful articles and news."
-        bodyTone="muted"
-        bodySize="m"
-      />
+      <Reveal steps={BLOG_HERO_STEPS}>
+        <PageHero
+          className={styles.hero}
+          innerClassName={styles.heroInner}
+          headingId="hero-heading"
+          heading="Our Blog"
+          body="Learn about IT with our blog. We share helpful articles and news."
+          bodyTone="muted"
+          bodySize="m"
+        />
+      </Reveal>
 
-      <Section spacing="compact" className={styles.postsSection}>
-        <Container className={styles.grid}>
-          {POSTS.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
-        </Container>
-      </Section>
+      <Reveal steps={BLOG_POSTS_STEPS}>
+        <Section spacing="compact" className={styles.postsSection}>
+          <Container className={styles.grid}>
+            {POSTS.map((post) => (
+              <PostCard key={post.slug} post={post} />
+            ))}
+          </Container>
+        </Section>
+      </Reveal>
     </>
   );
 }

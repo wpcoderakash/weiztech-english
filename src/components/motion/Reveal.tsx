@@ -30,7 +30,11 @@ export interface RevealProps {
    */
   trigger?: "load" | "scroll";
   scrub?: boolean;
-  /** ScrollTrigger start, in Bricksforge's own syntax. */
+  /**
+   * ScrollTrigger start. Defaults to the source's own `top+=20% bottom` —
+   * the animation begins as soon as the section is 20% into view, not when
+   * it is already 80% up the screen.
+   */
   start?: string;
   end?: string;
   className?: string;
@@ -53,7 +57,7 @@ export function Reveal({
   steps,
   trigger = "load",
   scrub = false,
-  start = "top 80%",
+  start = "top+=20% bottom",
   end = "bottom bottom",
   className,
 }: RevealProps) {
@@ -66,6 +70,31 @@ export function Reveal({
     const gsap = initGsap();
     const splits: { revert: () => void }[] = [];
 
+    /* Every element this timeline touches, so the end state can be forced. */
+    const allTargets: HTMLElement[] = [];
+
+    /**
+     * Only the properties these tweens actually animate are cleared.
+     * `clearProps: "all"` is wrong here: it strips every inline style GSAP
+     * has touched, including ones React set — the contact form's
+     * --field-padding-block and the product tiles' --card-image among them.
+     * That silently shortened two Home sections by ~30px each.
+     */
+    const animatedProps = new Set<string>();
+    for (const step of steps) {
+      for (const key of Object.keys(step.from)) {
+        if (key === "autoAlpha") {
+          animatedProps.add("opacity");
+          animatedProps.add("visibility");
+        } else if (["x", "y", "scale", "scaleX", "scaleY", "rotate"].includes(key)) {
+          animatedProps.add("transform");
+        } else {
+          animatedProps.add(key);
+        }
+      }
+    }
+    const clearProps = [...animatedProps].join(",");
+
     const ctx = gsap.context(() => {
       /* The wrapper is display:contents and so has no box of its own —
          ScrollTrigger needs a real one, which is the section inside it. */
@@ -77,9 +106,17 @@ export function Reveal({
           : {},
       );
 
+      /* Clearing inline styles on completion means a finished section carries
+         no residual opacity or transform — and nothing GSAP set can outlive
+         the animation that set it. */
+      tl.eventCallback("onComplete", () => {
+        gsap.set(allTargets, { clearProps });
+      });
+
       for (const step of steps) {
         const nodes = Array.from(el.querySelectorAll<HTMLElement>(step.target));
         if (!nodes.length) continue;
+        allTargets.push(...nodes);
 
         const vars: gsap.TweenVars = {
           ...step.from,
@@ -102,7 +139,17 @@ export function Reveal({
       }
     }, el);
 
+    /* Failsafe. If a timeline never completes — a ScrollTrigger that cannot
+       resolve, a tween that never runs — content must not be left invisible.
+       After four seconds anything still hidden is snapped to its end state.
+       Nothing on this site animates for longer than ~2s. */
+    const failsafe = window.setTimeout(() => {
+      const stuck = allTargets.filter((n) => Number(getComputedStyle(n).opacity) < 0.99);
+      if (stuck.length) gsap.set(stuck, { clearProps });
+    }, 4000);
+
     return () => {
+      window.clearTimeout(failsafe);
       ctx.revert();
       splits.forEach((s) => s.revert());
     };
