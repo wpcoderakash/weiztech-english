@@ -26,7 +26,7 @@
 }
 
 /* .price-card-text — a literal 16px, left. */
-.blurb {
+.blurb.blurb {
   font-size: 16px;
   text-align: start;
 }
@@ -38,14 +38,24 @@
 }
 
 /* Measured 28px/50.4px at 400 — not the --text-xxl of the plan name. */
-.price {
+/* Doubled selectors throughout: Text's own size/tone classes tie at (0,1,0)
+   and were winning on injection order — the 28px white price rendered at the
+   16px muted default. Screenshot-caught. */
+.price.price {
   color: var(--white);
   font-size: 28px;
   line-height: var(--text-line-height);
   font-weight: 400;
 }
 
-.period {
+/* #bad171 — the Pro card's "Get a Free Quote" slot: var(--text-l) white. */
+.freeQuote.freeQuote {
+  color: var(--white);
+  font-size: var(--text-l);
+  line-height: var(--text-line-height);
+}
+
+.period.period {
   font-size: 12px;
 }
 
@@ -85,7 +95,7 @@
   background-color: var(--tertiary-ultra-dark);
 }
 
-.featuresLabel {
+.featuresLabel.featuresLabel {
   font-size: 16px;
   text-align: start;
 }
@@ -106,7 +116,7 @@
   column-gap: 8px;
 }
 
-.featureText {
+.featureText.featureText {
   margin-block-end: 0;
   font-size: var(--text-s);
   text-align: start;

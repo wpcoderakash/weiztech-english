@@ -67,9 +67,10 @@ export default function HomePage() {
           </div>
         </PageHero>
 
-        {/* Vendor logo marquee — the last step of the hero timeline. */}
+        {/* Vendor logo marquee — the last step of the hero timeline.
+            container#ubjqnh carries z-index 100. */}
         <Section spacing="compact">
-          <Container>
+          <Container className={styles.marqueeBand}>
             <LogoMarquee logos={VENDOR_LOGOS} />
           </Container>
         </Section>

@@ -1,3 +1,8 @@
+/* container#ubjqnh — the marquee band, z-index 100 in the source. */
+.marqueeBand {
+  z-index: 100;
+}
+
 .heroActions {
   display: flex;
   column-gap: 16px;
@@ -48,6 +53,10 @@
    Reproduces the ACSS intrinsic grid so the four cards sit on one row at
    desktop and collapse without media queries below it. */
 .flipGrid {
+  /* container#ciyind — z 10, like every Home container. Without it the
+     glow's dark rim painted OVER the bright card faces once main stopped
+     being a stacking context; caught by screenshot. */
+  z-index: 10;
   --column-count: 4;
   --grid-gap: var(--space-s);
   --min: calc(

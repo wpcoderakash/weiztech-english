@@ -154,3 +154,12 @@ p.whyBody {
 .heroCta.heroCta {
   font-size: 14px;
 }
+
+/* Every source container on this page carries z-index: 10; these are the
+   ones that had no other styling and were rendered as bare <Container>s.
+   Without the lift the glow's dark rim painted over the timeline and the
+   pricing band once <main> stopped being a stacking context — caught by the
+   live-vs-local stacking audit. */
+.lifted {
+  z-index: 10;
+}

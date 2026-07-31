@@ -93,7 +93,7 @@ export default function WebappsPage() {
               bodyTone="muted"
             />
           </Container>
-          <Container>
+          <Container className={styles.lifted}>
             <Grid columns="auto-2" gap="var(--space-m)" className={styles.stretchGrid}>
               {WEBAPPS_SERVICES.cards.map((card) => (
                 <IconFeatureCard key={card.title} {...card} />
@@ -145,7 +145,7 @@ export default function WebappsPage() {
               bodyTone="muted"
             />
           </Container>
-          <Container>
+          <Container className={styles.lifted}>
             <Grid columns="auto-3" gap="var(--space-m)" className={styles.stretchGrid}>
               {WEBAPPS_SHOWCASE.cards.map((card) => (
                 <ShowcaseCard key={card.title} {...card} demoLabel={WEBAPPS_SHOWCASE.demoLabel} />
@@ -164,7 +164,7 @@ export default function WebappsPage() {
             bodyWidth="l"
           />
         </Container>
-        <Container>
+        <Container className={styles.lifted}>
           <ProcessTimeline steps={WEBAPPS_PROCESS.steps} />
         </Container>
       </Section>
@@ -179,7 +179,7 @@ export default function WebappsPage() {
             bodyWidth="l"
           />
         </Container>
-        <Container>
+        <Container className={styles.lifted}>
           <PricingTabs
             tabs={WEBAPPS_PRICING.tabs}
             plans={WEBAPPS_PRICING.plans}

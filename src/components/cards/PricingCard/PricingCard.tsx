@@ -35,7 +35,9 @@ export function PricingCard({ plan, cta }: PricingCardProps) {
         </Heading>
         <Text className={styles.blurb}>{plan.blurb}</Text>
         <div className={styles.priceRow}>
-          <Text as="span" className={styles.price}>
+          {/* #3e0058: 28px white. The Pro card has no price — its slot holds
+              "Get a Free Quote" at var(--text-l) (#bad171). */}
+          <Text as="span" className={plan.period ? styles.price : styles.freeQuote}>
             {plan.price}
           </Text>
           {plan.period ? (
@@ -44,7 +46,16 @@ export function PricingCard({ plan, cta }: PricingCardProps) {
             </Text>
           ) : null}
         </div>
-        <Button href={cta.href} variant="outline" className={styles.cta}>
+        {/* #9cb200 and siblings: ion-ios-arrow-dropright AFTER the label,
+            iconTypography 18px white. Caught by screenshot. */}
+        <Button
+          href={cta.href}
+          variant="outline"
+          icon="ion-ios-arrow-dropright"
+          iconPosition="right"
+          iconSize="18px"
+          className={styles.cta}
+        >
           {cta.label}
         </Button>
       </div>
@@ -54,7 +65,9 @@ export function PricingCard({ plan, cta }: PricingCardProps) {
         <ul className={styles.featureList}>
           {plan.features.map((feature, i) => (
             <li key={`${feature}-${i}`} className={styles.feature}>
-              <Icon name="ion-ios-checkmark" size="20px" color="var(--primary)" />
+              {/* iconSize 28px, iconColor white in the source — not the
+                  20px primary this used to render. */}
+              <Icon name="ion-ios-checkmark" size="28px" color="var(--white)" />
               <Text as="span" className={styles.featureText}>
                 {feature}
               </Text>
