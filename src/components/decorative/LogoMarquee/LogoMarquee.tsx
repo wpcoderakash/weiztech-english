@@ -51,33 +51,55 @@ export function LogoMarquee({ logos, logoHeight }: LogoMarqueeProps) {
       <div className={styles.track}>
         {[0, 1].map((copy) => (
           <div key={copy} className={styles.group} aria-hidden={copy === 1 ? true : undefined}>
-            {logos.map((logo) => (
-              <div
-                key={`${copy}-${logo.src}`}
-                className={styles.item}
-                style={
-                  logo.renderHeight
-                    ? ({ "--logo-height": logo.renderHeight } as CSSProperties)
-                    : undefined
-                }
-              >
-                <Image
-                  src={logo.src}
-                  alt={copy === 1 ? "" : logo.alt}
-                  width={logo.width}
-                  height={logo.height}
-                  /*
-                   * Eager, never lazy. The track animates horizontally, so
-                   * slides past the viewport edge never intersect and a lazy
-                   * image never STARTS loading — and an unloaded logo with
-                   * auto sizing collapses to 0x0, which at 767px silently
-                   * shrank the whole marquee band 14px (Fujitsu, the tallest
-                   * logo, was the one that never loaded). Measured.
-                   */
-                  loading="eager"
-                />
-              </div>
-            ))}
+            {logos.map((logo) => {
+              /*
+               * The img's box is computed HERE, from dimensions we already
+               * know, and set inline — so the box exists before a single
+               * byte of the image arrives. Deriving it from the loaded
+               * image (the old `block-size: var(--logo-height, auto)`)
+               * meant the whole band's height depended on image arrival:
+               * under Lighthouse's throttling the logos landed late, the
+               * band grew from 0 to 67px, and everything below shifted —
+               * a 0.4 CLS attributed to the footer.
+               *
+               * Forced-height logos get exactly height x natural ratio;
+               * natural ones get min(slot, natural width) with the ratio
+               * supplying the height. Both equal the loaded rendering, so
+               * measured parity is unchanged.
+               */
+              const forced = logo.renderHeight ?? logoHeight;
+              const imgStyle: CSSProperties = forced
+                ? {
+                    blockSize: forced,
+                    inlineSize: `calc(${forced} * ${logo.width} / ${logo.height})`,
+                    maxInlineSize: "100%",
+                  }
+                : {
+                    inlineSize: `min(100%, ${logo.width}px)`,
+                    blockSize: "auto",
+                    aspectRatio: `${logo.width} / ${logo.height}`,
+                  };
+              return (
+                <div key={`${copy}-${logo.src}`} className={styles.item}>
+                  <Image
+                    src={logo.src}
+                    alt={copy === 1 ? "" : logo.alt}
+                    width={logo.width}
+                    height={logo.height}
+                    /*
+                     * Eager, never lazy. The track animates horizontally, so
+                     * slides past the viewport edge never intersect and a lazy
+                     * image never STARTS loading — and an unloaded logo with
+                     * auto sizing collapses to 0x0, which at 767px silently
+                     * shrank the whole marquee band 14px (Fujitsu, the tallest
+                     * logo, was the one that never loaded). Measured.
+                     */
+                    loading="eager"
+                    style={imgStyle}
+                  />
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>

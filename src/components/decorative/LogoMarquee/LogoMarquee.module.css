@@ -45,10 +45,9 @@
    Dell 85x26 at natural size, Panasonic/Samsung/Toshiba capped to 110 and
    scaled down to 17. Where the source sets a height (three of Hardware's
    eleven, all nine of Software's) --logo-height carries it. */
+/* Sizing is inline per logo (see the TSX) so the box is reserved pre-load.
+   contain keeps the glyph undistorted when the 100% cap bites. */
 .item img {
-  inline-size: auto;
-  max-inline-size: 100%;
-  block-size: var(--logo-height, auto);
   object-fit: contain;
 }
 
