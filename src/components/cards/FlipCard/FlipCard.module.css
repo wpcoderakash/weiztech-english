@@ -5,7 +5,7 @@
                    perspective: 800px }
    Bricks global class "flipcard" (id djqdvy), from the DB dump 127_0_0_1.sql
      width 324px, height 324px, padding 12/24, radius 16, duration 1.8,
-     background-image why-choose-bg.png
+     background-image why-choose-bg.webp (converted from the source PNG, 79->7KB)
 
    plugins/nextbricks/elements/bc_flipbox.php maps those controls:
      width      -> `width`     on .bc-flipbox
@@ -57,7 +57,7 @@
   text-align: center;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  background-image: url("/images/why-choose-bg.png");
+  background-image: url("/images/why-choose-bg.webp");
   background-size: cover;
   background-position: center;
 }

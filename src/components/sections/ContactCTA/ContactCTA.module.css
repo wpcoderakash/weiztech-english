@@ -1,10 +1,12 @@
-/* Earth.svg, top left, 50% width, no-repeat, background-attachment: fixed
+/* Earth.webp — the source Earth.svg was a 333KB wrapper around ONE embedded
+   base64 PNG; recomposited onto the same 1416x1138 canvas at 91KB with
+   identical geometry. Top left, 50% width, no-repeat, attachment: fixed
    over var(--accent). Identical on every page carrying this band.
    Below mobile_landscape it recentres at 80%; below mobile_portrait the source
    drops the image and leaves the flat accent fill. */
 .section {
   background-color: var(--accent);
-  background-image: url("/images/Earth.svg");
+  background-image: url("/images/Earth.webp");
   background-position: top left;
   background-repeat: no-repeat;
   background-size: 50%;
