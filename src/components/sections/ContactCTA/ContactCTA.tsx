@@ -8,8 +8,8 @@ import styles from "./ContactCTA.module.css";
 
 export interface ContactCTAProps {
   /**
-   * Row gap inside the copy block. `12` is the literal Home/product-page
-   * value; `xs` is var(--space-xs), which /contact-us/ and /cybersec/ use.
+   * Row gap inside the copy block. `12` is the literal value /products/ and
+   * /software/ set; `xs` is var(--space-xs) — Home, /contact-us/, /cybersec/.
    */
   copyGap?: "12" | "xs" | undefined;
   eyebrow: string;

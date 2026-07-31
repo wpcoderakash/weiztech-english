@@ -163,6 +163,7 @@ export default function HomePage() {
           Its body paragraph carries no ACSS text utility, unlike theirs. */}
       <Reveal steps={HOME_CONTACT_STEPS} trigger="scroll" scrub>
         <ContactCTA
+          copyGap="xs"
           {...HOME_CONTACT_CTA}
           form={{
             nameLabel: "Full name",

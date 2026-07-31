@@ -52,15 +52,26 @@
   background-color: rgb(13 13 33 / 59%);
 }
 
-/* The heading sits in the first column, on the same row as the marker.
-   Measured 22px / 39.6px on the live page — neither the h2 nor the h3 step of
-   the scale, so it is set literally. */
-.title {
+/* The heading sits in the first column, on the same row as the marker,
+   CENTRED within its 384px track — live x is exactly (384 − w) / 2 in.
+   Measured 22px / 39.6px on the live page (--text-xl at its 1181px+ lock).
+
+   Doubled selector: the source tags these h2, and Heading's own `.h2` class
+   ties at (0,1,0) — without the doubling it won on injection order and
+   rendered the full 28.43px heading scale. */
+.title.title {
   grid-column: 1;
   grid-row: 1;
   align-self: start;
-  font-size: 22px;
+  justify-self: center;
+  font-size: var(--text-xl);
   line-height: var(--text-line-height);
+}
+
+/* Step copy is white on the live page, not the muted default. Doubled against
+   Text's `.tone-base`. */
+.body.body {
+  color: var(--white);
 }
 
 @media (max-width: 767px) {

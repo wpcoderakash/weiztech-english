@@ -52,10 +52,10 @@
   padding: var(--space-s);
 }
 
-/* Two real variants, both measured. Home, /products/ and /software/ set a
-   literal 12px row gap (#brxe-oogrqh); /contact-us/ and /cybersec/ keep
+/* Two real variants, both measured. /products/ and /software/ set a literal
+   12px row gap (#brxe-oogrqh); Home, /contact-us/ and /cybersec/ keep
    SectionHeader's var(--space-xs) (13.5068px). The 1.5px difference compounds
-   over two gaps into a visible 3px, so it needs the variant after all. */
+   over two gaps into a visible 3px, so it needs the variant. */
 .copy > * {
   row-gap: 12px;
 }

@@ -164,7 +164,11 @@ def measure(ws, url, width):
         m = ws.recv()
         if m.get("method") == "Page.loadEventFired" and m.get("sessionId") == sid:
             break
-    time.sleep(3.5)
+    # The rebuild's Reveal snaps anything still hidden to its end state four
+    # seconds after mount, so anything shorter than that can catch a card
+    # mid-tween and report a phantom offset. That produced a fake 14px delta
+    # on every /products/ card until it was traced.
+    time.sleep(7)
 
     ws.call(
         "Runtime.evaluate",
@@ -185,8 +189,12 @@ def measure(ws, url, width):
                 "(async () => { const h = document.body.scrollHeight;"
                 "for (let y = 0; y < h; y += 400) { window.scrollTo(0, y);"
                 "await new Promise(r => setTimeout(r, 40)); }"
-                "window.scrollTo(0, 0);"
-                "await new Promise(r => setTimeout(r, 600)); })()"
+                # Stay at the BOTTOM. Scrolling back to 0 rewinds every
+                # scrubbed timeline to its from-state (opacity 0, y+25), on
+                # the live site and the rebuild alike - sampling there
+                # reported split-text words 2-25px out that were pure
+                # animation state. At the bottom every scrub is complete.
+                "await new Promise(r => setTimeout(r, 2000)); })()"
             ),
             "awaitPromise": True,
         },

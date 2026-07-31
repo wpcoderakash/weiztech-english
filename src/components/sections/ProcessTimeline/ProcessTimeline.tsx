@@ -32,12 +32,14 @@ export function ProcessTimeline({ steps }: ProcessTimelineProps) {
     <ol className={styles.timeline}>
       {steps.map((step) => (
         <li key={step.title} className={styles.step}>
-          <Heading as="h3" className={styles.title}>
+          {/* The source tags these h2 — five sibling h2s under the section
+              h2. Reproduced rather than corrected; size comes from .title. */}
+          <Heading as="h2" className={styles.title}>
             {step.title}
           </Heading>
           <span className={styles.marker} aria-hidden="true" />
           <div className={styles.content}>
-            <Text>{step.body}</Text>
+            <Text className={styles.body}>{step.body}</Text>
           </div>
         </li>
       ))}

@@ -63,7 +63,18 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
               </span>
             </button>
 
-            <div id={panelId} className={styles.panel} hidden={!isOpen}>
+            {/*
+              Collapsed via height, not `hidden`: the NextBricks expander
+              keeps the answer in layout flow inside a clipped container, so
+              it participates in find-in-page and can animate open. `hidden`
+              (display: none) removed it entirely. `inert` keeps the closed
+              panel out of the tab order and the accessibility tree.
+            */}
+            <div
+              id={panelId}
+              className={[styles.panel, isOpen ? "" : styles.panelClosed].join(" ").trim()}
+              inert={!isOpen}
+            >
               <Text className={styles.answer}>{item.answer}</Text>
             </div>
           </div>

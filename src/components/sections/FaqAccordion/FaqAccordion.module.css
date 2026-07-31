@@ -72,6 +72,13 @@ h3.label {
 /* .bc-expander-answercont */
 .panel {
   padding: 22px 20px 16px;
+  overflow: hidden;
+  transition: block-size 0.25s ease;
+}
+
+.panelClosed {
+  block-size: 0;
+  padding-block: 0;
 }
 
 /* `contenttypography` sets only the colour (var(--base-light)); the 1.5 line

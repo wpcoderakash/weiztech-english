@@ -1,7 +1,10 @@
-/* Source: div#umolnx — grid--auto-4 with a var(--space-xs) row gap. */
+/* Source: div#umolnx — grid--auto-4 with a var(--space-xs) ROW gap only.
+   The column gap stays at the ACSS default var(--space-m): the live tracks
+   measure (585 − 30) / 2 = 277.5px, and setting both axes to xs made ours
+   285.75px — every second-column row sat 8.25px left of the original. */
 .list {
   --column-count: 4;
-  --grid-gap: var(--space-xs);
+  --grid-gap: var(--space-m);
   --min: calc(
     (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
       var(--grid-min-ratio)
@@ -13,7 +16,7 @@
 
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
-  gap: var(--grid-gap);
+  gap: var(--space-xs) var(--grid-gap);
   margin: 0;
   padding: 0;
   list-style: none;
