@@ -1,0 +1,42 @@
+/* Source section#nvfdcd pads xxl top / xl bottom; PageHero's `large` gives
+   xxl on both, so only the bottom is overridden. */
+.hero {
+  padding-block-end: var(--space-xl);
+}
+
+.bodySection {
+  background-color: var(--accent);
+}
+
+/* Container#hqesbg is `width--l` — 60% of --content-width, 720px — and keeps
+   the container's own `margin-inline: auto`, so it centres at x=360 in a
+   1440 viewport. Measured against the live page.
+
+   The width goes on the CONTAINER, not on `.bodyInner > *`. PostBody's own
+   `.body { inline-size: 100% }` has equal specificity to a `> *` rule, so
+   which one wins is decided by stylesheet injection order — which Next.js
+   derives from the import graph, not from intent. Measurement caught this
+   losing the race and rendering the body at the full 1200. */
+/* The stripped leading `<p><!-- wp:heading --></p>` was empty but not free:
+   on the live page it self-collapses to zero height while still contributing
+   its 1.2em bottom margin, pushing "Introduction" down 19.19px. Measured as a
+   constant 19px offset across the whole body once the flow was right. The
+   junk markup stays out of the content; its spacing is reproduced here.
+   `--text-s * 1.2` is the same 19.2px the paragraph margins resolve to, so it
+   tracks the type scale at every viewport. */
+.bodyInner {
+  padding-block-start: calc(var(--text-s) * 1.2);
+  inline-size: calc(var(--content-width) * 0.6);
+  max-inline-size: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 10;
+}
+
+/* The legal page's headings are 600, not the 500 PostBody uses for posts.
+   Element selectors keep this scoped to the page and beat `.heading`. */
+.bodyInner h2,
+.bodyInner h3 {
+  font-weight: 600;
+}

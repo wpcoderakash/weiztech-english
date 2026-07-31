@@ -7,6 +7,11 @@ import { SectionHeader } from "../SectionHeader";
 import styles from "./ContactCTA.module.css";
 
 export interface ContactCTAProps {
+  /**
+   * Row gap inside the copy block. `12` is the literal Home/product-page
+   * value; `xs` is var(--space-xs), which /contact-us/ and /cybersec/ use.
+   */
+  copyGap?: "12" | "xs" | undefined;
   eyebrow: string;
   heading: string;
   body: string;
@@ -35,6 +40,7 @@ export interface ContactCTAProps {
  * heading — hence the explicit weight.
  */
 export function ContactCTA({
+  copyGap = "12",
   eyebrow,
   heading,
   body,
@@ -45,7 +51,7 @@ export function ContactCTA({
   return (
     <Section className={[styles.section, styles[`end-${endSpacing}`]].join(" ")}>
       <Container className={styles.grid}>
-        <div className={styles.copy}>
+        <div className={[styles.copy, copyGap === "xs" ? styles.copyGapXs : ""].join(" ").trim()}>
           <SectionHeader
             eyebrow={{ label: eyebrow, icon: "ion-ios-bookmark" }}
             heading={heading}

@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import type { Metadata } from "next";
 
 import { BgGlow } from "@/components/decorative";
+import { CareersFormModal } from "@/components/forms";
 import { Footer, Header } from "@/components/layout";
 import { MobileMenuDrawer, SkipLink } from "@/components/navigation";
 import { OverlayProvider } from "@/components/overlays";
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <main id="main">{children}</main>
           <Footer />
           <MobileMenuDrawer />
+          <CareersFormModal />
         </OverlayProvider>
       </body>
     </html>

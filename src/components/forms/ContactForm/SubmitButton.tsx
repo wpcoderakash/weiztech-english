@@ -19,9 +19,13 @@ export interface SubmitButtonProps {
 export function SubmitButton({ children, className }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
+  /* The label sits in a <span>, as Bricks renders it. Without it the button's
+     own box is the only thing carrying the text, which made every measurement
+     pair the live label span against our button element and report a phantom
+     600px width difference on all three forms. */
   return (
     <button type="submit" className={className} disabled={pending} aria-busy={pending}>
-      {pending ? "Sending…" : children}
+      <span>{pending ? "Sending…" : children}</span>
     </button>
   );
 }

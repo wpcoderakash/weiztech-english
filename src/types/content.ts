@@ -15,6 +15,12 @@ export interface TextRun {
   b?: boolean;
   i?: boolean;
   href?: string;
+  /**
+   * A hard line break FOLLOWS this run. The legal page uses `<br />` inside a
+   * paragraph twice, both times to put a bare contact URL on its own line
+   * without opening a new paragraph — which would change the spacing.
+   */
+  br?: boolean;
 }
 
 export type PostBlock =

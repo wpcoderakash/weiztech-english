@@ -40,3 +40,21 @@
 .link:hover {
   color: var(--white);
 }
+
+/* Document flow — /privacy-policy/. The live rich text is plain block flow,
+   not a flex column: every paragraph carries `margin-block-end: 19.2px`
+   (1.2em at --text-s) and the headings carry no margin at all. Measured, and
+   it is the reason a heading sits 19.2px below the paragraph before it while
+   the paragraph after it sits flush at 0. A uniform row gap cannot express
+   that. */
+.document {
+  row-gap: 0;
+}
+
+.document .paragraph {
+  margin-block-end: 1.2em;
+}
+
+.document .heading {
+  margin-block-start: 0;
+}

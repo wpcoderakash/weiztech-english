@@ -1,0 +1,289 @@
+/* Bricks popup template 4521 — templateSettings transcribed:
+     popupBackground rgba(27,27,67,0.48)
+     popupContentBackground #1b1b43, radius 8
+     popupContentWidth 60% (90% at mobile_landscape)
+     popupContentPadding 15px, justify + align center, body scroll locked. */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background-color: rgb(27 27 67 / 0.48);
+  animation: fade-in 0.3s ease both;
+}
+
+.panel {
+  inline-size: 60%;
+  max-block-size: 100%;
+  overflow-y: auto;
+  border-radius: 8px;
+  background-color: #1b1b43;
+  /* section#sdykpy — var(--space-l) block, var(--space-m) inline. */
+  padding: var(--space-l) var(--space-m);
+}
+
+/* div#jpxfsw — `row-reverse`, so the logo renders right of the title even
+   though it comes first in the DOM. The close button is ours, not the
+   source's, and sits at the row's start. */
+.header {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  inline-size: 100%;
+}
+
+.logo {
+  inline-size: 92px;
+  block-size: auto;
+}
+
+.title {
+  flex: 1;
+}
+
+.closeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  /* row-reverse puts DOM order last = visually first; keep it at the far
+     left of the header. */
+  order: 1;
+}
+
+/* divider#couemk — height 0.5, #4747b3. */
+.divider {
+  inline-size: 100%;
+  block-size: 0.5px;
+  margin-block: var(--space-m);
+  border: 0;
+  background-color: #4747b3;
+}
+
+/* Bricks' own form CSS, the same base the contact form sits on:
+     :where(.brxe-form) { display: flex; flex-wrap: wrap; width: 100% }
+     .form-group { display: flex; flex-direction: column; padding: 0 0 20px } */
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  inline-size: 100%;
+}
+
+.field,
+.fieldHalf {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  padding-block-end: 20px;
+  /* `fieldMargin.right: 8`. */
+  padding-inline-end: 8px;
+}
+
+/* First and last name are `width: 50%` in the field definitions. */
+.fieldHalf {
+  inline-size: 50%;
+}
+
+/* `requiredAsterisk: true`. The source renders no visible <label> — the
+   placeholder carries the name — but a placeholder is not an accessible
+   name, so the labels are shown here. CHANGE #29. */
+.label {
+  margin-block-end: 6px;
+  color: var(--base);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+}
+
+/* fieldBackgroundColor var(--accent-ultra-dark), fieldBorder #2f2f6a at 8px
+   radius, fieldTypography var(--base) 14/500. */
+.input,
+.textarea {
+  inline-size: 100%;
+  padding-block: 8px;
+  padding-inline: 12px;
+  border: 1px solid #2f2f6a;
+  border-radius: 8px;
+  background-color: var(--accent-ultra-dark);
+  color: var(--base);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--text-line-height);
+}
+
+.textarea {
+  min-block-size: 90px;
+  resize: vertical;
+}
+
+/* placeholderTypography — 12px, var(--base). */
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--base);
+  font-size: 12px;
+}
+
+/* Visually hidden but still focusable and still the real control: the styled
+   label below is its button. `display: none` would take it out of the tab
+   order and break keyboard use. */
+.fileInput {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* `fileUploadButtonText` styled as the form's own submit button is, so the
+   upload reads as an action rather than an input. */
+.fileButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  padding: 8px 16px;
+  border: 1px solid #2f2f6a;
+  border-radius: 8px;
+  background-color: var(--accent-ultra-dark);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.fileButton:hover {
+  border-color: var(--primary);
+}
+
+/* Keyboard focus lands on the hidden input, so the ring has to be drawn on
+   the label that stands in for it. */
+.fileInput:focus-visible + .fileButton {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.fileName {
+  margin-block-start: 6px;
+  color: var(--base);
+  font-size: 12px;
+}
+
+/* submitButtonWidth 100%, submitButtonBackgroundColor var(--primary),
+   14/500 white at line-height 2, radius 8, hover var(--secondary). */
+.submit {
+  /* Bricks' `.bricks-button` base: a centred flex box with 0.5px letter
+     spacing. Both matter — the flex box is what gives the label span its
+     line-height-2 height of 28px, and the letter spacing is 6px across
+     "Send Message". Measured on the live button. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  inline-size: 100%;
+  margin-inline-end: 8px;
+  padding: 7px 14px;
+  border: 0;
+  border-radius: 8px;
+  background-color: var(--primary);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  line-height: 2;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.submit:hover {
+  background-color: var(--secondary);
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+/* Submission states — same treatment as the contact form. */
+.success {
+  padding: var(--space-s);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-md);
+  background-color: rgb(128 21 232 / 12%);
+  color: var(--white);
+  font-size: var(--text-s);
+}
+
+.formError {
+  inline-size: 100%;
+  margin-block-end: 12px;
+  padding: 12px;
+  border: 1px solid #b3261e;
+  border-radius: var(--radius-md);
+  background-color: rgb(179 38 30 / 12%);
+  color: var(--white);
+  font-size: var(--text-xs);
+}
+
+.fieldError {
+  display: block;
+  margin-block-start: 4px;
+  color: #ff8a80;
+  font-size: 12px;
+}
+
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  border-color: #b3261e;
+}
+
+.fileInput[aria-invalid="true"] + .fileButton {
+  border-color: #b3261e;
+}
+
+.honeypot {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Bricks `mobile_landscape` — popupContentWidth becomes 90%. */
+@media (max-width: 767px) {
+  .panel {
+    inline-size: 90%;
+  }
+
+  .fieldHalf {
+    inline-size: 100%;
+  }
+}
+
+/* CSS Modules scope @keyframes per file, so the drawer's `fade-in` is not
+   visible here — the popup's own fadeIn is declared locally. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop {
+    animation: none;
+  }
+}

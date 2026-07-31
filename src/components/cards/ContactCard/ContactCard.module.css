@@ -29,15 +29,22 @@
   block-size: 24px;
 }
 
-/* .cuc-heading — --text-m at 500 in var(--base). */
-.label {
+/* .cuc-heading — --text-m at 500 in var(--base).
+
+   Doubled selector: `Heading`'s own `.heading`/`.h3` classes tie with this one
+   at (0,1,0), so injection order rather than intent decided the winner — and
+   this was losing on BOTH axes, rendering 21.33px/600 in white instead of
+   18px/500 in var(--base). Measured against the live site. */
+.label.label {
   color: var(--base);
   font-size: var(--text-m);
   font-weight: var(--font-weight-medium);
 }
 
-/* .cuc-text — --text-s white, turning --secondary on hover. */
-.value {
+/* .cuc-text — --text-s white, turning --secondary on hover.
+   Doubled for the same reason: `Text`'s `.tone-base` was winning and painting
+   the value muted grey instead of white — the exact inverse of the label. */
+.value.value {
   color: var(--white);
   font-size: var(--text-s);
   font-weight: 400;

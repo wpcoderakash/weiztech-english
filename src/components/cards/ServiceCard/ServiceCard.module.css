@@ -14,8 +14,10 @@
   overflow: hidden;
 }
 
-/* Card headings are h3 at weight 500 in the source, not the 600 heading default. */
-.title {
+/* Card headings are h3 at weight 500 in the source (#xvtjwt), not the 600
+   heading default. Doubled selector: `Heading`'s own `.heading` ties at
+   (0,1,0) and was winning on injection order, rendering 600. */
+.title.title {
   font-weight: var(--font-weight-medium);
 }
 
@@ -50,9 +52,13 @@
   transform: translateY(0) scale(1);
 }
 
+/* The five "Learn More" links (#osbwho and siblings) are Bricks `text-link`
+   elements that set NO font-size of their own, so they take the theme
+   default for `.brxe-text-link` — which measures 18px on a 32.4px line, not
+   the 16px assumed here. Measured on the live site. */
 .cta {
   color: var(--white);
-  font-size: var(--text-s);
+  font-size: var(--text-m);
   border-block-end: 1px solid var(--primary);
 }
 

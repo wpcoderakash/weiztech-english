@@ -1,0 +1,37 @@
+/* section#zpvycx — accent background, var(--space-xxl) top.
+   🔴 SOURCE BUG, REPRODUCED. Its padding-bottom is written
+   `var(--space--xxl)` — a doubled dash, and no such variable exists (the real
+   one is `--space-xxl`). The declaration is invalid, Bricks emits no
+   fallback, and the live section therefore has `padding-bottom: 0`: the form
+   sits flush against the footer with no closing space at all. Measured, not
+   inferred — 0px, against the 67.5px PageHero would otherwise give.
+
+   Reproduced rather than corrected, because fixing it changes the page. It is
+   flagged in the phase report as a one-character fix if you want it. */
+.hero {
+  background-color: var(--accent);
+  padding-block-end: 0;
+}
+
+/* container#klrqwt sets `row-gap: var(--space-xs)` between the heading and
+   the body, tighter than PageHero's default var(--space-s). */
+.heroInner > div {
+  row-gap: var(--space-xs);
+}
+
+/* Both the h1 and the body carry ACSS `width--l` in the source, so each fills
+   the full 720px column and centres its text inside it. PageHero's column
+   sets `align-items: center`, which shrink-wraps its children instead — with
+   a heading as short as "Get a Quote" that measured 344px against the live
+   720px. Longer headings on the other pages hide the difference. */
+.heroInner > div > * {
+  inline-size: 100%;
+}
+
+/* container#gtkmmm — centred on both axes, holding the form. */
+.formContainer {
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  z-index: 10;
+}

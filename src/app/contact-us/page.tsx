@@ -55,6 +55,7 @@ export default function ContactUsPage() {
           shape as Home's, not the product pages'. */}
       <Reveal steps={CONTACT_BAND_STEPS}>
         <ContactCTA
+          copyGap="xs"
           {...CONTACT_CTA}
           form={{
             nameLabel: "Full name",

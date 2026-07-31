@@ -5,7 +5,14 @@ import { Heading, Text } from "@/components/primitives";
 import styles from "./PageHero.module.css";
 
 export interface PageHeroProps {
-  eyebrow?: { label: string; chip?: string | undefined } | undefined;
+  eyebrow?:
+    | {
+        label: string;
+        chip?: string | undefined;
+        labelSize?: string | undefined;
+        className?: string | undefined;
+      }
+    | undefined;
   heading: string;
   headingId?: string | undefined;
   body?: string | undefined;
@@ -13,7 +20,7 @@ export interface PageHeroProps {
    * Hero body colour. Home's (`#brxe-rmnpoh`) declares none and so inherits
    * --base; Hardware, Software, Web Design and Cybersec all set #98a2b3.
    */
-  bodyTone?: "base" | "muted" | undefined;
+  bodyTone?: "base" | "muted" | "white" | undefined;
   /**
    * Hero body size. `s` everywhere except `/blog/`, whose `#brxe-swqfzc`
    * sets `font-size: var(--text-m)` inline — 18px, and unlike the ACSS
@@ -75,6 +82,8 @@ export function PageHero({
               variant="hero"
               label={eyebrow.label}
               chip={eyebrow.chip}
+              labelSize={eyebrow.labelSize}
+              className={eyebrow.className}
               data-anim="badge"
             />
           ) : null}

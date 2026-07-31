@@ -212,3 +212,66 @@ export const BLOG_HERO_STEPS: RevealStep[] = [
 export const BLOG_POSTS_STEPS: RevealStep[] = [
   { target: "[data-anim=card]", from: { y: "25px", opacity: 0 }, duration: 1 },
 ];
+
+/* ── Careers /careers/ ──────────────────────────────────────────────────── */
+
+/** [36] pageLoad on section#zgwldk. */
+export const CAREERS_HERO_STEPS: RevealStep[] = [
+  { target: "[data-anim=badge]", from: { opacity: 0, y: "15px" }, duration: 0.3 },
+  {
+    target: "[data-anim=heading]",
+    from: { y: "25px", opacity: 0 },
+    duration: 0.5,
+    splitWords: true,
+  },
+  { target: "[data-anim=body]", from: { y: "25px", opacity: 0 }, duration: 0.3 },
+];
+
+/**
+ * [37] pageLoad on heading#xpnhbd.
+ *
+ * The four benefit tiles are four separate steps in the source, at absolute
+ * timeline positions 0.7 / 0.9 / 1.1 / 1.3 — evenly spaced, so one step
+ * starting at 0.7 with a 0.2 stagger is the same timeline.
+ */
+export const CAREERS_INTRO_STEPS: RevealStep[] = [
+  {
+    target: "[data-anim=intro-heading]",
+    from: { y: "25px", opacity: 0 },
+    duration: 0.5,
+    splitWords: true,
+  },
+  { target: "[data-anim=intro-body]", from: { y: "25px", opacity: 0 }, duration: 0.3 },
+  {
+    target: "[data-anim=benefit]",
+    from: { y: "25px", opacity: 0 },
+    duration: 0.3,
+    position: 0.7,
+    stagger: 0.2,
+  },
+];
+
+/**
+ * [38] pageLoad on section#soskor. All three careers timelines are pageLoad;
+ * this one also carries `scrollStart: "+=20% bottom"`, which Bricksforge
+ * ignores for a pageLoad trigger — the section animates on load even though
+ * it sits below the fold, so by the time it is scrolled to it has finished.
+ * Reproduced rather than "fixed" into a scroll trigger.
+ *
+ * Six cards at 0.4 through 1.4, evenly spaced by 0.2.
+ */
+export const CAREERS_POSITIONS_STEPS: RevealStep[] = [
+  {
+    target: "[data-anim=heading]",
+    from: { y: "25px", opacity: 0 },
+    duration: 0.5,
+    splitWords: true,
+  },
+  {
+    target: "[data-anim=job-card]",
+    from: { y: "25px", opacity: 0 },
+    duration: 0.3,
+    position: 0.4,
+    stagger: 0.2,
+  },
+];

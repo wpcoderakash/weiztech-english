@@ -1,0 +1,170 @@
+/* Source section#zgwldk pads xxl top / xl bottom, like the other heroes. */
+.hero {
+  padding-block-end: var(--space-xl);
+}
+
+/* div#potozn — this page's eyebrow pill is NOT the shared hero badge. It uses
+   a solid #0b0723 fill with a #1c1542 border and no backdrop blur, and its
+   padding is 6/16/6/8 rather than 6/18/6/6. The two paddings sum to the same
+   24px, so the pill is the same width — but the 2px difference on the left
+   moved everything inside it, which is what measurement caught. */
+.heroBadge {
+  padding: 6px 16px 6px 8px;
+  border-color: #1c1542;
+  background-color: #0b0723;
+  backdrop-filter: none;
+}
+
+/* section#icnbwl — var(--space-xl) block, var(--space-m) inline, bg accent. */
+.introSection {
+  background-color: var(--accent);
+}
+
+/* container#yflghw — a row, centre-aligned, var(--space-m) both gaps. */
+.introRow {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-m);
+  z-index: 10;
+}
+
+/* block#pamxca 40% wide, wrapping div#ppptsw: column, flex-start,
+   ACSS pad--s, var(--space-xs) row gap. */
+.introCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: var(--space-xs);
+  inline-size: 40%;
+  padding: var(--space-s);
+}
+
+/* text-basic#sqswec carries ACSS `text--xs`, which sets BOTH font-size and
+   line-height — but only the line-height survives: the theme style's
+   `.brxe-text-basic { font-size: var(--text-s) }` loads after ACSS and wins
+   at equal specificity. Measured on the live page as 16px copy on a 27.2px
+   pitch, i.e. --text-s at --text-xs-line-height. The utility genuinely does
+   not change the font size here. */
+.introBody.introBody {
+  line-height: var(--text-xs-line-height);
+}
+
+/* block#tmjbum — 60% wide, ACSS `col-count--2`.
+   The element ALSO sets `display: flex; flex-direction: column`, which should
+   make `column-count` inert — but measurement says otherwise: on the live
+   page the four tiles sit in two columns of ~323px at two rows. The ACSS
+   utility wins, so multicol is what is reproduced here. Read from the JSON
+   alone this looks like a vertical stack; it is not. */
+.benefits {
+  column-count: 2;
+  column-gap: 0;
+  inline-size: 60%;
+}
+
+/* div#ualfyp and siblings — ACSS pad--xs, var(--space-xs) row gap.
+   `break-inside: avoid` keeps a tile from splitting across the two columns. */
+.benefit {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-xs);
+  padding: var(--space-xs);
+  break-inside: avoid;
+}
+
+/* All four tiles carry DIFFERENT borders and padding — they are not a
+   repeated card. Between them they draw a cross: a vertical rule down the
+   column boundary (tiles 1 and 2 border-right) and a horizontal rule through
+   each column (tile 2 border-top, tile 3 border-bottom). Tiles 3 and 4, the
+   right-hand column, take var(--space-s) of left padding instead of the
+   ACSS var(--space-xs), which is what sets them 6px further in.
+
+   Transcribed per element: #ualfyp, #enotcq, #naewxt, #gaxptt. Applying one
+   uniform border-right to all four — the obvious reading — measured wrong on
+   both right-hand tiles. */
+.benefit:nth-child(1) {
+  border-right: 1px solid var(--tertiary-dark);
+}
+
+.benefit:nth-child(2) {
+  border-block-start: 1px solid var(--tertiary-dark);
+  border-right: 1px solid var(--tertiary-dark);
+}
+
+.benefit:nth-child(3) {
+  border-block-end: 1px solid var(--tertiary-dark);
+  padding-inline-start: var(--space-s);
+}
+
+.benefit:nth-child(4) {
+  padding-inline-start: var(--space-s);
+}
+
+/* heading#ftnoai — 18/500, dropping to 14 at mobile_portrait.
+   Doubled selector: Heading's own `.h3` class carries the same specificity,
+   so at (0,1,0) the winner would be decided by stylesheet injection order
+   rather than intent. Measurement caught this rendering at 21.3px/600. */
+.benefitTitle.benefitTitle {
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+}
+
+/* text-basic#prcnif — a flat 14px, not a token. Doubled for the same reason
+   as .benefitTitle; it was rendering at Text's default 16px. */
+.benefitBody.benefitBody {
+  font-size: 14px;
+}
+
+/* section#soskor — var(--space-xl) block, var(--space-s) inline. */
+.positionsSection {
+  background-color: var(--accent);
+  padding-inline: var(--space-s);
+}
+
+.positionsHeader {
+  z-index: 10;
+}
+
+/* container#jqdkho — ACSS grid--auto-2 with var(--space-m) gap and stretched
+   items, so the two columns keep equal heights. */
+.positionsGrid {
+  --column-count: 2;
+  --min: calc(
+    (var(--content-width) - ((var(--column-count) - 1) * var(--grid-gap))) / var(--column-count) *
+      var(--grid-min-ratio)
+  );
+  --min-formula: min(
+    100%,
+    max(var(--min), (100% - (var(--column-count) - 1) * var(--grid-gap)) / var(--column-count))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-formula), 1fr));
+  align-items: stretch;
+  gap: var(--space-m);
+  inline-size: 100%;
+  z-index: 10;
+}
+
+/* Bricks `mobile_landscape` — both blocks go full width. */
+@media (max-width: 767px) {
+  .introRow {
+    flex-direction: column;
+  }
+
+  .introCopy,
+  .benefits {
+    inline-size: 100%;
+  }
+}
+
+/* Bricks `mobile_portrait`. */
+@media (max-width: 478px) {
+  .benefitTitle {
+    font-size: 14px;
+  }
+
+  .positionsHeader {
+    align-items: center;
+    text-align: center;
+  }
+}

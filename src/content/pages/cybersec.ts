@@ -48,26 +48,39 @@ export const CYBERSEC_LOGOS = [
  * minimum, same scrim and hover), reusing `.product-card-heading` and
  * `.product-card-text`. They carry no link.
  */
+/**
+ * The four `.ce-card` tiles.
+ *
+ * `innerWrap` is not styling taste — it is per-card markup. Three of the four
+ * wrap their heading and text in an inner block, which stretches both to the
+ * same width (the wider of the two, capped at the card's content box); "App
+ * Security Test" does not, so its heading and text size independently.
+ * Measured on the live page: card 1 is 207/207, card 2 is 169/139.
+ */
 export const CYBERSEC_CAPABILITIES = [
   {
     title: "Website Security Test",
     body: "Code review and OSINT",
     image: "/images/Web-Security.webp",
+    innerWrap: true,
   },
   {
     title: "App Security Test",
     body: "iOS and Android apps",
     image: "/images/Mobilesec.webp",
+    innerWrap: false,
   },
   {
     title: "Network Security Test",
     body: "A complete test of your network",
     image: "/images/InfSec.webp",
+    innerWrap: true,
   },
   {
     title: "Cloud Data Security",
     body: "Stopping bad things from happening to your data",
     image: "/images/Overview-Cyber-Security.webp",
+    innerWrap: true,
   },
 ] as const;
 

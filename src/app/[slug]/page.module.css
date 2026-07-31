@@ -1,45 +1,110 @@
+/* The post hero closes with var(--space-l) — 45px — not the var(--space-xl)
+   the marketing heroes use. Measured. */
 .hero {
-  padding-block-end: var(--space-xl);
+  padding-block-end: var(--space-l);
 }
 
+/* `.brxe-post-meta` — an 18px flex row with a 20px column gap in
+   var(--body-color) (#cdd2db). Measured. */
 .meta {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  column-gap: 20px;
   flex-wrap: wrap;
 }
 
-/* Matches the category pill on the blog index. */
-.category {
-  padding: 8px 16px;
-  border-radius: var(--radius-pill);
-  background-color: #1b1b43;
-  color: var(--white);
-  font-size: 12px;
-  font-weight: var(--font-weight-medium);
-  text-transform: uppercase;
+.metaItem,
+.separator {
+  color: var(--body-color);
+  font-size: var(--text-m);
 }
 
-.date {
-  color: var(--text-muted);
-  font-size: var(--text-xs);
+/* The slash between the two items is var(--primary), not the text colour. */
+.separator {
+  color: var(--primary);
+}
+
+/* The post hero column is width--xl (960px), not the width--l every marketing
+   hero uses. Only visible on a title long enough to wrap — "Power Up on the
+   Go: Car Voltage Converters" broke a line early at 720px. */
+.heroInner > div {
+  inline-size: calc(var(--content-width) * 0.8);
 }
 
 .bodySection {
+  padding-block: var(--space-xs) var(--space-m);
   background-color: var(--accent);
 }
 
-/* Post bodies read at width--l, the same measure the marketing pages use for
-   long copy. */
+/* The post body is an <article class="pad--s width--xl"> in the source, not
+   width--l: 960px (0.8 x --content-width) with ACSS pad--s (20px), centred in
+   the 1200px container — so the copy itself reads at 920px starting at x=260.
+   Measured; the earlier width--l assumption rendered it at the full 1200. */
 .bodyInner {
+  inline-size: calc(var(--content-width) * 0.8);
+  max-inline-size: 100%;
+  /* ACSS pad--s, plus the 19.2px contributed by the source's leading
+     EMPTY `<p class="brxe-text-basic">` — the excerpt slot, which every
+     post renders blank. It self-collapses to zero height but still emits
+     its 1.2em bottom margin, exactly as on the legal page. */
+  padding: var(--space-s);
+  padding-block-start: calc(var(--space-s) + var(--text-s) * 1.2);
   display: flex;
   flex-direction: column;
-  align-items: center;
   z-index: 10;
 }
 
-.bodyInner > * {
-  inline-size: calc(var(--content-width) * 0.6);
-  max-inline-size: 100%;
+/* Bricks' `.brxe-div` base is a flex column with `align-items: flex-start`,
+   so a heading or a paragraph short enough to fit one line shrink-wraps to
+   its text rather than filling the 920px measure.
+
+   This has to land on PostBody's own `.body` — the flex column that actually
+   holds the blocks — not on the container above it, which only ever has the
+   one full-width child. The legal page is the opposite case and must NOT get
+   this: there the blocks sit inside a single `.brxe-text` block, so they are
+   normal block flow and do fill their measure. */
+.bodyInner > div {
+  align-items: flex-start;
+}
+
+/* Post copy is 18px white on a 32.4px line — NOT the 16px var(--base) that
+   PostBody defaults to for the legal page. Element selectors beat PostBody's
+   own single-class rules at (0,1,1) regardless of injection order. */
+.bodyInner p,
+.bodyInner li {
+  color: var(--white);
+  font-size: var(--text-m);
+}
+
+/* List items indent 40px from the copy edge, against PostBody's var(--space-s)
+   (20px). Links inside the body are white like the copy around them, not the
+   var(--secondary) PostBody uses for the legal page. */
+.bodyInner ul,
+.bodyInner ol {
+  padding-inline-start: 40px;
+  /* Lists carry a flat 18px above and below — not the paragraphs' 1.2em.
+     Nothing collapses here: the body is a flex column, so the preceding
+     paragraph's 21.6px and this 18px add to a 39.6px gap. Measured. */
+  margin-block: 18px;
+  /* No gap between items — PostBody's 8px row-gap is the blog-post treatment;
+     the source's list items sit on consecutive 32.4px lines. */
+  row-gap: 0;
+}
+
+/* The live post links are white with NO underline — indistinguishable from
+   the copy around them. Reproduced; flagged as an accessibility issue, since
+   it leaves links with no non-colour affordance at all. The underline was
+   also what made them measure 4px taller than the source. */
+.bodyInner a {
+  color: var(--white);
+  text-decoration: none;
+  /* Without this the link keeps Link's own 16px and sits 4px short inside
+     18px copy. */
+  font-size: inherit;
+}
+
+/* Post headings are 600, against PostBody's 500. */
+.bodyInner h2,
+.bodyInner h3 {
+  font-weight: 600;
 }

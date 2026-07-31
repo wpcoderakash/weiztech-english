@@ -7,6 +7,19 @@ import styles from "./PostBody.module.css";
 
 export interface PostBodyProps {
   blocks: readonly PostBlock[];
+  /**
+   * How blocks are spaced.
+   *
+   * `post` — a flex column with a `--space-s` row gap and a matching top
+   * margin on headings.
+   *
+   * `document` — plain block flow: paragraphs carry `margin-block-end: 1.2em`
+   * and headings carry no margin at all, so a heading picks up the preceding
+   * paragraph's trailing margin and the paragraph after it sits flush. That is
+   * what `/privacy-policy/` measures on the live site — 19.2px before every
+   * heading and 0 after it, not a uniform gap.
+   */
+  flow?: "post" | "document" | undefined;
 }
 
 function Runs({ runs }: { runs: readonly TextRun[] }) {
@@ -23,7 +36,12 @@ function Runs({ runs }: { runs: readonly TextRun[] }) {
             </Link>
           );
         }
-        return <Fragment key={i}>{node}</Fragment>;
+        return (
+          <Fragment key={i}>
+            {node}
+            {run.br ? <br /> : null}
+          </Fragment>
+        );
       })}
     </>
   );
@@ -37,9 +55,9 @@ function Runs({ runs }: { runs: readonly TextRun[] }) {
  * is real React. Headings render at the level the source used (h2/h3), which
  * sits correctly under the post's h1.
  */
-export function PostBody({ blocks }: PostBodyProps) {
+export function PostBody({ blocks, flow = "post" }: PostBodyProps) {
   return (
-    <div className={styles.body}>
+    <div className={[styles.body, flow === "document" ? styles.document : ""].join(" ").trim()}>
       {blocks.map((block, i) => {
         if (block.type === "heading") {
           const Tag = block.level === 2 ? "h2" : "h3";

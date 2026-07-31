@@ -57,6 +57,10 @@
    4px the product tiles use. */
 .capabilityCard {
   padding-block: var(--space-m);
+}
+
+/* The 8px gap sits on the inner block (`innerWrap`), not on the card. */
+.capabilityCard > div {
   row-gap: 8px;
 }
 

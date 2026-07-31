@@ -72,7 +72,7 @@ export default function CybersecPage() {
         <Section id="capabilities" className={styles.section}>
           <Container className={styles.capabilityGrid}>
             {CYBERSEC_CAPABILITIES.map((card) => (
-              <ProductCard key={card.title} {...card} className={styles.capabilityCard} />
+              <ProductCard key={card.title} {...card} className={styles.capabilityCard} innerWrap />
             ))}
           </Container>
         </Section>
@@ -96,7 +96,7 @@ export default function CybersecPage() {
       </Reveal>
 
       <Reveal steps={CONTACT_BAND_STEPS}>
-        <ContactCTA {...CYBERSEC_CONTACT_CTA} />
+        <ContactCTA copyGap="xs" {...CYBERSEC_CONTACT_CTA} />
       </Reveal>
     </>
   );

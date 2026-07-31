@@ -4,8 +4,7 @@ import type { Metadata } from "next";
 
 import { PostBody } from "@/components/blog";
 import { Container, Section } from "@/components/layout";
-import { Text } from "@/components/primitives";
-import { ContactCTA, PageHero } from "@/components/sections";
+import { PageHero } from "@/components/sections";
 import { POSTS, getPost } from "@/content/posts";
 
 import styles from "./page.module.css";
@@ -47,37 +46,56 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = getPost(slug);
   if (!post) notFound();
 
+  /*
+   * The hero labels this "Last updated:" but the live template renders the
+   * PUBLICATION date — verified against three posts (this one, E-E-A-T and
+   * the laptops guide). `post.modified` is a uniform 2025-01-08 across all
+   * nine, a bulk edit, and matches nothing on the live page. The source's
+   * label is kept; the value it actually shows is used.
+   */
   const published = new Date(`${post.date}T00:00:00Z`);
 
   return (
     <>
-      <PageHero className={styles.hero} headingId="post-heading" heading={post.title}>
+      <PageHero
+        className={styles.hero}
+        innerClassName={styles.heroInner}
+        headingId="post-heading"
+        heading={post.title}
+      >
+        {/*
+          The source's post meta is `Posted by Weiz Team / Last updated: <date>`
+          — the author and the MODIFIED date, not the category and the
+          publication date. Measured on the live template (`.brxe-post-meta`):
+          three spans in an 18px flex row with a 20px gap, in var(--body-color).
+        */}
         <div className={styles.meta}>
-          <span className={styles.category}>{post.category.label}</span>
-          <Text as="span" className={styles.date}>
+          <span className={styles.metaItem}>Posted by Weiz Team</span>
+          <span className={styles.separator} aria-hidden="true">
+            /
+          </span>
+          <span className={styles.metaItem}>
+            Last updated:{" "}
             <time dateTime={post.date}>
-              {published.toLocaleDateString("en-GB", {
-                day: "numeric",
+              {published.toLocaleDateString("en-US", {
                 month: "long",
+                day: "numeric",
                 year: "numeric",
                 timeZone: "UTC",
               })}
             </time>
-          </Text>
+          </span>
         </div>
       </PageHero>
 
       <Section className={styles.bodySection}>
         <Container className={styles.bodyInner}>
-          <PostBody blocks={post.blocks} />
+          {/* Same document flow as the legal page: the live post body is
+              block flow with a 1.2em margin under each paragraph — 21.6px at
+              18px copy — and no margin on the headings. */}
+          <PostBody blocks={post.blocks} flow="document" />
         </Container>
       </Section>
-
-      <ContactCTA
-        eyebrow="Get in Touch"
-        heading="Connect with Us Today"
-        body="Have a question or need assistance? Contact us today. Our team is ready to help you."
-      />
     </>
   );
 }

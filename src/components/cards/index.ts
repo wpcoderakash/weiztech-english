@@ -8,6 +8,8 @@ export { IconFeatureCard } from "./IconFeatureCard";
 export type { IconFeatureCardProps } from "./IconFeatureCard";
 export { IndustryCard } from "./IndustryCard";
 export type { IndustryCardProps } from "./IndustryCard";
+export { JobPositionCard } from "./JobPositionCard";
+export type { JobPositionCardProps } from "./JobPositionCard";
 export { PricingCard } from "./PricingCard";
 export type { PricingCardProps, PricingPlan } from "./PricingCard";
 export { ProductCard } from "./ProductCard";

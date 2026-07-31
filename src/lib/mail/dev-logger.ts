@@ -17,13 +17,18 @@ export const devLoggerAdapter: MailAdapter = {
     console.warn(
       [
         "",
-        "┌─ CONTACT FORM SUBMISSION — NOT DELIVERED ─────────────────",
+        "┌─ FORM SUBMISSION — NOT DELIVERED ─────────────────────────",
         "│ No mail provider is configured. Set MAIL_PROVIDER and the",
         "│ matching credentials to send this for real.",
         "├───────────────────────────────────────────────────────────",
         `│ to:       ${message.to}`,
         `│ subject:  ${message.subject}`,
         `│ reply-to: ${message.replyTo ?? "(none)"}`,
+        ...(message.attachments?.length
+          ? message.attachments.map(
+              (a) => `│ attach:   ${a.filename} (${a.contentType}, ${a.content.length} bytes)`,
+            )
+          : []),
         "├───────────────────────────────────────────────────────────",
         message.text
           .split("\n")

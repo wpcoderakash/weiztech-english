@@ -70,6 +70,14 @@
 }
 
 .submit {
+  /* Bricks' `.bricks-button` base: a centred flex box with 0.5px letter
+     spacing. Both matter — the flex box is what gives the label span its
+     line-height-2 height of 28px, and the letter spacing is 6px across
+     "Send Message". Measured on the live button. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
   inline-size: 100%;
   padding: 7px 14px;
   border-radius: var(--radius-md);

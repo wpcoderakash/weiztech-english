@@ -52,10 +52,16 @@
   padding: var(--space-s);
 }
 
-/* #brxe-oogrqh sets a literal 12px row gap, not the --space-xs (13.5px) that
-   SectionHeader uses elsewhere. Small, but it compounds over three children. */
+/* Two real variants, both measured. Home, /products/ and /software/ set a
+   literal 12px row gap (#brxe-oogrqh); /contact-us/ and /cybersec/ keep
+   SectionHeader's var(--space-xs) (13.5068px). The 1.5px difference compounds
+   over two gaps into a visible 3px, so it needs the variant after all. */
 .copy > * {
   row-gap: 12px;
+}
+
+.copyGapXs > * {
+  row-gap: var(--space-xs);
 }
 
 @media (max-width: 767px) {

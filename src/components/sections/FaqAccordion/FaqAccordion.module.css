@@ -74,6 +74,13 @@ h3.label {
   padding: 22px 20px 16px;
 }
 
-.answer {
+/* `contenttypography` sets only the colour (var(--base-light)); the 1.5 line
+   height is the NextBricks expander's own base stylesheet, measured at 24px
+   on 16px copy against Text's inherited 1.8/28.8px.
+
+   Doubled selector — `Text`'s `.tone-base` and `.size-s` tie at (0,1,0) and
+   were winning on injection order, painting the answer muted grey. */
+.answer.answer {
   color: var(--base-light);
+  line-height: 1.5;
 }

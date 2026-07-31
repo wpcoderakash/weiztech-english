@@ -18,6 +18,14 @@ export interface ProductCardProps {
   backgroundPosition?: string | undefined;
   /** Per-page overrides — `.ce-card` pads and gaps differently from `.software-page-card`. */
   className?: string | undefined;
+  /**
+   * Wrap the heading and text in an inner block, as `.ce-card` does. That
+   * block is shrink-to-fit but stretches its own children, so the heading
+   * and the body end up the SAME width — whichever of the two is wider,
+   * capped at the card's content box. Without it they size independently
+   * and both measure wrong.
+   */
+  innerWrap?: boolean | undefined;
 }
 
 /**
@@ -54,9 +62,10 @@ export function ProductCard({
   href,
   backgroundPosition = "center center",
   className,
+  innerWrap = false,
 }: ProductCardProps) {
   const cardClass = [styles.card, className].filter(Boolean).join(" ");
-  const content = (
+  const inner = (
     <>
       <Heading as="h3" className={styles.title}>
         {title}
@@ -64,6 +73,7 @@ export function ProductCard({
       <Text className={styles.body}>{body}</Text>
     </>
   );
+  const content = innerWrap ? <div className={styles.inner}>{inner}</div> : inner;
 
   const style = {
     "--card-image": `url("${image}")`,

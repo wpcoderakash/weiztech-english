@@ -40,6 +40,9 @@
 
   /* Neutral */
   --accent: #121212; /* page background */
+  /* ACSS ramp. Used by the careers form's fields (`fieldBackgroundColor`) —
+     the only place on the site that reaches for it. */
+  --accent-ultra-dark: #1a1a1a;
   --base: #aea6ba;
   --base-light: #d8d4de;
   --base-ultra-light: #f2f1f4;

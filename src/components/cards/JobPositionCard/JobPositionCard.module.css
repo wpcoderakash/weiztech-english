@@ -1,0 +1,112 @@
+/* Global class ryzpvo `.job-position-card` — transcribed:
+     display flex, justify space-between, align center, align-self center,
+     1px solid var(--tertiary-dark), radius 16, padding var(--space-m),
+     row-gap var(--space-m), transition all 0.2s ease-in,
+     hover border var(--primary-hover).
+   At mobile_landscape it turns into a centred column. */
+.card {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  justify-content: space-between;
+  /* ROW gap only. The source sets `_rowGap: var(--space-m)` and no column gap,
+     and in a flex ROW a row-gap adds nothing horizontally — so the 65/35 split
+     uses the full 525px of card content. Using the `gap` shorthand here cost
+     the copy 20px of width and was caught by measurement. */
+  row-gap: var(--space-m);
+  inline-size: 100%;
+  padding: var(--space-m);
+  border: 1px solid var(--tertiary-dark);
+  border-radius: 16px;
+  transition: all 0.2s ease-in;
+}
+
+.card:hover {
+  border-color: var(--primary-hover);
+}
+
+/* div#htwnvz — 65% wide, column, 8px row gap. */
+.content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  inline-size: 65%;
+}
+
+/* Global class 8b2jbz `.job-content__heading` — --text-l, 20px at 1440.
+   Doubled: Heading's own `.h3` sits at the same specificity, so at (0,1,0)
+   injection order decides. It was rendering at the h3 default, 21.33px. */
+.title.title {
+  font-size: var(--text-l);
+}
+
+/* Global class ydz1og `.job-content__text-basic`. Doubled for the same
+   reason — Text's `.size-s` would otherwise win. */
+.summary.summary {
+  font-size: var(--text-xs);
+}
+
+/* div#cwourr — 35%, align-self center, justify flex-end. */
+.action {
+  display: flex;
+  align-self: center;
+  justify-content: flex-end;
+  inline-size: 35%;
+}
+
+/* Global class t5qr1u `.job-apply__button` — 12px/500 white, 8px/16px
+   padding, 250px radius (a pill), 1px solid var(--tertiary-semi-dark).
+   Hover swaps the border for a primary→secondary gradient with an inset
+   rgba(255,255,255,0.25) 0 0 2px shadow, over 0.3s ease-in-out. */
+.apply {
+  display: inline-flex;
+  align-items: center;
+  /* Bricks' own button gap, measured on the live pill. */
+  gap: 10px;
+  padding: 8px 16px;
+  border: 1px solid var(--tertiary-semi-dark);
+  border-radius: 250px;
+  background-color: transparent;
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 500;
+  /* Bricks' `.bricks-button` base. Nine characters at 0.5px is 4.5px, which
+     is exactly how much narrower the pill measured without it. */
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.apply:hover {
+  background-image: linear-gradient(to right, var(--primary), var(--secondary));
+  box-shadow: inset 0 0 2px rgb(255 255 255 / 0.25);
+}
+
+/* Bricks `mobile_landscape` — ladder B, 767px. */
+@media (max-width: 767px) {
+  .card {
+    flex-direction: column;
+    align-items: center;
+    align-self: flex-end;
+  }
+
+  .content,
+  .action {
+    inline-size: 100%;
+  }
+
+  /* `_width:mobile_landscape: 100%` on the button itself. */
+  .apply {
+    inline-size: 100%;
+    justify-content: center;
+  }
+}
+
+/* Bricks `mobile_portrait` — ladder B, 478px. */
+@media (max-width: 478px) {
+  .title,
+  .summary {
+    text-align: center;
+  }
+}

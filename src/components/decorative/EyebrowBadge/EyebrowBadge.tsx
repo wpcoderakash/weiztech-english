@@ -10,6 +10,14 @@ export interface EyebrowBadgeProps {
   variant?: "section" | "hero" | undefined;
   /** Hero variant only — the gradient chip before the label. */
   chip?: string | undefined;
+  /**
+   * Label font size. 12px on the seven badges that leave it alone; /careers/
+   * is the exception — its #gtwaza sets 14, and the badge is 12px too narrow
+   * without it.
+   */
+  labelSize?: string | undefined;
+  /** Extra classes on the pill, for the per-page shell variations. */
+  className?: string | undefined;
   /** Animation role, read by Reveal. Phase 11. */
   "data-anim"?: string | undefined;
 }
@@ -29,13 +37,20 @@ export function EyebrowBadge({
   icon,
   variant = "section",
   chip,
+  labelSize,
+  className,
   "data-anim": dataAnim,
 }: EyebrowBadgeProps) {
   return (
-    <div data-anim={dataAnim} className={[styles.badge, styles[variant]].join(" ")}>
+    <div
+      data-anim={dataAnim}
+      className={[styles.badge, styles[variant], className].filter(Boolean).join(" ")}
+    >
       {chip ? <span className={styles.chip}>{chip}</span> : null}
       {icon ? <Icon name={icon} size="16px" color="var(--white)" /> : null}
-      <span className={styles.label}>{label}</span>
+      <span className={styles.label} style={labelSize ? { fontSize: labelSize } : undefined}>
+        {label}
+      </span>
     </div>
   );
 }

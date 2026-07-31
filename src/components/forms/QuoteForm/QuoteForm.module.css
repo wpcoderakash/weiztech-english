@@ -1,0 +1,180 @@
+/* Bricks' own form CSS, the base every form on the site sits on:
+     :where(.brxe-form) { display: flex; flex-wrap: wrap; width: 100% }
+     .form-group { display: flex; flex-direction: column; padding: 0 0 20px } */
+/* The form itself is `_width: var(--width-l)`. That is a REAL ACSS variable —
+   `--width-l: calc(var(--content-width) * 0.6)` — not the doubled-dash typo
+   seen elsewhere in this export, so the form is 720px wide and centred inside
+   its container, not full width. Measured. */
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  inline-size: calc(var(--content-width) * 0.6);
+  max-inline-size: 100%;
+}
+
+/* `fieldMargin.right: 8` lands on the group as padding-right; the 20px
+   bottom is Bricks' own. */
+.field {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  padding-block-end: 20px;
+  padding-inline-end: 8px;
+}
+
+/* The source's widths, which deliberately do not tile: three thirds fill
+   row one, then four halves take two rows — the last of which is half
+   empty — and the textarea spans the full width. */
+.third {
+  inline-size: 33.3%;
+}
+
+.half {
+  inline-size: 50%;
+}
+
+/* fieldBackgroundColor rgba(0,0,0,0.25), fieldBorder #2f2f6a at 8px radius,
+   fieldTypography #fff5f5 14/500. Note this form's field fill is a quarter
+   black, not the contact form's --surface-field (0.6). */
+.input,
+.select,
+.textarea {
+  inline-size: 100%;
+  /* This form sets no Bricks `fieldPadding`, so ACSS's own values stand: 0
+     for inputs and the select, 10px for the textarea. Measured — the inputs
+     are 27.2px tall, not the 43.2px an 8px pad would give. */
+  padding-block: 0;
+  padding-inline: 12px;
+  border: 1px solid #2f2f6a;
+  border-radius: 8px;
+  background-color: rgb(0 0 0 / 0.25);
+  color: #fff5f5;
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--text-line-height);
+}
+
+.textarea {
+  padding-block: 10px;
+  /* ACSS floor; with the default 2 rows it is what sets the height. */
+  min-block-size: 90px;
+  resize: vertical;
+}
+
+/* placeholderTypography — var(--base), with no size override on this form. */
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--base);
+}
+
+/* The select shows its placeholder option in the same colour as a real
+   placeholder until something is chosen. */
+.select:has(option[value=""]:checked) {
+  color: var(--base);
+}
+
+/* Options render in var(--base), not the field's own #fff5f5. */
+.select option {
+  color: var(--base);
+  background-color: var(--accent);
+  line-height: var(--text-line-height);
+}
+
+/* submitButtonMargin — 18px top, 8px right. */
+.submitWrapper {
+  display: flex;
+  inline-size: 100%;
+  margin-block-start: 18px;
+  padding-inline-end: 8px;
+}
+
+/* submitButtonWidth 100%, var(--primary), white 14/500 at line-height 2,
+   8px radius, hover var(--secondary). */
+.submit {
+  /* Bricks' `.bricks-button` base: a centred flex box with 0.5px letter
+     spacing. Both matter — the flex box is what gives the label span its
+     line-height-2 height of 28px, and the letter spacing is 6px across
+     "Send Message". Measured on the live button. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  inline-size: 100%;
+  padding: 7px 14px;
+  border: 0;
+  border-radius: 8px;
+  background-color: var(--primary);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  line-height: 2;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.submit:hover {
+  background-color: var(--secondary);
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+/* Submission states — same treatment as the other two forms. */
+.success {
+  padding: var(--space-s);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-md);
+  background-color: rgb(128 21 232 / 12%);
+  color: var(--white);
+  font-size: var(--text-s);
+}
+
+.formError {
+  inline-size: 100%;
+  margin-block-end: 12px;
+  padding: 12px;
+  border: 1px solid #b3261e;
+  border-radius: var(--radius-md);
+  background-color: rgb(179 38 30 / 12%);
+  color: var(--white);
+  font-size: var(--text-xs);
+}
+
+.fieldError {
+  display: block;
+  margin-block-start: 4px;
+  color: #ff8a80;
+  font-size: 12px;
+}
+
+.input[aria-invalid="true"],
+.select[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  border-color: #b3261e;
+}
+
+/* Off-screen rather than display:none — a bot that skips hidden fields still
+   fills this one, and no assistive tech announces it. */
+.honeypot {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Bricks `mobile_portrait` — the select goes full width and the other
+   narrow fields pair up at 50%. */
+@media (max-width: 478px) {
+  .third:first-of-type {
+    inline-size: 100%;
+  }
+
+  .third {
+    inline-size: 50%;
+  }
+}
