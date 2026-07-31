@@ -16,10 +16,12 @@ export interface ContactCardProps {
  * points at a different phone number than the text. Each point is one link
  * here, taking the text element's target. CHANGE #25.
  *
- * Labels are h3. The source tags all six h2, which would put six sibling h2s
- * under the page h1; every other card on the site uses h3. Same call as
- * CHANGE #13, and `.cuc-heading` sizes off the text scale anyway, so there is
- * no visual change.
+ * Labels are h2, as the source tags them. An earlier revision demoted them
+ * to h3 "for consistency with the other cards" — which created an h1->h3
+ * level skip (axe heading-order), since this page has no other h2. The
+ * source's own h2 is both faithful and correctly ordered; `.cuc-heading`
+ * sizes off the text scale, so the tag has no visual effect. CHANGE #25
+ * retracted in part.
  */
 export function ContactCard({ items }: ContactCardProps) {
   return (
@@ -33,7 +35,7 @@ export function ContactCard({ items }: ContactCardProps) {
           >
             <Icon name={item.icon} size="24px" color="var(--primary)" />
           </span>
-          <Heading as="h3" className={styles.label}>
+          <Heading as="h2" className={styles.label}>
             {item.label}
           </Heading>
           <Text className={styles.value}>{item.value}</Text>
