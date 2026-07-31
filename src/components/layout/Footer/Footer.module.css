@@ -9,13 +9,19 @@
    rows sit flush and the footer reads as one cramped block. */
 .footer {
   position: relative;
-  z-index: var(--z-content);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-xl);
   padding: var(--space-xl) var(--space-m);
   background-color: var(--accent);
+}
+
+/* Template 303's containers carry z-index: 10 (#srxgek, #yieycv) — content
+   above the fixed glow, the section background below it. The rows are flex
+   items of .footer, so z-index applies without positioning. */
+.footer > * {
+  z-index: 10;
 }
 
 /* Source div#zzcmuf carries .width--full + .grid--auto-2 — the ACSS intrinsic

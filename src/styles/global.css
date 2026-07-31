@@ -75,15 +75,20 @@ p {
 
 /* --------------------------------------------------------------------------
    Stacking
-   BgGlow is position:fixed at --z-glow (1). Page content must sit above it or
-   the 50%-opacity orb washes over the text. In the original, Bricks sets
-   position:relative on sections and z-index:10 on containers to achieve this;
-   here one rule on <main> covers every page.
+   BgGlow is position:fixed at --z-glow (1) and must paint ABOVE section
+   backgrounds but BELOW content — that is the whole design, and it is why
+   every Bricks container carries z-index: 10.
+
+   A previous revision instead put z-index: 2 on <main>, lifting the entire
+   page — section backgrounds included — above the glow. That held only
+   while sections were transparent; /careers/ paints every section with
+   var(--accent), and its glow vanished completely (screenshot-verified
+   against live). The per-container z-10 rules in the page modules are the
+   real mechanism; main stays a plain box.
    -------------------------------------------------------------------------- */
 
 main {
   position: relative;
-  z-index: var(--z-content);
 }
 
 /* --------------------------------------------------------------------------

@@ -53,6 +53,10 @@ export default function HomePage() {
               href={HOME_HERO.primaryCta.href}
               variant="primary"
               icon="ion-ios-paper-plane"
+              /* The live button renders the plane AFTER the label. The JSON
+                 sets no iconPosition, but Bricks' default for this button
+                 style is right — screenshot-verified. */
+              iconPosition="right"
               data-anim="cta-primary"
             >
               {HOME_HERO.primaryCta.label}

@@ -1,6 +1,7 @@
 /* Earth.webp — the source Earth.svg was a 333KB wrapper around ONE embedded
-   base64 PNG; recomposited onto the same 1416x1138 canvas at 91KB with
-   identical geometry. Top left, 50% width, no-repeat, attachment: fixed
+   THREE base64 PNGs; recomposited onto the same 1416x1138 canvas with
+   identical geometry. (The first conversion took only the first image node
+   and dropped the large left arc — caught by screenshot comparison.) Top left, 50% width, no-repeat, attachment: fixed
    over var(--accent). Identical on every page carrying this band.
    Below mobile_landscape it recentres at 80%; below mobile_portrait the source
    drops the image and leaves the flat accent fill. */
