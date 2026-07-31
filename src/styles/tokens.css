@@ -173,6 +173,7 @@
   --grid-min-ratio: 0.7;
   --grid-1: repeat(1, minmax(0, 1fr));
   --grid-2: repeat(2, minmax(0, 1fr));
+  --grid-3: repeat(3, minmax(0, 1fr));
   --grid-4: repeat(4, minmax(0, 1fr));
   --grid-5: repeat(5, minmax(0, 1fr));
   --grid-1-2: minmax(0, 1fr) minmax(0, 2fr);

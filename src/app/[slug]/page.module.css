@@ -4,13 +4,24 @@
   padding-block-end: var(--space-l);
 }
 
+/* Section #lqrtjk carries `_padding:mobile_landscape: { top: xxl, bottom:
+   xxl }` — below 768 the closing padding grows from --space-l to --space-xxl
+   (38.6px → 79.4px at 767). Measured. */
+@media (max-width: 767px) {
+  .hero {
+    padding-block-end: var(--space-xxl);
+  }
+}
+
 /* `.brxe-post-meta` — an 18px flex row with a 20px column gap in
    var(--body-color) (#cdd2db). Measured. */
 .meta {
   display: flex;
   align-items: center;
   column-gap: 20px;
-  flex-wrap: wrap;
+  /* NOWRAP, as the live row: at 478 the items squeeze and the text wraps
+     INSIDE its span ("Posted by Weiz Team" on two lines), not between items. */
+  flex-wrap: nowrap;
 }
 
 .metaItem,

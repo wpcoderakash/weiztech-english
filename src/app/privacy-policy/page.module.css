@@ -40,3 +40,11 @@
 .bodyInner h3 {
   font-weight: 600;
 }
+
+/* The h1 carries ACSS `width--l` in the source (#ucufwt), so it FILLS the
+   hero column instead of shrink-wrapping inside it. Invisible at 1440 where
+   the single line happens to fit; at 767 the wrapped text shrink-wrapped to
+   688px against the live 713px. */
+.hero h1 {
+  inline-size: 100%;
+}

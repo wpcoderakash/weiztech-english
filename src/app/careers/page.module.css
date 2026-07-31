@@ -159,8 +159,12 @@
 
 /* Bricks `mobile_portrait`. */
 @media (max-width: 478px) {
-  .benefitTitle {
+  /* Must match the doubled base selector: media queries add no specificity,
+     so a single .benefitTitle here loses to .benefitTitle.benefitTitle above
+     and the 18px kept winning below 478. */
+  .benefitTitle.benefitTitle {
     font-size: 14px;
+    line-height: 1.8;
   }
 
   .positionsHeader {

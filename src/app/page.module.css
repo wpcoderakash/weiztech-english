@@ -79,4 +79,33 @@
   .faqGrid {
     grid-template-columns: 1fr;
   }
+
+  /* div#iqdhqu — `_alignItems:mobile_landscape: center`: once the two-column
+     grid stacks, the header block centres. Its eyebrow measured 249px left
+     of the live position without this. */
+  .faqGrid > div:first-child,
+  .faqGrid > div:first-child > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Bricks `mobile_landscape` — ladder B, 767px.
+   The hero body (#rmnpoh) carries `_typography:mobile_landscape:
+   { font-size: 16 }`: below 768 it PINS to a literal 16px while the fluid
+   --text-s it uses on desktop drops to 15.02px. The 1px rewraps the
+   paragraph from the live page's 3 lines to 2, and the missing 32px shifted
+   every section below the hero. Element+class beats Text's .size-s. */
+/* stylelint needs .hero to exist outside the query too */
+.hero {
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .hero p[data-anim="body"] {
+    font-size: 16px;
+    line-height: 1.8;
+  }
 }

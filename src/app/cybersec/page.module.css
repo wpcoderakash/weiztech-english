@@ -82,3 +82,19 @@
 .experienceGrid {
   z-index: 10;
 }
+
+/* container#wfsovj — `_gridTemplateColumns:mobile_landscape: var(--grid-3)`,
+   `mobile_portrait: var(--grid-2)`. Without these the auto grid kept ~121px
+   tracks at 767 and the cards (and their full-width View buttons) measured
+   half the live size. Doubled against Grid's own template rule. */
+@media (max-width: 767px) {
+  .experienceGrid.experienceGrid {
+    grid-template-columns: var(--grid-3);
+  }
+}
+
+@media (max-width: 478px) {
+  .experienceGrid.experienceGrid {
+    grid-template-columns: var(--grid-2);
+  }
+}

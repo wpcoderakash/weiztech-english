@@ -40,6 +40,7 @@ export default function HomePage() {
     <>
       <Reveal steps={HOME_HERO_STEPS}>
         <PageHero
+          className={styles.hero}
           containerId="hero-container"
           headingId="hero-heading"
           eyebrow={HOME_HERO.eyebrow}

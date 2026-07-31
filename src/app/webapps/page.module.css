@@ -142,9 +142,9 @@ p.whyBody {
     grid-template-columns: 1fr;
   }
 
-  .whyCopy {
-    padding-inline-start: 0;
-  }
+  /* #rgcbqo carries NO mobile override — its var(--space-m) left padding
+     stays at every width. The reset that used to live here indented the
+     whole header 27px left of the live page below 768. */
 }
 
 /* The hero CTA (#brxe-dkndau) is 14px, against the 16px `.primary` uses on

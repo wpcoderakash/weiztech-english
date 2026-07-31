@@ -66,6 +66,15 @@ export function LogoMarquee({ logos, logoHeight }: LogoMarqueeProps) {
                   alt={copy === 1 ? "" : logo.alt}
                   width={logo.width}
                   height={logo.height}
+                  /*
+                   * Eager, never lazy. The track animates horizontally, so
+                   * slides past the viewport edge never intersect and a lazy
+                   * image never STARTS loading — and an unloaded logo with
+                   * auto sizing collapses to 0x0, which at 767px silently
+                   * shrank the whole marquee band 14px (Fujitsu, the tallest
+                   * logo, was the one that never loaded). Measured.
+                   */
+                  loading="eager"
                 />
               </div>
             ))}

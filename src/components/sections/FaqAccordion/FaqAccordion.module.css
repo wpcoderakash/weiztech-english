@@ -89,5 +89,9 @@ h3.label {
    were winning on injection order, painting the answer muted grey. */
 .answer.answer {
   color: var(--base-light);
+  /* A literal 16px, not the fluid --text-s: identical at 1440 where the
+     clamp locks at 16, but at 767 the token drops to 15.02 and the live
+     answer does not. The expander's own base size, like its 1.5 leading. */
+  font-size: 16px;
   line-height: 1.5;
 }

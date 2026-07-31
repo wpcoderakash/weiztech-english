@@ -50,7 +50,10 @@
   border-radius: var(--radius-pill);
   border-color: var(--tertiary-dark);
   color: var(--white);
-  font-size: 16px;
+  /* The element (#omzpdv) sets var(--text-s), overriding the class's literal
+     16 — identical at 1440 where the clamp locks at 16px, but at 767 the
+     fluid value is 15.02px and a hardcoded 16 measured 1px tall. */
+  font-size: var(--text-s);
   font-weight: var(--font-weight-medium);
 }
 
