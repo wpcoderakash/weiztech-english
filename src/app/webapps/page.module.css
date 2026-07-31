@@ -146,3 +146,11 @@ p.whyBody {
     padding-inline-start: 0;
   }
 }
+
+/* The hero CTA (#brxe-dkndau) is 14px, against the 16px `.primary` uses on
+   Home. Doubled selector: Button's own `.primary` ties at (0,1,0), so
+   injection order would otherwise decide it. The 2px made the button 3px
+   taller, which pushed every section below it down by the same amount. */
+.heroCta.heroCta {
+  font-size: 14px;
+}

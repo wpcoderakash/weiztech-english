@@ -9,6 +9,13 @@
   inline-size: 100%;
 }
 
+/* Some headers use var(--space-s) instead — the Web Design page's Industries
+   block (#brxe-…) is 20px between its h2 and body, against the 13.5px the
+   others use. Measured; the 6.5px showed as a growing offset down the page. */
+.gap-s {
+  row-gap: var(--space-s);
+}
+
 .center {
   align-items: center;
   align-content: center;

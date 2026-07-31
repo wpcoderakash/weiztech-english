@@ -71,8 +71,10 @@ export default function CybersecPage() {
       <Reveal steps={CYBERSEC_CAPABILITY_STEPS}>
         <Section id="capabilities" className={styles.section}>
           <Container className={styles.capabilityGrid}>
+            {/* `innerWrap` rides in on each card's own data — it is per-card
+                markup in the source, not a page-wide setting. */}
             {CYBERSEC_CAPABILITIES.map((card) => (
-              <ProductCard key={card.title} {...card} className={styles.capabilityCard} innerWrap />
+              <ProductCard key={card.title} {...card} className={styles.capabilityCard} />
             ))}
           </Container>
         </Section>

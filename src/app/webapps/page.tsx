@@ -60,7 +60,13 @@ export default function WebappsPage() {
           <Text tone="muted" className={styles.heroBody}>
             {WEBAPPS_HERO.body}
           </Text>
-          <Button href={WEBAPPS_HERO.cta.href} variant="primary" icon="ion-ios-paper-plane">
+          {/* #brxe-dkndau sets 14px, not the 16px `.primary` carries on Home. */}
+          <Button
+            href={WEBAPPS_HERO.cta.href}
+            variant="primary"
+            icon="ion-ios-paper-plane"
+            className={styles.heroCta}
+          >
             {WEBAPPS_HERO.cta.label}
           </Button>
           {/* div#wcxhnf — a bordered panel holding the 650px illustration. */}
@@ -105,6 +111,7 @@ export default function WebappsPage() {
       <Section id="industries" className={styles.section}>
         <Container className={styles.industriesInner}>
           <SectionHeader
+            gap="s"
             heading={WEBAPPS_INDUSTRIES.heading}
             body={WEBAPPS_INDUSTRIES.body}
             bodyWidth="l"

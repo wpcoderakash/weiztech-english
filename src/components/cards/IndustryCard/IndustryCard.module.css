@@ -11,16 +11,18 @@
   background-color: rgb(3 1 22 / 35%);
 }
 
-/* #brxe-vvmafe and siblings — var(--secondary) at 500. */
-.number {
+/* #brxe-vvmafe and siblings — var(--secondary) at 500. Doubled for the
+   same injection-order reason as the cards above. */
+.number.number {
   color: var(--secondary);
   font-weight: var(--font-weight-medium);
 }
 
 /* #brxe-kvjgqs and siblings — --text-xs, not the --text-s of .wd3-text. */
 /* The card is an anchor, so its copy inherits the 500 links carry. Text
-   sets its own weight, so it has to be restated here. */
-.body {
+   sets its own weight, so it has to be restated here. Doubled: Text's
+   `.size-s` was winning, giving 16px/400 against the source's 14px/500. */
+.body.body {
   font-weight: var(--font-weight-medium);
   font-size: var(--text-xs);
 }

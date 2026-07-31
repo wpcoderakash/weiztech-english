@@ -5,6 +5,8 @@ import type { IconName } from "@/components/primitives";
 import styles from "./SectionHeader.module.css";
 
 export interface SectionHeaderProps {
+  /** Row gap between eyebrow, heading and body. Defaults to var(--space-xs). */
+  gap?: "xs" | "s" | undefined;
   eyebrow?: { label: string; icon?: IconName | undefined } | undefined;
   heading: string;
   headingId?: string | undefined;
@@ -41,6 +43,7 @@ export interface SectionHeaderProps {
  * below the body, which Home uses for its star rating.
  */
 export function SectionHeader({
+  gap = "xs",
   eyebrow,
   heading,
   headingId,
@@ -54,7 +57,7 @@ export function SectionHeader({
   children,
 }: SectionHeaderProps) {
   return (
-    <div className={[styles.header, styles[align]].join(" ")}>
+    <div className={[styles.header, styles[align], styles[`gap-${gap}`]].join(" ")}>
       {eyebrow ? (
         <EyebrowBadge label={eyebrow.label} icon={eyebrow.icon} data-anim="eyebrow" />
       ) : null}

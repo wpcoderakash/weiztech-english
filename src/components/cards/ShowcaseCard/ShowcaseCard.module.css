@@ -31,13 +31,16 @@
 }
 
 /* .demo-heading / .demo-text */
-.title {
+/* Doubled: Heading's `.h3` ties at (0,1,0), and injection order was giving
+   it 21.33px/600 instead of the source's 20px/500. */
+.title.title {
   font-size: var(--text-l);
   font-weight: var(--font-weight-medium);
   transition: var(--transition-fast);
 }
 
-.body {
+/* Doubled for the same reason as `.title`. */
+.body.body {
   font-size: var(--text-s);
   font-weight: 400;
   transition: var(--transition-fast);
