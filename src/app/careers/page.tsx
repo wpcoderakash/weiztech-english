@@ -17,13 +17,16 @@ import {
   CAREERS_POSITIONS,
   CAREERS_SECTION_HEADING,
 } from "@/content/pages/careers";
+import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
-/** Placeholder metadata; the full set lands in Phase 13. */
-export const metadata: Metadata = {
-  title: "Careers - Weiz Technologies",
-};
+/** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
+export const metadata: Metadata = pageMetadata({
+  title: "Careers",
+  description: DESCRIPTIONS.careers,
+  path: "/careers/",
+});
 
 /**
  * `/careers/` — source page ID 807. Three sections and one popup.

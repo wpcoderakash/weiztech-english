@@ -4,13 +4,16 @@ import { QuoteForm } from "@/components/forms";
 import { Container } from "@/components/layout";
 import { PageHero } from "@/components/sections";
 import { QUOTE_HERO } from "@/content/pages/quote";
+import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
-/** Placeholder metadata; the full set lands in Phase 13. */
-export const metadata: Metadata = {
-  title: "Get a Quote - Weiz Technologies",
-};
+/** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
+export const metadata: Metadata = pageMetadata({
+  title: "Get a Quote",
+  description: DESCRIPTIONS.quote,
+  path: "/quote/",
+});
 
 /**
  * `/quote/` — source page ID 3725. One section holding a centred hero and,

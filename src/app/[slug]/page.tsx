@@ -6,6 +6,7 @@ import { PostBody } from "@/components/blog";
 import { Container, Section } from "@/components/layout";
 import { PageHero } from "@/components/sections";
 import { POSTS, getPost } from "@/content/posts";
+import { SITE_URL, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
@@ -33,12 +34,14 @@ export async function generateMetadata({
   const post = getPost(slug);
   if (!post) return {};
 
-  /* The source has no per-post description — PHASE-5 §5 records all nine as
-     auto-generated. The excerpt is the honest stand-in until Phase 13. */
-  return {
-    title: `${post.title} - Weiz Technologies`,
-    ...(post.excerpt ? { description: post.excerpt } : {}),
-  };
+  /* Live post descriptions ARE the excerpt (Rank Math's auto-generation
+     takes the first sentence) — verified on three posts. Phase 13 adds the
+     canonical, OG and Twitter set around it via the shared builder. */
+  return pageMetadata({
+    title: post.title,
+    description: post.excerpt,
+    path: `/${post.slug}/`,
+  });
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -55,8 +58,25 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
    */
   const published = new Date(`${post.date}T00:00:00Z`);
 
+  /* BlogPosting — the type the live site emits for posts (PHASE-5 §6.2). */
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    dateModified: post.modified,
+    mainEntityOfPage: `${SITE_URL}/${post.slug}/`,
+    author: { "@type": "Organization", name: "Weiz Technologies" },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <PageHero
         className={styles.hero}
         innerClassName={styles.heroInner}

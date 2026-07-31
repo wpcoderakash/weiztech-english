@@ -6,12 +6,18 @@ import { Reveal } from "@/components/motion";
 import { PageHero } from "@/components/sections";
 import { BLOG_HERO_STEPS, BLOG_POSTS_STEPS } from "@/content/animations/pages";
 import { POSTS } from "@/content/posts";
+import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "Our Blog - Weiz Technologies",
-};
+/** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
+export const metadata: Metadata = pageMetadata({
+  title: "Our Blog",
+  description: DESCRIPTIONS.blog,
+  path: "/blog/",
+  /* Rank Math treats the posts page as an archive: og:type website. */
+  ogType: "website",
+});
 
 /**
  * `/blog/` — the post index.

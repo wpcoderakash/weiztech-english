@@ -13,20 +13,16 @@ import {
   PRODUCTS_INTRO,
 } from "@/content/pages/products";
 import { VENDOR_LOGOS } from "@/content/site";
+import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
-/**
- * Placeholder metadata; the full set lands in Phase 13.
- *
- * The title resolves through the site pattern `%title% - Weiz Technologies`.
- * No description is set here: the source's is Hebrew on an English page, and
- * whether to carry the four Hebrew descriptions forward or write English ones
- * is open decision B in PHASE-5 §11.
- */
-export const metadata: Metadata = {
-  title: "Hardware - Weiz Technologies",
-};
+/** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
+export const metadata: Metadata = pageMetadata({
+  title: "Hardware",
+  description: DESCRIPTIONS.products,
+  path: "/products/",
+});
 
 export default function ProductsPage() {
   return (

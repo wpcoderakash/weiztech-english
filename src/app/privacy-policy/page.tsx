@@ -4,13 +4,16 @@ import { PostBody } from "@/components/blog";
 import { Container, Section } from "@/components/layout";
 import { PageHero } from "@/components/sections";
 import { PRIVACY_BLOCKS, PRIVACY_HERO } from "@/content/pages/privacy";
+import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
-/** Placeholder metadata; the full set lands in Phase 13. */
-export const metadata: Metadata = {
-  title: "Terms of Use & Privacy Policy - Weiz Technologies",
-};
+/** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
+export const metadata: Metadata = pageMetadata({
+  title: "Terms of Use & Privacy Policy",
+  description: DESCRIPTIONS.privacy,
+  path: "/privacy-policy/",
+});
 
 /**
  * `/privacy-policy/` — source page ID 845, the simplest route on the site:

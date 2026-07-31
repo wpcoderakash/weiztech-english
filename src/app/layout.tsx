@@ -7,6 +7,7 @@ import { CareersFormModal } from "@/components/forms";
 import { Footer, Header } from "@/components/layout";
 import { MobileMenuDrawer, SkipLink } from "@/components/navigation";
 import { OverlayProvider } from "@/components/overlays";
+import { DESCRIPTIONS, GOOGLE_SITE_VERIFICATION, SITE_URL, pageMetadata } from "@/lib/seo";
 
 import "@/styles/reset.css";
 import "@/styles/tokens.css";
@@ -31,13 +32,68 @@ const rubik = localFont({
 });
 
 /**
- * Placeholder metadata only. The real per-route metadata, Open Graph, Twitter
- * cards and JSON-LD are built in Phase 13 from the Rank Math rules captured in
- * PHASE-5-DATA-STRATEGY.md §5.
+ * Site-wide metadata — Phase 13, from the Rank Math rules in PHASE-5 §5.
+ *
+ * The Home title is Rank Math's override `%sitename% - %sitedesc%`, which
+ * resolves to the exact live string. Pages replace title and description via
+ * `pageMetadata()`; what lives here is only what genuinely applies site-wide:
+ * the base URL (canonicals and og:url resolve against it), the robots rule,
+ * the Google verification token, and the Home defaults.
  */
 export const metadata: Metadata = {
-  title: "Weiz Technologies",
-  description: "Power Your Business with Cutting-Edge IT",
+  metadataBase: new URL(SITE_URL),
+  ...pageMetadata({
+    title: "Weiz Technologies - Power Your Business with Cutting-Edge IT",
+    description: DESCRIPTIONS.home,
+    path: "/",
+    ogType: "website",
+    absoluteTitle: true,
+  }),
+  robots: {
+    index: true,
+    follow: true,
+    "max-snippet": -1,
+    "max-video-preview": -1,
+    "max-image-preview": "large",
+  },
+  verification: { google: GOOGLE_SITE_VERIFICATION },
+};
+
+/**
+ * Organization + WebSite JSON-LD, site-wide (PHASE-5 §6.3).
+ *
+ * The live Organization schema is Hebrew with two typos (`Isreal`, `Weis`) and
+ * a logo file that no longer exists — decision PHASE-5 §11-C chose English
+ * with the typos fixed. `openingHours` is deliberately OMITTED: the source
+ * gives three conflicting versions (decision D, still open) and emitting a
+ * wrong one is worse than none.
+ */
+const ORGANIZATION_JSONLD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "Weiz Technologies",
+      url: `${SITE_URL}/`,
+      logo: `${SITE_URL}/images/Weiz-Logo.svg`,
+      email: "office@weiztech.com",
+      telephone: "09-8989899",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Paz Complex, Moshav Ein Vered",
+        addressCountry: "IL",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: `${SITE_URL}/`,
+      name: "Weiz Technologies",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+      inLanguage: "en-US",
+    },
+  ],
 };
 
 /**
@@ -55,6 +111,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={rubik.variable}>
       <body>
+        <script
+          type="application/ld+json"
+
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}
+        />
         <OverlayProvider>
           <SkipLink />
           <Header />
