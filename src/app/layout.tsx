@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { BgGlow, GlowTracker, Starfield } from "@/components/decorative";
 import { CareersFormModal } from "@/components/forms";
 import { Footer, Header } from "@/components/layout";
-import { MobileMenuDrawer, SkipLink } from "@/components/navigation";
+import { MobileMenuDrawer, ScrollReset, SkipLink } from "@/components/navigation";
 import { OverlayProvider } from "@/components/overlays";
 import { DESCRIPTIONS, GOOGLE_SITE_VERIFICATION, SITE_URL, pageMetadata } from "@/lib/seo";
 
@@ -127,6 +127,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <BgGlow />
           <Starfield />
           <GlowTracker />
+          <ScrollReset />
           <main id="main">{children}</main>
           <Footer />
           <MobileMenuDrawer />
