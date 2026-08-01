@@ -64,7 +64,14 @@ export function ProductCard({
   className,
   innerWrap = false,
 }: ProductCardProps) {
-  const cardClass = [styles.card, className].filter(Boolean).join(" ");
+  const cardClass = styles.card;
+  /* The glow ring lives on an unclipped wrapper — the card root clips
+     overflow for its background image. The caller's className stays on the
+     wrapper so grid placement is untouched. */
+  const wrapClass = ["cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot", className]
+    .filter(Boolean)
+    .join(" ");
+  const wrapStyle: CSSProperties = { blockSize: "100%", borderRadius: "var(--radius-lg)" };
   const inner = (
     <>
       <Heading as="h3" className={styles.title}>
@@ -82,15 +89,19 @@ export function ProductCard({
 
   if (!href) {
     return (
-      <div className={cardClass} style={style} data-anim="card">
-        {content}
+      <div className={wrapClass} style={wrapStyle}>
+        <div className={cardClass} style={style} data-anim="card">
+          {content}
+        </div>
       </div>
     );
   }
 
   return (
-    <Link href={href} className={cardClass} style={style} data-anim="card">
-      {content}
-    </Link>
+    <div className={wrapClass} style={wrapStyle}>
+      <Link href={href} className={cardClass} style={style} data-anim="card">
+        {content}
+      </Link>
+    </div>
   );
 }

@@ -3,7 +3,7 @@ import Script from "next/script";
 
 import type { Metadata } from "next";
 
-import { BgGlow, Starfield } from "@/components/decorative";
+import { BgGlow, GlowTracker, Starfield } from "@/components/decorative";
 import { CareersFormModal } from "@/components/forms";
 import { Footer, Header } from "@/components/layout";
 import { MobileMenuDrawer, SkipLink } from "@/components/navigation";
@@ -126,6 +126,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Header />
           <BgGlow />
           <Starfield />
+          <GlowTracker />
           <main id="main">{children}</main>
           <Footer />
           <MobileMenuDrawer />

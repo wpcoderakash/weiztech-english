@@ -20,7 +20,10 @@ export interface IconFeatureCardProps {
  */
 export function IconFeatureCard({ icon, title, body, href }: IconFeatureCardProps) {
   return (
-    <Link href={href} className={styles.card}>
+    <Link
+      href={href}
+      className={`${styles.card} cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot`}
+    >
       <Icon name={icon} size="32px" color="var(--primary)" />
       <Heading as="h3" className={styles.title}>
         {title}

@@ -21,7 +21,13 @@ export function FlipCard({ title, body }: FlipCardProps) {
   return (
     <div className={styles.scene} data-anim="card">
       <div className={styles.inner}>
-        <div className={[styles.face, styles.front].join(" ")}>
+        <div
+          className={[
+            styles.face,
+            styles.front,
+            "cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot",
+          ].join(" ")}
+        >
           <Heading as="h3">{title}</Heading>
         </div>
         <div className={[styles.face, styles.back].join(" ")}>

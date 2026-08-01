@@ -6,3 +6,4 @@ export { ParticlesField } from "./ParticlesField";
 export { SocialIcons } from "./SocialIcons";
 export { StarRating } from "./StarRating";
 export { Starfield } from "./Starfield";
+export { GlowTracker } from "./GlowTracker";

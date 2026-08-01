@@ -27,7 +27,10 @@ export function JobPositionCard({ title, summary }: JobPositionCardProps) {
   const { open } = useOverlay();
 
   return (
-    <div className={styles.card} data-anim="job-card">
+    <div
+      className={`${styles.card} cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot`}
+      data-anim="job-card"
+    >
       <div className={styles.content}>
         <Heading as="h3" className={styles.title}>
           {title}

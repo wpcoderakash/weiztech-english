@@ -28,7 +28,7 @@ export interface PricingCardProps {
  */
 export function PricingCard({ plan, cta }: PricingCardProps) {
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot`}>
       <div className={styles.head}>
         <Heading as="h3" className={styles.name}>
           {plan.name}

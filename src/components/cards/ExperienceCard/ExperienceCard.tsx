@@ -27,7 +27,10 @@ export interface ExperienceCardProps {
  */
 export function ExperienceCard({ brand, image, href, label }: ExperienceCardProps) {
   return (
-    <div className={styles.card} data-anim="card">
+    <div
+      className={`${styles.card} cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot`}
+      data-anim="card"
+    >
       <div className={styles.banner}>
         <Image src={image} alt={brand} width={214} height={108} className={styles.image} />
       </div>

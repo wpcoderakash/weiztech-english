@@ -23,7 +23,10 @@ export interface PostCardProps {
  */
 export function PostCard({ post }: PostCardProps) {
   return (
-    <article className={styles.card} data-anim="card">
+    <article
+      className={`${styles.card} cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot`}
+      data-anim="card"
+    >
       <Link href={`/${post.slug}/`} className={styles.link}>
         <div className={styles.meta}>
           <span className={styles.category}>{post.category.label}</span>

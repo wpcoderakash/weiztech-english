@@ -45,7 +45,10 @@
   transform: rotateX(180deg);
 }
 
-.face {
+/* Doubled: the global .cta-cursor-glow utility on the front face sets
+   position: relative at the same (0,1,0) specificity, and injection order
+   let it win — which collapsed the face out of the 3D stack. */
+.face.face {
   position: absolute;
   inset: 0;
   display: flex;

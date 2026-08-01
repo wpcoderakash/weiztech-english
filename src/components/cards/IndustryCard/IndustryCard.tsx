@@ -22,7 +22,10 @@ export interface IndustryCardProps {
  */
 export function IndustryCard({ number, title, body, href }: IndustryCardProps) {
   return (
-    <Link href={href} className={styles.card}>
+    <Link
+      href={href}
+      className={`${styles.card} cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot`}
+    >
       <span className={styles.number} aria-hidden="true">
         {number}
       </span>

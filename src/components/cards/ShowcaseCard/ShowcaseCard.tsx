@@ -29,7 +29,7 @@ export interface ShowcaseCardProps {
  */
 export function ShowcaseCard({ title, body, image, href, demoLabel }: ShowcaseCardProps) {
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot`}>
       <Image src={image} alt="" width={1024} height={683} className={styles.image} />
       <Heading as="h3" className={styles.title}>
         {title}

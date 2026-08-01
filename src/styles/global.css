@@ -213,3 +213,73 @@ html {
   white-space: nowrap;
   border: 0;
 }
+
+/* ============================================================================
+   Cursor-follow border glow — ported from weiz.co.il (globals.css
+   .cta-cursor-glow + GlowTracker). Verified live 1 Aug 2026: every card uses
+   the hover-only spotlight trio (base + --hover + --spot): invisible at rest,
+   a 120px violet arc on the border ring that tracks the cursor. The ring is
+   a masked ::before (inset -1px, 2.5px band) so the host card's background,
+   border and layout are untouched. GlowTracker sets --mx/--my.
+   ========================================================================== */
+.cta-cursor-glow {
+  --mx: 50%;
+  --my: 50%;
+  --glow-size: 200px;
+  position: relative;
+  isolation: isolate;
+}
+
+.cta-cursor-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 2.5px;
+  background:
+    radial-gradient(
+      var(--glow-size) circle at var(--mx) var(--my),
+      #fff 0%,
+      hsl(270deg 100% 80%) 12%,
+      hsl(270deg 100% 62% / 75%) 34%,
+      transparent 72%
+    ),
+    linear-gradient(hsl(270deg 60% 25%), hsl(270deg 60% 25%));
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  /* One deviation from the reference CSS: our card hover overlays are 90%
+     opaque and swallowed the ring's inner band, reading far dimmer than the
+     live site. The ring is only the masked 2.5px border band and ignores
+     pointer events, so lifting it above the card content is safe. */
+  z-index: 1;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.cta-cursor-glow:hover::before {
+  opacity: 1;
+}
+
+/* hover-only: no glow at rest, it appears only under the cursor */
+.cta-cursor-glow--hover::before {
+  opacity: 0;
+}
+
+/* spotlight: ONLY the border near the cursor glows — no full-ring base.
+   120px radius so a centred cursor doesn't light all four edges at once. */
+.cta-cursor-glow--spot {
+  --glow-size: 120px;
+}
+
+.cta-cursor-glow--spot::before {
+  background: radial-gradient(
+    var(--glow-size) circle at var(--mx) var(--my),
+    #fff 0%,
+    hsl(270deg 100% 80%) 12%,
+    hsl(270deg 100% 62% / 75%) 34%,
+    transparent 72%
+  );
+}
