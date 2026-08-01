@@ -41,14 +41,12 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* Reference hover: brighten, not lift. Border warms to the secondary. */
+/* PROBED on the live reference (button-hover.md's brightness spec was an
+   outdated draft): hover lifts 4px and warms the border — filter stays none.
+   The brightness-only hover read as "hover not working". */
 .primary:hover {
-  filter: brightness(1.18);
+  transform: translateY(-4px);
   border-color: #9666ff;
-}
-
-.primary:active {
-  filter: brightness(0.95);
 }
 
 /* --------------------------------------------------------------------------
@@ -57,9 +55,9 @@
 .outline {
   padding: 12px 24px;
   border-radius: var(--radius-pill);
-  /* Design port: rest border #1b1b44, hover border-color only. */
+  /* Design port: rest border #1b1b44. */
   border-color: #1b1b44;
-  transition: border-color 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   color: var(--white);
   /* The element (#omzpdv) sets var(--text-s), overriding the class's literal
      16 — identical at 1440 where the clamp locks at 16px, but at 767 the
@@ -68,8 +66,10 @@
   font-weight: var(--font-weight-medium);
 }
 
+/* Probed on the live reference: the outline lifts too. */
 .outline:hover {
   border-color: #9666ff;
+  transform: translateY(-4px);
 }
 
 /* --------------------------------------------------------------------------
