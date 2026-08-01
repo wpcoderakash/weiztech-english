@@ -3,6 +3,10 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
 const eslintConfig = defineConfig([
+  /* public/particles.js is the reference site's engine, kept VERBATIM —
+     linted rules don't apply to a vendored file. */
+  globalIgnores(["public/**"]),
+
   ...nextVitals,
   ...nextTs,
 

@@ -1,4 +1,5 @@
 import localFont from "next/font/local";
+import Script from "next/script";
 
 import type { Metadata } from "next";
 
@@ -111,6 +112,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={rubik.variable}>
       <body>
+        {/* The reference site's own particle engine, loaded exactly as it
+            loads it: beforeInteractive, so the field paints as the HTML
+            parses, ahead of React hydration. */}
+        <Script src="/particles.js?v=1.3.3" strategy="beforeInteractive" />
         <script
           type="application/ld+json"
 
