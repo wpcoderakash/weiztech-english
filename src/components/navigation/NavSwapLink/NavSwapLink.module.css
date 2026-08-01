@@ -40,8 +40,9 @@
   transform: translateY(-100%);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .text {
-    transition: none;
-  }
-}
+/* NO reduced-motion override, deliberately. The swap duplicates IDENTICAL
+   text, so with the transition removed the hover produces no visible change
+   at all — on a machine with Reduce Motion enabled the nav looked completely
+   dead, which was reported as "header hover not working". The live site
+   animates regardless; an 18px text roll is not a vestibular trigger, and
+   parity wins here. */

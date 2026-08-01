@@ -4,7 +4,9 @@
   gap: 8px;
   padding: 8px 16px;
   border-radius: var(--radius-round);
-  border: 1px solid var(--surface-tint);
+  /* White, per the live header pill (computed rgb(255,255,255)) — it was
+     rendering the near-invisible #1b1b43. Hover audit follow-up. */
+  border: 1px solid var(--white);
 }
 
 .outlined {
