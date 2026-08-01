@@ -25,6 +25,18 @@
   text-align: start;
 }
 
+/* Live-measured at 390/478/767/1024 (18.4773 / 19.0773 / 21.0477 / 22.8px):
+   one linear fluid segment, 15.8183px + 0.6818vw. Our --text-xxl clamp sits
+   1.3-1.9px under it below the desktop lock; matched here for tablet/mobile
+   only — desktop (1440) already measures equal and stays on the token. */
+@media (max-width: 1024px) {
+  /* Doubled: chunked CSS puts a tying (0,1,0) rule after this media block,
+     and media queries add no specificity. */
+  .name.name {
+    font-size: calc(15.8183px + 0.6818vw);
+  }
+}
+
 /* .price-card-text — a literal 16px, left. */
 .blurb.blurb {
   font-size: 16px;

@@ -163,3 +163,15 @@ p.whyBody {
 .lifted {
   z-index: 10;
 }
+
+/* The FAQ header body locks at 16px/28.8 on live at every probed mobile and
+   tablet width (478, 1024) while our --text-s dips fluid below the desktop
+   lock. Scoped tag selector (0,1,1) beats Text's size class; the accordion
+   answers keep their own doubled (0,2,0) rules. Desktop stays on the token
+   (identical at 1440). */
+@media (max-width: 1180px) {
+  .faqGrid p {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+}

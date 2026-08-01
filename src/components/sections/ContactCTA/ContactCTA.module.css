@@ -30,10 +30,16 @@
   }
 }
 
-/* mobile_portrait — the source drops the image and leaves the flat fill */
+/* mobile_portrait — LIVE-PROBED 1 Aug 2026 (390px): the Earth does NOT
+   drop — computed 80% / center / fixed, same as mobile_landscape. The old
+   background-image:none here came from the Bricks JSON and was wrong (the
+   recurring JSON-vs-DOM trap). The copy column also centres: the live
+   wrapper computes display:flex, align-items:center, text-align:center.
+   (0,2,0) beats SectionHeader's .start on any injection order. */
 @media (max-width: 478px) {
-  .section {
-    background-image: none;
+  .section .copy > * {
+    align-items: center;
+    text-align: center;
   }
 }
 
