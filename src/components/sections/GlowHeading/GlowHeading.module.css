@@ -1,0 +1,53 @@
+/* GlowHeading — ported from the weiz.co.il source (GlowHeading.module.css),
+   mirrored for LTR. A moving white/cyan/purple gradient clipped to the hero
+   title, sweeping left-to-right, 12s linear, forever.
+
+   Palette note carried from the source: white / cyan #67fffa / purple #9765ff
+   only — cyan and purple never touch (a direct blend would pass through
+   blue); each band returns to white, so transitions stay smooth. White at
+   both ends makes the 200% tile seamless.
+
+   Only colour/animation lives here — all typography is inherited from the
+   hero heading it wraps. The reference's per-letter spans carry a delay but
+   no animation (probed: `animation: none`), so they are inert and not
+   ported; the visible sweep is line-level. */
+
+.line {
+  display: block;
+  background-image: linear-gradient(
+    /* Reference is `to left` for RTL; mirrored for English. */ to right,
+    #fff,
+    #67fffa,
+    #fff,
+    #9765ff,
+    #fff,
+    #67fffa,
+    #fff,
+    #9765ff,
+    #fff
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hero-grad-sweep var(--glow-duration, 12s) linear infinite;
+}
+
+@keyframes hero-grad-sweep {
+  /* Negative travel sweeps the bands left-to-right for LTR reading —
+     the mirror of the reference's 0% -> 200%. */
+  from {
+    background-position: 200% center;
+  }
+
+  to {
+    background-position: 0% center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Reference behaviour: no movement; the static gradient still shows. */
+  .line {
+    animation: none;
+  }
+}

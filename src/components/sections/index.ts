@@ -2,6 +2,7 @@ export { CheckList } from "./CheckList";
 export type { CheckListProps } from "./CheckList";
 export { ContactCTA } from "./ContactCTA";
 export type { ContactCTAProps } from "./ContactCTA";
+export { GlowHeading } from "./GlowHeading";
 export { FaqAccordion } from "./FaqAccordion";
 export type { FaqAccordionProps, FaqItem } from "./FaqAccordion";
 export { HeroIntro } from "./HeroIntro";

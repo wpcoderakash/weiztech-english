@@ -1,0 +1,1 @@
+export { GlowHeading } from "./GlowHeading";

@@ -124,7 +124,11 @@ export function Reveal({
           ease: step.ease ?? "power1.out",
         };
 
-        if (step.splitWords) {
+        /* A GlowHeading inside the target vetoes word-splitting: SplitText
+           would flatten the gradient span, and the reference site enters its
+           glowing hero titles as a whole block (fadeUp) anyway — which is
+           exactly the plain tween below. */
+        if (step.splitWords && !nodes[0]?.querySelector("[data-glow]")) {
           const split = new SplitText(nodes[0] as HTMLElement, { type: "words" });
           splits.push(split);
           tl.from(split.words, { ...vars, stagger: step.stagger ?? 0.02 }, step.position ?? ">");

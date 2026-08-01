@@ -2,6 +2,8 @@ import { EyebrowBadge, ParticlesField } from "@/components/decorative";
 import { Container, Section } from "@/components/layout";
 import { Heading, Text } from "@/components/primitives";
 
+import { GlowHeading } from "../GlowHeading";
+
 import styles from "./PageHero.module.css";
 
 export interface PageHeroProps {
@@ -87,8 +89,11 @@ export function PageHero({
               data-anim="badge"
             />
           ) : null}
+          {/* Design port: the weiz.co.il gradient sweep lives on a span inside
+              the h1; GSAP fades the h1 as a block (the reference's fadeUp) —
+              word-splitting would destroy the gradient span. */}
           <Heading as="h1" id={headingId} data-anim="heading">
-            {heading}
+            <GlowHeading>{heading}</GlowHeading>
           </Heading>
           {body ? (
             <Text
