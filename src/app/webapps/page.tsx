@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 import { IconFeatureCard, IndustryCard, ShowcaseCard } from "@/components/cards";
-import { EyebrowBadge, ParticlesField } from "@/components/decorative";
+import { EyebrowBadge } from "@/components/decorative";
 import { Container, Grid, Section } from "@/components/layout";
 import { Reveal } from "@/components/motion";
 import { Button, Heading, Text } from "@/components/primitives";
@@ -49,7 +49,6 @@ export default function WebappsPage() {
         PageHero's fixed `.column` would override.
       */}
       <Section spacing="none" className={styles.hero}>
-        <ParticlesField />
         <Container className={styles.heroInner}>
           <EyebrowBadge label={WEBAPPS_HERO.eyebrow} />
           {/* This hero renders its own h1 (illustration layout), so it wraps

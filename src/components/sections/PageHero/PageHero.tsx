@@ -1,4 +1,4 @@
-import { EyebrowBadge, ParticlesField } from "@/components/decorative";
+import { EyebrowBadge } from "@/components/decorative";
 import { Container, Section } from "@/components/layout";
 import { Heading, Text } from "@/components/primitives";
 
@@ -73,7 +73,7 @@ export function PageHero({
 }: PageHeroProps) {
   return (
     <Section spacing="large" className={[styles.hero, className].filter(Boolean).join(" ")}>
-      <ParticlesField />
+      {/* Hero particles retired: the weiz.co.il port renders ONE site-wide Starfield from the root layout. */}
       <Container
         id={containerId}
         className={[styles.inner, innerClassName].filter(Boolean).join(" ")}

@@ -91,6 +91,29 @@ main {
   position: relative;
 }
 
+/* Starfield (weiz.co.il port) — one canvas over the whole document. The
+   wrapper needs body as its containing block, hence position: relative on
+   body; it sits at the glow layer (z 1): above section backgrounds, below
+   every z-10 content container. */
+body {
+  position: relative;
+}
+
+.starfield-layer {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-glow);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.starfield-layer canvas {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
 /* --------------------------------------------------------------------------
    Focus — DELIBERATE DEVIATION FROM SOURCE
    The original disables focus indication site-wide:
