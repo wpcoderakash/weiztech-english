@@ -26,6 +26,16 @@
   z-index: 10;
 }
 
+/* GlowHeading measures the title's NATURAL wrap against its container.
+   The centred flex column shrink-wraps the h1, so once the measured rows are
+   forced as blocks the h1 collapses to the widest row and the measurer can
+   never see the full width again — the cybersec title locked itself into
+   three short lines. Full-width h1 (text stays centred via the column's
+   text-align) keeps the measurer honest at every viewport. */
+.column > h1 {
+  inline-size: 100%;
+}
+
 /* Hero column is width--l (60% of --content-width) with space-s row gap. */
 .column {
   display: flex;
