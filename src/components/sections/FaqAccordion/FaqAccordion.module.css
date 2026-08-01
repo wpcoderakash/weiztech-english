@@ -1,52 +1,67 @@
+/* ============================================================================
+   FAQ accordion — design ported from weiz.co.il (FaqAccordion-module),
+   verified against the live site's computed styles 1 Aug 2026: closed item
+   rgba(0,0,0,.25) on #1b1b43, radius 16; OPEN item swaps to a faint violet
+   gradient tint (no black underneath — the shorthand clears it), #9666ff
+   border and a soft 24px glow, all eased over .25s; a gradient divider under
+   the question; the answer slides via max-height .3s (inline, measured).
+   ========================================================================== */
+
 .accordion {
   inline-size: 100%;
 }
 
-/* .bc-expander-container — `.pad--xs` (13.5px) around a question block that
-   carries its own 10/20 padding. Measured identical on Home and the Web
-   Design page: item 780x78 closed, 8px apart, radius 20/16/20/20.
-
-   The item padding was missing, and the question block used --space-xs in
-   place of the 10/20; together they left each row 22px short, which
-   compounded to 139px over Home's five questions. */
 .item {
   inline-size: 100%;
-  padding: var(--space-xs);
   margin-block-end: 8px;
   border: 1px solid var(--surface-tint);
-  border-start-start-radius: 20px;
-  border-start-end-radius: 16px;
-  border-end-end-radius: 20px;
-  border-end-start-radius: 20px;
+  border-radius: 16px;
   background-color: rgb(0 0 0 / 0.25);
   overflow: hidden;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-/* .bc-expander-question — 90% / 10% split in the source */
+/* Open: highlighted border + subtle purple tint and soft glow. `background`
+   shorthand on purpose — the live open item has NO black fill under the tint. */
+.itemOpen {
+  border-color: #9666ff;
+  background: linear-gradient(180deg, rgb(150 102 255 / 0.03), rgb(150 102 255 / 0.008));
+  box-shadow: 0 6px 24px rgb(150 102 255 / 0.07);
+}
+
 .question {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: nowrap;
+  gap: 50px;
   inline-size: 100%;
-  padding: 10px 20px;
+  padding: 24px;
   text-align: start;
 }
 
+/* Faded purple divider below the question — only while open. */
+.questionOpen::after {
+  content: "";
+  position: absolute;
+  inset-inline: 24px;
+  inset-block-end: 0;
+  block-size: 1px;
+  background: linear-gradient(to right, transparent, #9666ff 50%, transparent);
+}
+
 /* Tag-qualified so it wins over Heading's .h3 on any injection order.
-   Weight is 500 in the source — all five questions carry it (home.json
-   #brxe-jhnwin and siblings), and the live page measures 500. */
+   Reference question: 16px / 500 / 1.4, #d8d4de, white on hover only —
+   the open question stays muted. */
 h3.label {
-  inline-size: 90%;
-  color: var(--base);
-  font-size: var(--text-s);
+  color: #d8d4de;
+  font-size: 16px;
   font-weight: var(--font-weight-medium);
-  /* Inherits body's 1.8; the --text-s-line-height token (1.7) is only applied
-     by ACSS's .text--s utility, which this heading does not carry. Measured
-     29px on the live question against our 27px — 2px per row, 10px over five.
-     Same mistake as PHASE-9-SOFTWARE §1b#4. */
-  line-height: var(--text-line-height);
-  transition: var(--transition-fast);
+  line-height: 1.4;
+  transition: color 0.2s ease;
 }
 
 .question:hover .label {
@@ -55,43 +70,35 @@ h3.label {
 
 .chevronWrap {
   display: flex;
-  inline-size: 10%;
+  flex-shrink: 0;
   align-self: center;
-  justify-content: flex-end;
-  color: var(--base);
+  color: var(--white);
 }
 
 .chevron {
-  transition: transform 0.2s ease-in;
+  transition: transform 0.2s ease;
 }
 
 .chevronOpen {
   transform: rotate(180deg);
 }
 
-/* .bc-expander-answercont */
+/* The sliding container animates an inline max-height (0 -> measured
+   scrollHeight, set in the component) — a height of `auto` cannot tween,
+   which is why the old block-size collapse snapped instead of sliding. */
 .panel {
-  padding: 22px 20px 16px;
+  inline-size: 100%;
+  max-block-size: 0;
   overflow: hidden;
-  transition: block-size 0.25s ease;
+  transition: max-block-size 0.3s ease;
 }
 
-.panelClosed {
-  block-size: 0;
-  padding-block: 0;
-}
-
-/* `contenttypography` sets only the colour (var(--base-light)); the 1.5 line
-   height is the NextBricks expander's own base stylesheet, measured at 24px
-   on 16px copy against Text's inherited 1.8/28.8px.
-
-   Doubled selector — `Text`'s `.tone-base` and `.size-s` tie at (0,1,0) and
-   were winning on injection order, painting the answer muted grey. */
+/* Doubled selector — `Text`'s tone/size classes tie at (0,1,0) and would
+   win on injection order. Reference answer: 16px / 1.75, #d8d4de, padding
+   giving breathing room below the divider. */
 .answer.answer {
-  color: var(--base-light);
-  /* A literal 16px, not the fluid --text-s: identical at 1440 where the
-     clamp locks at 16, but at 767 the token drops to 15.02 and the live
-     answer does not. The expander's own base size, like its 1.5 leading. */
+  padding: 20px 24px 26px;
+  color: #d8d4de;
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.75;
 }

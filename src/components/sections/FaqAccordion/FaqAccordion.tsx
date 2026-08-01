@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import { Heading, Icon, Text } from "@/components/primitives";
 
@@ -18,10 +18,9 @@ export interface FaqAccordionProps {
 /**
  * FaqAccordion — replaces the NextBricks `expander` element.
  *
- * Both instances (Home, Web Design) use identical settings: rgba(0,0,0,0.25)
- * fill, label var(--base) at --text-s hovering to white, content padding
- * 22/20/16/20, content colour var(--base-light), chevron ti-angle-down.
- * Items carry a 1px #1b1b43 border, 16px radius and 8px bottom margin.
+ * Design ported from weiz.co.il's FaqAccordion (verified live 1 Aug 2026):
+ * open items tint violet with a #9666ff border, glow and question divider,
+ * and the answer slides via an inline measured max-height (see module CSS).
  *
  * Multiple items can be open at once, matching the source's expander.
  */
@@ -43,10 +42,14 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
         const isOpen = open.has(index);
         const panelId = `${baseId}-panel-${index}`;
         return (
-          <div key={item.question} className={styles.item} data-anim="faq-item">
+          <div
+            key={item.question}
+            className={[styles.item, isOpen ? styles.itemOpen : ""].join(" ").trim()}
+            data-anim="faq-item"
+          >
             <button
               type="button"
-              className={styles.question}
+              className={[styles.question, isOpen ? styles.questionOpen : ""].join(" ").trim()}
               aria-expanded={isOpen}
               aria-controls={panelId}
               onClick={() => toggle(index)}
@@ -64,22 +67,29 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
             </button>
 
             {/*
-              Collapsed via height, not `hidden`: the NextBricks expander
-              keeps the answer in layout flow inside a clipped container, so
-              it participates in find-in-page and can animate open. `hidden`
-              (display: none) removed it entirely. `inert` keeps the closed
-              panel out of the tab order and the accessibility tree.
+              Collapsed via max-height, not `hidden`: the answer stays in
+              layout flow inside a clipped container, so it participates in
+              find-in-page and can animate open. The open height is the
+              measured scrollHeight — `auto` cannot tween. `inert` keeps the
+              closed panel out of the tab order and the accessibility tree.
             */}
-            <div
-              id={panelId}
-              className={[styles.panel, isOpen ? "" : styles.panelClosed].join(" ").trim()}
-              inert={!isOpen}
-            >
-              <Text className={styles.answer}>{item.answer}</Text>
-            </div>
+            <AnswerPanel id={panelId} isOpen={isOpen} answer={item.answer} />
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function AnswerPanel({ id, isOpen, answer }: { id: string; isOpen: boolean; answer: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const maxBlockSize = isOpen && ref.current ? `${ref.current.scrollHeight}px` : "0px";
+
+  return (
+    <div id={id} className={styles.panel} style={{ maxBlockSize }} inert={!isOpen}>
+      <div ref={ref}>
+        <Text className={styles.answer}>{answer}</Text>
+      </div>
     </div>
   );
 }
