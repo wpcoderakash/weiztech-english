@@ -31,33 +31,38 @@
   inline-size: 50%;
 }
 
+/* Design port (weiz.co.il `.cta-input`): tall 14/18 fields, white copy,
+   focus ring. Replaces the per-page Bricks `fieldPadding` variants. */
 .input,
 .textarea {
   inline-size: 100%;
-  /* Vertical padding is per-page: the Bricks `fieldPadding` setting is 8px on
-     Home and Software and absent on Hardware, where ACSS's own value applies
-     (0 for inputs, 10px for the textarea). */
-  padding-block: var(--field-padding-block, 0);
-  padding-inline: 12px;
+  padding: 14px 18px;
   border: 1px solid var(--border-card-alt);
   border-radius: var(--radius-md);
   background-color: var(--surface-field);
-  color: var(--base-ultra-light);
+  color: var(--white);
   font-size: 14px;
   font-weight: var(--font-weight-medium);
   line-height: var(--text-line-height);
+  outline: none;
+  transition: all 0.2s ease-in;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgb(127 22 233 / 25%);
 }
 
 .textarea {
-  padding-block: var(--field-padding-block, 10px);
-  /* ACSS floor; with the default 2 rows it is what actually sets the height. */
   min-block-size: 90px;
   resize: vertical;
 }
 
 .input::placeholder,
 .textarea::placeholder {
-  color: var(--base);
+  color: #98a2b3;
+  opacity: 1;
 }
 
 /* .submit-button-wrapper — `width: auto`, and the 18/8 margin from
@@ -79,18 +84,24 @@
   justify-content: center;
   letter-spacing: 0.5px;
   inline-size: 100%;
-  padding: 7px 14px;
+  /* Design port (weiz.co.il `.cta-submit`): gradient bar, 15/700, glow hover. */
+  padding: 14px 24px;
+  border: 0;
   border-radius: var(--radius-md);
-  background-color: var(--primary);
+  background: linear-gradient(to right, #9b62ff, #6b46ff);
   color: var(--white);
-  font-size: 14px;
-  font-weight: var(--font-weight-medium);
-  line-height: 2;
-  transition: var(--transition-fast);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    filter 0.2s ease-in,
+    box-shadow 0.2s;
 }
 
 .submit:hover {
-  background-color: var(--secondary);
+  filter: brightness(1.08);
+  box-shadow: 0 0 22px rgb(127 22 233 / 40%);
 }
 
 /* The 50% widths carry no breakpoint in the source — Bricks emits them

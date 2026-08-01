@@ -32,14 +32,23 @@
   padding: 12px 24px;
   border-radius: var(--radius-pill);
   border-color: var(--border-button);
-  background-image: var(--gradient-brand);
+  /* Design port (weiz.co.il / button-hover.md): diagonal 135deg gradient,
+     #7f16e9 -> #9666ff, replacing the old vertical fill. */
+  background-image: linear-gradient(135deg, #7f16e9, #9666ff);
   color: var(--white);
   font-size: var(--text-s);
   font-weight: var(--font-weight-medium);
+  transition: all 0.3s ease-in-out;
 }
 
+/* Reference hover: brighten, not lift. Border warms to the secondary. */
 .primary:hover {
-  transform: translateY(var(--hover-lift));
+  filter: brightness(1.18);
+  border-color: #9666ff;
+}
+
+.primary:active {
+  filter: brightness(0.95);
 }
 
 /* --------------------------------------------------------------------------
@@ -48,7 +57,9 @@
 .outline {
   padding: 12px 24px;
   border-radius: var(--radius-pill);
-  border-color: var(--tertiary-dark);
+  /* Design port: rest border #1b1b44, hover border-color only. */
+  border-color: #1b1b44;
+  transition: border-color 0.3s ease-in-out;
   color: var(--white);
   /* The element (#omzpdv) sets var(--text-s), overriding the class's literal
      16 — identical at 1440 where the clamp locks at 16px, but at 767 the
@@ -58,10 +69,7 @@
 }
 
 .outline:hover {
-  border-color: var(--secondary);
-  /* The live button also lifts 4px on hover — measured via a dispatched
-     mouse-move; the class settings alone do not show it. */
-  transform: translateY(-4px);
+  border-color: #9666ff;
 }
 
 /* --------------------------------------------------------------------------
