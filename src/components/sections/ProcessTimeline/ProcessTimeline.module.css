@@ -1,8 +1,13 @@
-/* Measured off the live timeline at 1440. Each item is a three-column grid
-   384/192/384 inside the 960px width--xl rail (2fr / 1fr / 2fr), padded 40px
-   top and bottom, with a 3px progress rail running down the centre and a 15px
-   dot per step. There is no left/right alternation — every step reads
-   heading-left, panel-right. */
+/* Scroll-scrubbed timeline, visuals ported from weiz.co.il's ProcessTimeline
+   (clone globals.css .timeline-*): dim 2px track #211a3f, a 2px gradient fill
+   (#400b75 -> var(--primary) -> #eee6ff, the reference's primary-dark /
+   primary / secondary-ultra-light) that scaleY-follows scroll, 18px dots —
+   dim rgba(255,255,255,.18) base, lit white core with the violet glow ring —
+   and glass step cards (rgba(13,13,33,.59), 1px #1b1b43, radius 12).
+
+   Step grid geometry (2fr/1fr/2fr in the width--xl rail, 40px block padding,
+   heading left / panel right) is OURS, measured off the original WeizTech
+   page — the content layout is not part of this port. */
 .timeline {
   position: relative;
   display: flex;
@@ -13,19 +18,34 @@
   inline-size: 100%;
 }
 
-/* .next-timeline--progress */
+/* Dim background track. */
 .timeline::before {
   content: "";
   position: absolute;
   inset-block: 0;
   inset-inline-start: 50%;
-  inline-size: 3px;
+  inline-size: 2px;
   transform: translateX(-50%);
-  /* Measured #414141 on the live rail. */
-  background-color: #414141;
+  background-color: #211a3f;
+}
+
+/* Gradient progress fill — grows from the top, driven by --tl-progress
+   (set by the component on scroll, rAF-throttled). */
+.timeline::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 50%;
+  inline-size: 2px;
+  transform: translateX(-50%) scaleY(var(--tl-progress, 0));
+  transform-origin: top center;
+  background: linear-gradient(180deg, #400b75, var(--primary), #eee6ff);
+  will-change: transform;
 }
 
 .step {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 2fr 1fr 2fr;
   align-items: start;
@@ -35,20 +55,36 @@
   padding-block: 40px;
 }
 
+/* Dim base circle; the lit overlay fades/scales in on top when the fill
+   reaches this step. */
 .marker {
+  position: relative;
   grid-column: 2;
   justify-self: center;
-  inline-size: 15px;
-  block-size: 15px;
+  inline-size: 18px;
+  block-size: 18px;
   border-radius: var(--radius-circle);
-  background-color: var(--primary);
+  background-color: rgb(255 255 255 / 18%);
 }
 
-/* .timeline-content-text — space-s padding, rgba(13,13,33,0.59), 8px radius. */
+.markerOn {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-circle);
+  background-color: var(--white);
+  box-shadow:
+    0 0 0 5px rgb(127 22 233 / 28%),
+    0 0 16px rgb(150 102 255 / 65%);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Step card — reference glass: rgba(13,13,33,.59), 1px #1b1b43, radius 12. */
 .content {
   grid-column: 3;
   padding: var(--space-s);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--surface-tint);
+  border-radius: 12px;
   background-color: rgb(13 13 33 / 59%);
 }
 
@@ -75,16 +111,29 @@
 }
 
 @media (max-width: 767px) {
-  .timeline::before {
-    inset-inline-start: 7px;
+  .timeline::before,
+  .timeline::after {
+    inset-inline-start: 9px;
+    transform: translateX(0);
+  }
+
+  .timeline::after {
+    transform: translateX(0) scaleY(var(--tl-progress, 0));
   }
 
   .step {
-    grid-template-columns: 15px 1fr;
+    grid-template-columns: 18px 1fr;
     column-gap: var(--space-s);
   }
 
-  .title,
+  /* Doubled: the base .title.title (grid-column 1, justify-self center)
+     is (0,2,0) and media queries add no specificity — a single-class
+     override loses and the title collapses into the 18px marker column. */
+  .title.title {
+    grid-column: 2;
+    justify-self: start;
+  }
+
   .content {
     grid-column: 2;
   }
