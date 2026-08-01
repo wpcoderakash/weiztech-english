@@ -25,13 +25,11 @@ export interface ContactCardProps {
  */
 export function ContactCard({ items }: ContactCardProps) {
   return (
-    <div className={styles.card} data-anim="card">
+    /* Full-ring variant (no --spot) on the OUTER panel: the user wants the
+       entire card border to glow on hover, not an arc on the inner rows. */
+    <div className={`${styles.card} cta-cursor-glow cta-cursor-glow--hover`} data-anim="card">
       {items.map((item) => (
-        <Link
-          key={item.label}
-          href={item.href}
-          className={`${styles.item} cta-cursor-glow cta-cursor-glow--hover cta-cursor-glow--spot`}
-        >
+        <Link key={item.label} href={item.href} className={styles.item}>
           <span
             className={[styles.iconRow, item.iconLinked === false ? styles.iconRowBare : ""]
               .filter(Boolean)
