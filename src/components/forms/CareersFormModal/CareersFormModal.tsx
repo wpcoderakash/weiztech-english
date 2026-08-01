@@ -11,6 +11,7 @@ import type { CareersFieldError, CareersFieldName } from "@/lib/forms/careers-sc
 import { CAREERS_FORM_INITIAL_STATE } from "@/lib/forms/careers-state";
 
 import { SubmitButton } from "../ContactForm/SubmitButton";
+import { TurnstileWidget } from "../TurnstileWidget";
 
 import styles from "./CareersFormModal.module.css";
 
@@ -255,6 +256,7 @@ export function CareersFormModal() {
               is configured, so the form works either way.
             */}
 
+            <TurnstileWidget />
             <SubmitButton className={styles.submit}>Submit</SubmitButton>
           </form>
         )}

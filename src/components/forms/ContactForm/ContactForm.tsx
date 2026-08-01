@@ -10,6 +10,8 @@ import { CONTACT_FORM_INITIAL_STATE } from "@/lib/forms/contact-state";
 import type { FieldError, FieldName } from "@/lib/forms/schema";
 
 import styles from "./ContactForm.module.css";
+import { TurnstileWidget } from "../TurnstileWidget";
+
 import { SubmitButton } from "./SubmitButton";
 
 export interface ContactFormProps {
@@ -177,11 +179,7 @@ export function ContactForm({
         ) : null}
       </div>
 
-      {/*
-        Turnstile mounts here once NEXT_PUBLIC_TURNSTILE_SITE_KEY is set. The
-        server already verifies the token and skips the check when no secret
-        is configured, so the form works either way.
-      */}
+      <TurnstileWidget />
 
       <div className={styles.submitWrapper}>
         <SubmitButton className={styles.submit}>{submitLabel}</SubmitButton>

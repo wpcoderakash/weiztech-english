@@ -8,6 +8,7 @@ import type { QuoteFieldError, QuoteFieldName } from "@/lib/forms/quote-schema";
 import { QUOTE_FORM_INITIAL_STATE } from "@/lib/forms/quote-state";
 
 import { SubmitButton } from "../ContactForm/SubmitButton";
+import { TurnstileWidget } from "../TurnstileWidget";
 
 import styles from "./QuoteForm.module.css";
 
@@ -209,6 +210,8 @@ export function QuoteForm() {
         Turnstile mounts here once NEXT_PUBLIC_TURNSTILE_SITE_KEY is set —
         the source has `enableTurnstile: true` with a dark theme.
       */}
+
+      <TurnstileWidget />
 
       <div className={styles.submitWrapper}>
         <SubmitButton className={styles.submit}>Send Message</SubmitButton>
