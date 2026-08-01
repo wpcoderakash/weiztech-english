@@ -52,6 +52,5 @@
   transition: var(--transition-fast);
 }
 
-.button:hover {
-  border-color: var(--primary);
-}
+/* No hover treatment: the live View button keeps its #1b1b43 border on
+   hover — a primary-border hover here was an invention. Hover audit. */

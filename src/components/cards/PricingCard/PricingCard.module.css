@@ -61,7 +61,10 @@
 
 /* .price-card-button — pill, 1px #1c1542, 10/24 padding, --text-s at 500,
    lifting 4px and turning var(--primary) on hover. */
-.cta {
+/* Doubled: Button's `.outline` ties at (0,1,0) and was winning — its 12px
+   block padding and --tertiary-dark border rendered instead of the source's
+   10px / #1c1542 (`sgrurh`). Computed-style audit caught it. */
+.cta.cta {
   /* Full width — the source button fills the card's content box. */
   align-self: stretch;
   justify-content: center;
@@ -75,7 +78,9 @@
   transition: var(--transition-fast);
 }
 
-.cta:hover {
+/* Doubled like the base: Button's .outline:hover ties and was painting the
+   hover border --secondary instead of the source's --primary. */
+.cta.cta:hover {
   transform: translateY(-4px);
   border-color: var(--primary);
 }

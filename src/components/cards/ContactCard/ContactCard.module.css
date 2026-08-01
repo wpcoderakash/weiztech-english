@@ -5,6 +5,10 @@
   flex-direction: column;
   row-gap: 12px;
   padding: var(--space-m);
+  /* var(--surface-card) — the live card carries the glass fill
+     rgba(3,1,22,0.35); it was rendering with no background at all.
+     Computed-style audit caught it. */
+  background-color: var(--surface-card);
   border: 1px solid #2f2f6a;
   border-radius: var(--radius-lg);
   transition: var(--transition-base);

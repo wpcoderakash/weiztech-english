@@ -97,7 +97,15 @@ export default function CybersecPage() {
       </Reveal>
 
       <Reveal steps={CONTACT_BAND_STEPS}>
-        <ContactCTA copyGap="xs" {...CYBERSEC_CONTACT_CTA} />
+        {/* This page's form labels its name field "Full name" and its phone
+            placeholder "Phone number" (cybersec.json) — not the "Name"/"Phone"
+            defaults. Placeholders are invisible to the text harness; caught by
+            screenshot, and the first attempt at this fix silently missed. */}
+        <ContactCTA
+          copyGap="xs"
+          {...CYBERSEC_CONTACT_CTA}
+          form={{ nameLabel: "Full name", phonePlaceholder: "Phone number" }}
+        />
       </Reveal>
     </>
   );

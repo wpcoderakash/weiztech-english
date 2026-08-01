@@ -57,6 +57,10 @@
   text-align: center;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  /* WHITE under the image: the source tile has semi-transparent regions,
+     and the live face lets white show through them — over a transparent
+     base the same image renders visibly darker. Computed-style audit. */
+  background-color: #fff;
   background-image: url("/images/why-choose-bg.webp");
   background-size: cover;
   background-position: center;

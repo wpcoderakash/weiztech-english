@@ -78,7 +78,10 @@
   --border-button: #9b62ff;
 
   /* Gradients */
-  --gradient-brand: linear-gradient(var(--primary), var(--secondary));
+  /* The source declares this as a REPEATING linear gradient. With two
+     default-position stops it paints identically to a plain one; matched
+     exactly so computed styles compare clean. */
+  --gradient-brand: repeating-linear-gradient(var(--primary), var(--secondary));
   --gradient-glow: radial-gradient(50% 50% at 50% 50%, #20008e 0%, #121212 100%);
   --gradient-glow-alt: radial-gradient(50% 50% at 50% 50%, rgb(50 31 116) 0%, rgb(1 4 26) 100%);
 

@@ -59,6 +59,9 @@
 
 .outline:hover {
   border-color: var(--secondary);
+  /* The live button also lifts 4px on hover — measured via a dispatched
+     mouse-move; the class settings alone do not show it. */
+  transform: translateY(-4px);
 }
 
 /* --------------------------------------------------------------------------
