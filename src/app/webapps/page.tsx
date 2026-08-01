@@ -9,6 +9,7 @@ import { Reveal } from "@/components/motion";
 import { Button, Heading, Text } from "@/components/primitives";
 import {
   CheckList,
+  GlowHeading,
   ContactCTA,
   FaqAccordion,
   PricingTabs,
@@ -51,8 +52,10 @@ export default function WebappsPage() {
         <ParticlesField />
         <Container className={styles.heroInner}>
           <EyebrowBadge label={WEBAPPS_HERO.eyebrow} />
+          {/* This hero renders its own h1 (illustration layout), so it wraps
+              GlowHeading itself — PageHero's heading path does it elsewhere. */}
           <Heading as="h1" id="hero-heading" className={styles.heroHeading}>
-            {WEBAPPS_HERO.heading}
+            <GlowHeading>{WEBAPPS_HERO.heading}</GlowHeading>
           </Heading>
           <Text tone="muted" className={styles.heroBody}>
             {WEBAPPS_HERO.body}

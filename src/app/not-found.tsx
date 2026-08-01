@@ -1,5 +1,6 @@
 import { Container, Section } from "@/components/layout";
 import { Button, Heading, Text } from "@/components/primitives";
+import { GlowHeading } from "@/components/sections";
 
 import styles from "./not-found.module.css";
 
@@ -16,7 +17,7 @@ export default function NotFound() {
     <Section spacing="large">
       <Container className={styles.inner}>
         <Heading as="h1" className={styles.heading}>
-          Oops! We can&apos;t find the page you&apos;re looking for.
+          <GlowHeading>Oops! We can&apos;t find the page you&apos;re looking for.</GlowHeading>
         </Heading>
         <Text size="m" tone="muted" className={styles.subtext}>
           Can&apos;t find what you&apos;re looking for? Click here to go home.
