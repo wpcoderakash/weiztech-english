@@ -1,16 +1,31 @@
 /* GlowHeading — ported from the weiz.co.il source (GlowHeading.module.css),
    mirrored for LTR. A moving white/cyan/purple gradient clipped to the hero
-   title, sweeping left-to-right, 12s linear, forever.
+   title, sweeping left-to-right, 12s linear, forever — with each visual ROW
+   offset by a quarter cycle so stacked rows never share a phase (the
+   reference's `.line` rule, verbatim).
 
-   Palette note carried from the source: white / cyan #67fffa / purple #9765ff
-   only — cyan and purple never touch (a direct blend would pass through
-   blue); each band returns to white, so transitions stay smooth. White at
-   both ends makes the 200% tile seamless.
+   Palette note carried from the source: white / cyan #67fffa / purple
+   #9765ff only — cyan and purple never touch (a direct blend would pass
+   through blue); each band returns to white, so transitions stay smooth.
+   White at both ends makes the 200% tile seamless. */
 
-   Only colour/animation lives here — all typography is inherited from the
-   hero heading it wraps. The reference's per-letter spans carry a delay but
-   no animation (probed: `animation: none`), so they are inert and not
-   ported; the visible sweep is line-level. */
+.glow {
+  position: relative;
+  display: block;
+}
+
+/* The invisible twin used to detect the natural line wrap. */
+.measure {
+  position: absolute;
+  inset: 0;
+  display: block;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.word {
+  display: inline;
+}
 
 .line {
   display: block;
@@ -31,6 +46,12 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: hero-grad-sweep var(--glow-duration, 12s) linear infinite;
+
+  /* Reference rule, verbatim: each row trails the previous by a quarter
+     cycle (row 0 -> 0s, row 1 -> -3s at 12s), so the rows sweep at
+     different phases instead of in unison. Longhand AFTER the shorthand so
+     it is not reset to 0. */
+  animation-delay: calc(var(--line-i, 0) * var(--glow-duration, 12s) / -4);
 }
 
 @keyframes hero-grad-sweep {
