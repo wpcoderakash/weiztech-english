@@ -31,8 +31,12 @@
     };
   }
   function prefersReduced() {
-    try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
-    catch (e) { return false; }
+    /* WeizTech deviation from the reference engine (the ONLY one): never
+       take the reduced-motion path. The original swaps to a static field
+       and skips the mousemove listeners when the OS has "Reduce Motion"
+       on, which silently kills the cursor repulse for those users — the
+       drift + repulse ARE the design here, so always animate. */
+    return false;
   }
 
   function init(canvas) {
