@@ -4,9 +4,10 @@
   gap: 8px;
   padding: 8px 16px;
   border-radius: var(--radius-round);
-  /* White, per the live header pill (computed rgb(255,255,255)) — it was
-     rendering the near-invisible #1b1b43. Hover audit follow-up. */
-  border: 1px solid var(--white);
+  /* 1px var(--surface-tint) (#1b1b43) — probed on the VISIBLE header pill.
+     A previous fix set this to white after probing live's hidden mobile-popup
+     toggle by mistake; the user's screenshot caught it. */
+  border: 1px solid var(--surface-tint);
 }
 
 .outlined {
