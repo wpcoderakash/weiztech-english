@@ -69,7 +69,11 @@ export default function WebappsPage() {
             {WEBAPPS_HERO.cta.label}
           </Button>
           {/* div#wcxhnf — a bordered panel holding the 650px illustration. */}
-          <div className={styles.heroPanel}>
+          <div
+            /* Full-ring cursor glow, same variant the user chose for the
+               contact panels. */
+            className={`${styles.heroPanel} cta-cursor-glow cta-cursor-glow--hover`}
+          >
             <Image
               src={WEBAPPS_HERO.image.src}
               alt={WEBAPPS_HERO.image.alt}
