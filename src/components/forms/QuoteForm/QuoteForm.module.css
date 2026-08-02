@@ -173,14 +173,13 @@
   white-space: nowrap;
 }
 
-/* Bricks `mobile_portrait` — the select goes full width and the other
-   narrow fields pair up at 50%. */
+/* Bricks `mobile_portrait` paired the halves at 50%, but our ported inputs
+   are taller with 18px side padding — at 163px the placeholders clip ("The
+   requested produc…"). Phones get a single clean column instead; 479-767
+   keeps the original pairing, desktop untouched. */
 @media (max-width: 478px) {
-  .third:first-of-type {
+  .third,
+  .half {
     inline-size: 100%;
-  }
-
-  .third {
-    inline-size: 50%;
   }
 }
