@@ -1,11 +1,14 @@
 import type { ReactNode } from "react";
 
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import type { Metadata } from "next";
 
 import { currentAdmin } from "@/lib/supabase/server";
+
+import { version } from "../../../../package.json";
 
 import styles from "../admin.module.css";
 import { signOut } from "../login/actions";
@@ -35,8 +38,13 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <div className={styles.root}>
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
-          <span className={styles.brandDot} />
-          WeizTech CMS
+          <Image
+            src="/images/Weiz-Logo.svg"
+            alt="Weiz Technologies"
+            width={78}
+            height={41}
+            priority
+          />
         </div>
 
         <div className={styles.navGroupLabel}>Manage</div>
@@ -47,7 +55,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
           </Link>
         ))}
 
-        <div className={styles.sidebarFooter}>WeizTech CMS · Supabase</div>
+        <div className={styles.sidebarFooter}>v{version}</div>
       </aside>
 
       <div className={styles.main}>
