@@ -79,7 +79,8 @@ export async function proxy(request: NextRequest) {
     const response = NextResponse.redirect(new URL("/admin/login", request.url));
     response.cookies.set(GATE_COOKIE, slug, {
       httpOnly: true,
-      secure: true,
+      /* secure cookies never stick on plain-http localhost in some browsers */
+      secure: request.nextUrl.protocol === "https:",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30,
       path: "/",
