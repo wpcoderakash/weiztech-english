@@ -47,7 +47,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
           </Link>
         ))}
 
-        <div className={styles.sidebarFooter}>Phase C1 · Supabase</div>
+        <div className={styles.sidebarFooter}>WeizTech CMS · Supabase</div>
       </aside>
 
       <div className={styles.main}>
