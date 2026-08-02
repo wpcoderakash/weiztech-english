@@ -27,8 +27,6 @@ const NAV = [
   { label: "Activity", href: "/admin/activity", icon: "≡" },
 ];
 
-const SOON = ["Media Library", "Navigation", "SEO", "Settings", "Users & Roles"];
-
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const admin = await currentAdmin();
   if (!admin) redirect("/admin/login");
@@ -47,14 +45,6 @@ export default async function AdminLayout({ children }: { children: ReactNode })
             <span aria-hidden="true">{item.icon}</span>
             {item.label}
           </Link>
-        ))}
-
-        <div className={styles.navGroupLabel}>Coming next</div>
-        {SOON.map((label) => (
-          <span key={label} className={`${styles.navLink} ${styles.navSoon}`}>
-            {label}
-            <span className={styles.navBadge}>soon</span>
-          </span>
         ))}
 
         <div className={styles.sidebarFooter}>Phase C1 · Supabase</div>
