@@ -110,3 +110,57 @@ export async function restoreRevision(revisionId: string): Promise<void> {
   revalidateTag(`page:${section.pages.slug}`, "max");
   redirect(`/admin/pages/${section.pages.slug}/${rev.section_id}`);
 }
+
+/* ---- C8 pilot: section-level order + visibility (ORDERABLE_PAGES only) ---- */
+
+export async function moveSection(sectionId: string, dir: -1 | 1): Promise<void> {
+  const admin = await currentAdmin();
+  if (!admin || !CAN_PUBLISH.has(admin.role)) return;
+
+  const db = supabaseAdmin();
+  const section = await sectionWithPage(sectionId);
+  const { data: siblings } = await db
+    .from("sections")
+    .select("id, sort")
+    .eq(
+      "page_id",
+      (await db.from("pages").select("id").eq("slug", section.pages.slug).single()).data!.id,
+    )
+    .is("deleted_at", null)
+    .order("sort");
+  if (!siblings) return;
+  const index = siblings.findIndex((s) => s.id === sectionId);
+  const other = siblings[index + dir];
+  if (index === -1 || !other) return;
+
+  const current = siblings[index]!;
+  await db.from("sections").update({ sort: other.sort }).eq("id", current.id);
+  await db.from("sections").update({ sort: current.sort }).eq("id", other.id);
+  await db.from("activity_log").insert({
+    actor_id: admin.userId,
+    action: "section.move",
+    entity: "sections",
+    entity_id: sectionId,
+  });
+  revalidateTag(`page:${section.pages.slug}`, "max");
+  revalidatePath(`/admin/pages/${section.pages.slug}`);
+}
+
+export async function toggleSectionEnabled(sectionId: string): Promise<void> {
+  const admin = await currentAdmin();
+  if (!admin || !CAN_PUBLISH.has(admin.role)) return;
+
+  const db = supabaseAdmin();
+  const section = await sectionWithPage(sectionId);
+  const { data: row } = await db.from("sections").select("enabled").eq("id", sectionId).single();
+  if (!row) return;
+  await db.from("sections").update({ enabled: !row.enabled }).eq("id", sectionId);
+  await db.from("activity_log").insert({
+    actor_id: admin.userId,
+    action: row.enabled ? "section.disable" : "section.enable",
+    entity: "sections",
+    entity_id: sectionId,
+  });
+  revalidateTag(`page:${section.pages.slug}`, "max");
+  revalidatePath(`/admin/pages/${section.pages.slug}`);
+}

@@ -23,7 +23,7 @@ const sectionsFor = (slug: string) =>
     async () => {
       const { data, error } = await supabaseAdmin()
         .from("sections")
-        .select("type, data, enabled")
+        .select("type, data, enabled, sort")
         .eq("page_id", await pageId(slug))
         .is("deleted_at", null);
       if (error) throw error;
@@ -41,6 +41,35 @@ async function pageId(slug: string): Promise<string> {
     .single();
   if (error) throw error;
   return data.id;
+}
+
+/**
+ * C8 pilot — section-level ordering. Returns the page's section types in the
+ * DB's sort order with their enabled flags. Unknown types are dropped and
+ * canonical types missing from the DB are appended enabled, so a page can
+ * never lose a section to bad data; canonical order is the fallback.
+ */
+export async function getSectionOrder(
+  pageSlug: string,
+  canonical: readonly string[],
+): Promise<{ type: string; enabled: boolean }[]> {
+  const fallback = canonical.map((type) => ({ type, enabled: true }));
+  if (process.env.CMS_READS === "off") return fallback;
+  try {
+    const rows = await sectionsFor(pageSlug);
+    const ordered = rows
+      .slice()
+      .sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0))
+      .filter((r) => canonical.includes(r.type))
+      .map((r) => ({ type: r.type, enabled: r.enabled }));
+    for (const type of canonical) {
+      if (!ordered.some((o) => o.type === type)) ordered.push({ type, enabled: true });
+    }
+    return ordered;
+  } catch (cause) {
+    console.warn(`[cms] getSectionOrder(${pageSlug}) fell back:`, cause);
+    return fallback;
+  }
 }
 
 export async function getSection<T>(pageSlug: string, key: string, fallback: T): Promise<T> {

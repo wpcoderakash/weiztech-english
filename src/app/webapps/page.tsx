@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { Fragment } from "react";
+
 import type { Metadata } from "next";
 
 import { IconFeatureCard, IndustryCard, ShowcaseCard } from "@/components/cards";
@@ -28,7 +30,7 @@ import {
   WEBAPPS_SHOWCASE as WEBAPPS_SHOWCASE_FALLBACK,
   WEBAPPS_WHY_CHOOSE_US as WEBAPPS_WHY_CHOOSE_US_FALLBACK,
 } from "@/content/pages/webapps";
-import { getSection, getSeo } from "@/lib/cms/getContent";
+import { getSection, getSectionOrder, getSeo } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
@@ -49,6 +51,18 @@ export async function generateMetadata(): Promise<Metadata> {
   });
   return pageMetadata({ ...METADATA_FALLBACK, ...seo });
 }
+
+const CANONICAL_ORDER = [
+  "WEBAPPS_HERO",
+  "WEBAPPS_SERVICES",
+  "WEBAPPS_INDUSTRIES",
+  "WEBAPPS_WHY_CHOOSE_US",
+  "WEBAPPS_SHOWCASE",
+  "WEBAPPS_PROCESS",
+  "WEBAPPS_PRICING",
+  "WEBAPPS_FAQ",
+  "WEBAPPS_CONTACT_CTA",
+] as const;
 
 export default async function WebappsPage() {
   /* C3: content from the CMS; the aliased imports are the byte-identical
@@ -83,180 +97,221 @@ export default async function WebappsPage() {
     WEBAPPS_WHY_CHOOSE_US_FALLBACK,
   );
 
-  return (
-    <>
-      {/*
+  /* C8 pilot — this page renders its top-level sections from the CMS's
+     order (getSectionOrder): reorder and enable/disable apply from the
+     admin. Canonical order below is the fallback and the 0-diff baseline. */
+  const order = await getSectionOrder("webapps", CANONICAL_ORDER);
+
+  const blocks: Record<string, React.ReactNode> = {
+    WEBAPPS_HERO: (
+      <>
+        {/*
         Hero — source section#xgdyhu. Not PageHero: this one has no inner
         60%-wide column. Its container is the column, and each child sets its
         own width (h1 and body width--l, the image panel width--xl), which
         PageHero's fixed `.column` would override.
       */}
-      <Section spacing="none" className={styles.hero}>
-        <Container className={styles.heroInner}>
-          <EyebrowBadge label={WEBAPPS_HERO.eyebrow} />
-          {/* This hero renders its own h1 (illustration layout), so it wraps
+        <Section spacing="none" className={styles.hero}>
+          <Container className={styles.heroInner}>
+            <EyebrowBadge label={WEBAPPS_HERO.eyebrow} />
+            {/* This hero renders its own h1 (illustration layout), so it wraps
               GlowHeading itself — PageHero's heading path does it elsewhere. */}
-          <Heading as="h1" id="hero-heading" className={styles.heroHeading}>
-            <GlowHeading>{WEBAPPS_HERO.heading}</GlowHeading>
-          </Heading>
-          <Text tone="muted" className={styles.heroBody}>
-            {WEBAPPS_HERO.body}
-          </Text>
-          {/* #brxe-dkndau sets 14px, not the 16px `.primary` carries on Home. */}
-          <Button
-            href={WEBAPPS_HERO.cta.href}
-            variant="primary"
-            icon="ion-ios-paper-plane"
-            className={styles.heroCta}
-          >
-            {WEBAPPS_HERO.cta.label}
-          </Button>
-          {/* div#wcxhnf — a bordered panel holding the 650px illustration. */}
-          <div
-            /* Full-ring cursor glow, same variant the user chose for the
+            <Heading as="h1" id="hero-heading" className={styles.heroHeading}>
+              <GlowHeading>{WEBAPPS_HERO.heading}</GlowHeading>
+            </Heading>
+            <Text tone="muted" className={styles.heroBody}>
+              {WEBAPPS_HERO.body}
+            </Text>
+            {/* #brxe-dkndau sets 14px, not the 16px `.primary` carries on Home. */}
+            <Button
+              href={WEBAPPS_HERO.cta.href}
+              variant="primary"
+              icon="ion-ios-paper-plane"
+              className={styles.heroCta}
+            >
+              {WEBAPPS_HERO.cta.label}
+            </Button>
+            {/* div#wcxhnf — a bordered panel holding the 650px illustration. */}
+            <div
+              /* Full-ring cursor glow, same variant the user chose for the
                contact panels. */
-            className={`${styles.heroPanel} cta-cursor-glow cta-cursor-glow--hover`}
-          >
-            <Image
-              src={WEBAPPS_HERO.image.src}
-              alt={WEBAPPS_HERO.image.alt}
-              width={WEBAPPS_HERO.image.width}
-              height={WEBAPPS_HERO.image.height}
-              priority
-              className={styles.heroImage}
-            />
-          </div>
-        </Container>
-      </Section>
-
-      {/* Services — source section#3e7d12 */}
-      <Reveal steps={WEBAPPS_SERVICES_STEPS}>
-        <Section id="services" className={styles.section}>
-          <Container className={styles.centeredHeader}>
-            {/* #brxe-c788b1 and #brxe-byxekl both set width: var(--width-m). */}
-            <SectionHeader
-              heading={WEBAPPS_SERVICES.heading}
-              headingWidth="m"
-              body={WEBAPPS_SERVICES.body}
-              bodyWidth="m"
-              bodyTone="muted"
-            />
-          </Container>
-          <Container className={styles.lifted}>
-            <Grid columns="auto-2" gap="var(--space-m)" className={styles.stretchGrid}>
-              {WEBAPPS_SERVICES.cards.map((card) => (
-                <IconFeatureCard key={card.title} {...card} />
-              ))}
-            </Grid>
+              className={`${styles.heroPanel} cta-cursor-glow cta-cursor-glow--hover`}
+            >
+              <Image
+                src={WEBAPPS_HERO.image.src}
+                alt={WEBAPPS_HERO.image.alt}
+                width={WEBAPPS_HERO.image.width}
+                height={WEBAPPS_HERO.image.height}
+                priority
+                className={styles.heroImage}
+              />
+            </div>
           </Container>
         </Section>
-      </Reveal>
-
-      {/* Industries — source section#kgbujs. One container holding both the
+      </>
+    ),
+    WEBAPPS_SERVICES: (
+      <>
+        {/* Services — source section#3e7d12 */}
+        <Reveal steps={WEBAPPS_SERVICES_STEPS}>
+          <Section id="services" className={styles.section}>
+            <Container className={styles.centeredHeader}>
+              {/* #brxe-c788b1 and #brxe-byxekl both set width: var(--width-m). */}
+              <SectionHeader
+                heading={WEBAPPS_SERVICES.heading}
+                headingWidth="m"
+                body={WEBAPPS_SERVICES.body}
+                bodyWidth="m"
+                bodyTone="muted"
+              />
+            </Container>
+            <Container className={styles.lifted}>
+              <Grid columns="auto-2" gap="var(--space-m)" className={styles.stretchGrid}>
+                {WEBAPPS_SERVICES.cards.map((card) => (
+                  <IconFeatureCard key={card.title} {...card} />
+                ))}
+              </Grid>
+            </Container>
+          </Section>
+        </Reveal>
+      </>
+    ),
+    WEBAPPS_INDUSTRIES: (
+      <>
+        {/* Industries — source section#kgbujs. One container holding both the
           header and the grid, with a space-l gap between them. */}
-      <Section id="industries" className={styles.section}>
-        <Container className={styles.industriesInner}>
-          <SectionHeader
-            gap="s"
-            heading={WEBAPPS_INDUSTRIES.heading}
-            body={WEBAPPS_INDUSTRIES.body}
-            bodyWidth="l"
-            bodyTone="muted"
-          />
-          <Grid columns="auto-3" gap="var(--space-m)" className={styles.industriesGrid}>
-            {WEBAPPS_INDUSTRIES.cards.map((card) => (
-              <IndustryCard key={card.number} {...card} />
-            ))}
-          </Grid>
-        </Container>
-      </Section>
-
-      {/* Why Choose Us — source section#tcbkkv, a two-column split. */}
-      <Section id="why-choose-us" className={styles.section}>
-        <Container className={styles.whyGrid}>
-          <div className={styles.whyCopy}>
-            <Heading as="h2">{WEBAPPS_WHY_CHOOSE_US.heading}</Heading>
-            <Text className={styles.whyBody}>{WEBAPPS_WHY_CHOOSE_US.body}</Text>
-          </div>
-          <CheckList items={WEBAPPS_WHY_CHOOSE_US.points} />
-        </Container>
-      </Section>
-
-      {/* Showcase — source section#450756 */}
-      <Reveal steps={WEBAPPS_SHOWCASE_STEPS}>
-        <Section id="showcase" className={styles.section}>
-          <Container className={styles.centeredHeader}>
+        <Section id="industries" className={styles.section}>
+          <Container className={styles.industriesInner}>
             <SectionHeader
-              heading={WEBAPPS_SHOWCASE.heading}
-              headingWidth="m"
-              body={WEBAPPS_SHOWCASE.body}
-              bodyWidth="m"
+              gap="s"
+              heading={WEBAPPS_INDUSTRIES.heading}
+              body={WEBAPPS_INDUSTRIES.body}
+              bodyWidth="l"
               bodyTone="muted"
             />
-          </Container>
-          <Container className={styles.lifted}>
-            <Grid columns="auto-3" gap="var(--space-m)" className={styles.stretchGrid}>
-              {WEBAPPS_SHOWCASE.cards.map((card) => (
-                <ShowcaseCard key={card.title} {...card} demoLabel={WEBAPPS_SHOWCASE.demoLabel} />
+            <Grid columns="auto-3" gap="var(--space-m)" className={styles.industriesGrid}>
+              {WEBAPPS_INDUSTRIES.cards.map((card) => (
+                <IndustryCard key={card.number} {...card} />
               ))}
             </Grid>
           </Container>
         </Section>
-      </Reveal>
-
-      {/* Development process — source section#dsvmbh */}
-      <Section id="process" className={styles.section}>
-        <Container className={styles.processHeader}>
-          <SectionHeader
-            heading={WEBAPPS_PROCESS.heading}
-            body={WEBAPPS_PROCESS.body}
-            bodyWidth="l"
-          />
-        </Container>
-        <Container className={styles.lifted}>
-          <ProcessTimeline steps={WEBAPPS_PROCESS.steps} />
-        </Container>
-      </Section>
-
-      {/* Pricing — source section#7a7375 */}
-      <Section id="pricing" className={styles.section}>
-        <Container className={styles.centeredHeader}>
-          <SectionHeader
-            eyebrow={{ label: WEBAPPS_PRICING.eyebrow, icon: "ion-ios-bookmark" }}
-            heading={WEBAPPS_PRICING.heading}
-            body={WEBAPPS_PRICING.body}
-            bodyWidth="l"
-          />
-        </Container>
-        <Container className={styles.lifted}>
-          <PricingTabs
-            tabs={WEBAPPS_PRICING.tabs}
-            plans={WEBAPPS_PRICING.plans}
-            cta={WEBAPPS_PRICING.cta}
-          />
-        </Container>
-      </Section>
-
-      {/* FAQ — source section#f88548, a 1fr/2fr split */}
-      <Section id="faq" className={styles.section}>
-        <Container className={styles.faqGrid}>
-          <div>
+      </>
+    ),
+    WEBAPPS_WHY_CHOOSE_US: (
+      <>
+        {/* Why Choose Us — source section#tcbkkv, a two-column split. */}
+        <Section id="why-choose-us" className={styles.section}>
+          <Container className={styles.whyGrid}>
+            <div className={styles.whyCopy}>
+              <Heading as="h2">{WEBAPPS_WHY_CHOOSE_US.heading}</Heading>
+              <Text className={styles.whyBody}>{WEBAPPS_WHY_CHOOSE_US.body}</Text>
+            </div>
+            <CheckList items={WEBAPPS_WHY_CHOOSE_US.points} />
+          </Container>
+        </Section>
+      </>
+    ),
+    WEBAPPS_SHOWCASE: (
+      <>
+        {/* Showcase — source section#450756 */}
+        <Reveal steps={WEBAPPS_SHOWCASE_STEPS}>
+          <Section id="showcase" className={styles.section}>
+            <Container className={styles.centeredHeader}>
+              <SectionHeader
+                heading={WEBAPPS_SHOWCASE.heading}
+                headingWidth="m"
+                body={WEBAPPS_SHOWCASE.body}
+                bodyWidth="m"
+                bodyTone="muted"
+              />
+            </Container>
+            <Container className={styles.lifted}>
+              <Grid columns="auto-3" gap="var(--space-m)" className={styles.stretchGrid}>
+                {WEBAPPS_SHOWCASE.cards.map((card) => (
+                  <ShowcaseCard key={card.title} {...card} demoLabel={WEBAPPS_SHOWCASE.demoLabel} />
+                ))}
+              </Grid>
+            </Container>
+          </Section>
+        </Reveal>
+      </>
+    ),
+    WEBAPPS_PROCESS: (
+      <>
+        {/* Development process — source section#dsvmbh */}
+        <Section id="process" className={styles.section}>
+          <Container className={styles.processHeader}>
             <SectionHeader
-              eyebrow={{ label: WEBAPPS_FAQ.eyebrow, icon: "ion-ios-bookmark" }}
-              heading={WEBAPPS_FAQ.heading}
-              body={WEBAPPS_FAQ.body}
-              align="start"
+              heading={WEBAPPS_PROCESS.heading}
+              body={WEBAPPS_PROCESS.body}
+              bodyWidth="l"
             />
-          </div>
-          <div>
-            <FaqAccordion items={WEBAPPS_FAQ.items} />
-          </div>
-        </Container>
-      </Section>
-
-      {/* The body paragraph here carries ACSS `.text--s`, as on the product
+          </Container>
+          <Container className={styles.lifted}>
+            <ProcessTimeline steps={WEBAPPS_PROCESS.steps} />
+          </Container>
+        </Section>
+      </>
+    ),
+    WEBAPPS_PRICING: (
+      <>
+        {/* Pricing — source section#7a7375 */}
+        <Section id="pricing" className={styles.section}>
+          <Container className={styles.centeredHeader}>
+            <SectionHeader
+              eyebrow={{ label: WEBAPPS_PRICING.eyebrow, icon: "ion-ios-bookmark" }}
+              heading={WEBAPPS_PRICING.heading}
+              body={WEBAPPS_PRICING.body}
+              bodyWidth="l"
+            />
+          </Container>
+          <Container className={styles.lifted}>
+            <PricingTabs
+              tabs={WEBAPPS_PRICING.tabs}
+              plans={WEBAPPS_PRICING.plans}
+              cta={WEBAPPS_PRICING.cta}
+            />
+          </Container>
+        </Section>
+      </>
+    ),
+    WEBAPPS_FAQ: (
+      <>
+        {/* FAQ — source section#f88548, a 1fr/2fr split */}
+        <Section id="faq" className={styles.section}>
+          <Container className={styles.faqGrid}>
+            <div>
+              <SectionHeader
+                eyebrow={{ label: WEBAPPS_FAQ.eyebrow, icon: "ion-ios-bookmark" }}
+                heading={WEBAPPS_FAQ.heading}
+                body={WEBAPPS_FAQ.body}
+                align="start"
+              />
+            </div>
+            <div>
+              <FaqAccordion items={WEBAPPS_FAQ.items} />
+            </div>
+          </Container>
+        </Section>
+      </>
+    ),
+    WEBAPPS_CONTACT_CTA: (
+      <>
+        {/* The body paragraph here carries ACSS `.text--s`, as on the product
           pages. This page's form sets no fieldPadding, like Hardware's. */}
-      <ContactCTA {...WEBAPPS_CONTACT_CTA} bodyScaled endSpacing="xl" />
+        <ContactCTA {...WEBAPPS_CONTACT_CTA} bodyScaled endSpacing="xl" />
+      </>
+    ),
+  };
+
+  return (
+    <>
+      {order
+        .filter((section) => section.enabled && blocks[section.type])
+        .map((section) => (
+          <Fragment key={section.type}>{blocks[section.type]}</Fragment>
+        ))}
     </>
   );
 }
