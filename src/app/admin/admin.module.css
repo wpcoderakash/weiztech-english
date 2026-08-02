@@ -558,3 +558,54 @@
 .content :global(.rb-editor-plain .ProseMirror) {
   min-block-size: 56px;
 }
+
+/* ---------- media library ---------- */
+.content :global(.media-grid) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+  padding: 18px;
+}
+
+.content :global(.media-card) {
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgb(0 0 0 / 30%);
+}
+
+.content :global(.media-thumb) {
+  block-size: 140px;
+  display: grid;
+  place-items: center;
+  background:
+    repeating-conic-gradient(rgb(255 255 255 / 4%) 0% 25%, transparent 0% 50%) 0 0 / 18px 18px,
+    #14101f;
+}
+
+.content :global(.media-thumb img),
+.content :global(.media-thumb video) {
+  max-inline-size: 100%;
+  max-block-size: 140px;
+  object-fit: contain;
+}
+
+.content :global(.media-meta) {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+}
+
+.content :global(.media-name) {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content :global(.media-sub) {
+  font-size: 11px;
+  color: #8b84a0;
+}

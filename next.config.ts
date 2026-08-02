@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
 
   images: {
     formats: ["image/avif", "image/webp"],
+    /** CMS media uploads live in Supabase Storage (public bucket). */
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "dewmgdusgpoqhvwdfcgj.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
     /**
      * All imagery is local (public/images). No remote patterns required.
      * The 42 SVGs bypass the optimiser entirely — it cannot compress SVG,
