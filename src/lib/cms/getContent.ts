@@ -55,3 +55,43 @@ export async function getSection<T>(pageSlug: string, key: string, fallback: T):
     return fallback;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   C4 — blog reads. Posts were seeded with the whole in-repo Post object in
+   `body`, so the read path returns them 1:1. Same resilience contract.
+   ------------------------------------------------------------------------- */
+
+import type { Post } from "@/types/content";
+
+import { POSTS as POSTS_FALLBACK } from "@/content/posts";
+
+const cachedPosts = unstable_cache(
+  async () => {
+    const { data, error } = await supabaseAdmin()
+      .from("posts")
+      .select("body, status, published_at")
+      .eq("status", "published")
+      .is("deleted_at", null)
+      .order("published_at", { ascending: false });
+    if (error) throw error;
+    return data.map((row) => row.body as Post);
+  },
+  ["cms-posts"],
+  { tags: ["posts"] },
+);
+
+export async function getPosts(): Promise<readonly Post[]> {
+  if (process.env.CMS_READS === "off") return POSTS_FALLBACK;
+  try {
+    const posts = await cachedPosts();
+    return posts.length > 0 ? posts : POSTS_FALLBACK;
+  } catch (cause) {
+    console.warn("[cms] getPosts fell back:", cause);
+    return POSTS_FALLBACK;
+  }
+}
+
+export async function getPostBySlug(slug: string): Promise<Post | undefined> {
+  const posts = await getPosts();
+  return posts.find((p) => p.slug === slug);
+}

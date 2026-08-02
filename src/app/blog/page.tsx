@@ -5,7 +5,7 @@ import { Container, Section } from "@/components/layout";
 import { Reveal } from "@/components/motion";
 import { PageHero } from "@/components/sections";
 import { BLOG_HERO_STEPS, BLOG_POSTS_STEPS } from "@/content/animations/pages";
-import { POSTS } from "@/content/posts";
+import { getPosts } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
@@ -30,7 +30,9 @@ export const metadata: Metadata = pageMetadata({
  * relaunched and the count grows, `POSTS` is already sorted newest-first and
  * slicing it is a two-line change.
  */
-export default function BlogPage() {
+export default async function BlogPage() {
+  const POSTS = await getPosts();
+
   return (
     <>
       <Reveal steps={BLOG_HERO_STEPS}>

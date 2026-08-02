@@ -5,7 +5,8 @@ import type { Metadata } from "next";
 import { PostBody } from "@/components/blog";
 import { Container, Section } from "@/components/layout";
 import { PageHero } from "@/components/sections";
-import { POSTS, getPost } from "@/content/posts";
+import { POSTS } from "@/content/posts";
+import { getPostBySlug } from "@/lib/cms/getContent";
 import { SITE_URL, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
@@ -31,7 +32,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPostBySlug(slug);
   if (!post) return {};
 
   /* Live post descriptions ARE the excerpt (Rank Math's auto-generation
@@ -46,7 +47,7 @@ export async function generateMetadata({
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPostBySlug(slug);
   if (!post) notFound();
 
   /*

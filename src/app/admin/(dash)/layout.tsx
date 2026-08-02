@@ -18,11 +18,11 @@ export const metadata: Metadata = {
 const NAV = [
   { label: "Dashboard", href: "/admin", icon: "◧" },
   { label: "Submissions", href: "/admin/submissions", icon: "✉" },
+  { label: "Blog", href: "/admin/blog", icon: "✎" },
 ];
 
 const SOON = [
   "Pages & Sections",
-  "Blog",
   "Media Library",
   "Navigation",
   "SEO",
