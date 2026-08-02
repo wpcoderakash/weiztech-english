@@ -95,3 +95,48 @@ export async function disable2fa(formData: FormData): Promise<void> {
   });
   revalidatePath("/admin/security");
 }
+
+/* ---- My profile: display name + password change ---- */
+
+export interface ProfileState {
+  message: string | null;
+  ok: boolean;
+}
+
+export async function updateProfile(
+  _prev: ProfileState,
+  formData: FormData,
+): Promise<ProfileState> {
+  const admin = await currentAdmin();
+  if (!admin) return { message: "Not signed in.", ok: false };
+
+  const name = String(formData.get("name") ?? "")
+    .trim()
+    .slice(0, 80);
+  const password = String(formData.get("password") ?? "");
+  const confirm = String(formData.get("confirm") ?? "");
+
+  if (password || confirm) {
+    if (password.length < 8)
+      return { message: "Password must be at least 8 characters.", ok: false };
+    if (password !== confirm) return { message: "Passwords do not match.", ok: false };
+    const auth = await supabaseAuth();
+    const { error } = await auth.auth.updateUser({ password });
+    if (error) return { message: `Could not change password: ${error.message}`, ok: false };
+  }
+
+  if (name) {
+    await supabaseAdmin().from("profiles").update({ name }).eq("user_id", admin.userId);
+  }
+
+  await supabaseAdmin()
+    .from("activity_log")
+    .insert({
+      actor_id: admin.userId,
+      action: password ? "profile.password_changed" : "profile.updated",
+      entity: "profiles",
+      entity_id: admin.userId,
+    });
+  revalidatePath("/admin/security");
+  return { message: password ? "Password changed." : "Profile saved.", ok: true };
+}

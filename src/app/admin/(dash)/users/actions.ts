@@ -28,8 +28,8 @@ export async function inviteUser(_prev: InviteState, formData: FormData): Promis
   const role = String(formData.get("role") ?? "viewer") as AppRole;
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
     return { message: "Invalid email.", password: null };
-  if (!ROLES.includes(role) || role === "super_admin") {
-    return { message: "Pick a role below super admin.", password: null };
+  if (!ROLES.includes(role)) {
+    return { message: "Pick a valid role.", password: null };
   }
 
   const password = randomBytes(9).toString("base64url");

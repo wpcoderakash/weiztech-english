@@ -7,7 +7,14 @@ import { removeUser, setRole } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const ROLE_OPTIONS = ["admin", "editor", "content_manager", "author", "viewer"] as const;
+const ROLE_OPTIONS = [
+  "super_admin",
+  "admin",
+  "editor",
+  "content_manager",
+  "author",
+  "viewer",
+] as const;
 
 export default async function AdminUsersPage() {
   const me = await currentAdmin();

@@ -4,6 +4,7 @@ import styles from "../../admin.module.css";
 import { AdminSlugForm } from "../site/AdminSlugForm";
 
 import { EnrollForm } from "./EnrollForm";
+import { ProfileForm } from "./ProfileForm";
 import { disable2fa } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +12,9 @@ export const dynamic = "force-dynamic";
 export default async function AdminSecurityPage() {
   const me = await currentAdmin();
   const mfa = await mfaState();
+  const { data: profile } = me
+    ? await supabaseAdmin().from("profiles").select("name").eq("user_id", me.userId).single()
+    : { data: null };
   const { data: slugRow } = await supabaseAdmin()
     .from("settings")
     .select("value")
@@ -20,6 +24,11 @@ export default async function AdminSecurityPage() {
 
   return (
     <>
+      <div className={styles.panel} style={{ marginBlockEnd: 16 }}>
+        <div className={styles.panelHead}>My profile</div>
+        <ProfileForm name={profile?.name ?? ""} email={me?.email ?? ""} />
+      </div>
+
       {me?.role === "super_admin" ? (
         <div className={styles.panel} style={{ marginBlockEnd: 16 }}>
           <div className={styles.panelHead}>Admin access URL</div>

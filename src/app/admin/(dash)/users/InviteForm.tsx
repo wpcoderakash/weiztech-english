@@ -37,6 +37,7 @@ export function InviteForm() {
         name="role"
         defaultValue="editor"
       >
+        <option value="super_admin">super admin</option>
         <option value="admin">admin</option>
         <option value="editor">editor</option>
         <option value="content_manager">content manager</option>
