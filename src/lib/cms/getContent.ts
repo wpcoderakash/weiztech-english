@@ -163,7 +163,10 @@ export async function getSeo(slug: string, fallback: PageSeo): Promise<PageSeo> 
       ["cms-seo", slug],
       { tags: [`page:${slug}`] },
     )();
-    return { title: seo.title || fallback.title, description: seo.description || fallback.description };
+    return {
+      title: seo.title || fallback.title,
+      description: seo.description || fallback.description,
+    };
   } catch (cause) {
     console.warn(`[cms] getSeo(${slug}) fell back:`, cause);
     return fallback;

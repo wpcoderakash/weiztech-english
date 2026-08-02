@@ -26,14 +26,15 @@ export async function Footer() {
   const year = new Date().getFullYear();
 
   /* C7: chrome content from the CMS, in-repo constants as fallback. */
-  const [FOOTER_QUICK_LINKS, FOOTER_SERVICES, FOOTER_INTRO, OFFICES, COPYRIGHT] =
-    await Promise.all([
+  const [FOOTER_QUICK_LINKS, FOOTER_SERVICES, FOOTER_INTRO, OFFICES, COPYRIGHT] = await Promise.all(
+    [
       getMenu("footer_quick", FOOTER_QUICK_LINKS_FALLBACK),
       getMenu("footer_services", FOOTER_SERVICES_FALLBACK),
       getSetting("footer_intro", FOOTER_INTRO_FALLBACK),
       getSetting("offices", OFFICES_FALLBACK),
       getSetting("copyright", COPYRIGHT_FALLBACK),
-    ]);
+    ],
+  );
 
   return (
     <footer className={styles.footer}>
