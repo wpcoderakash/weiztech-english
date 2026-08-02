@@ -2,6 +2,8 @@ import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../../admin.module.css";
 
+import { ProfileForm } from "../security/ProfileForm";
+
 import { InviteForm } from "./InviteForm";
 import { removeUser, setRole } from "./actions";
 
@@ -26,8 +28,17 @@ export default async function AdminUsersPage() {
   const emailOf = new Map(authUsers.users.map((u) => [u.id, u.email ?? ""]));
   const canManage = me?.role === "super_admin";
 
+  const { data: myProfile } = me
+    ? await db.from("profiles").select("name").eq("user_id", me.userId).single()
+    : { data: null };
+
   return (
     <>
+      <div className={styles.panel} style={{ marginBlockEnd: 16 }}>
+        <div className={styles.panelHead}>My profile</div>
+        <ProfileForm name={myProfile?.name ?? ""} email={me?.email ?? ""} />
+      </div>
+
       {canManage ? (
         <div className={styles.panel} style={{ marginBlockEnd: 16 }}>
           <div className={styles.panelHead}>Invite a team member</div>
