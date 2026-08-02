@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 
+import { recordSubmission } from "@/lib/actions/recordSubmission";
 import { formatQuoteSubmission, parseQuoteSubmission } from "@/lib/forms/quote-schema";
 import {
   QUOTE_FAILURE_MESSAGE as FAILURE,
@@ -76,6 +77,14 @@ export async function submitQuoteRequest(
   if (turnstile.skipped && process.env.NODE_ENV === "production") {
     console.warn("[quote] TURNSTILE_SECRET_KEY is not set — the form is unprotected.");
   }
+
+  await recordSubmission({
+    form: "quote",
+    payload: parsed.value,
+    pageSource: "/quote/",
+    ip,
+    turnstileOk: !turnstile.skipped,
+  });
 
   const mail = getMailAdapter();
 

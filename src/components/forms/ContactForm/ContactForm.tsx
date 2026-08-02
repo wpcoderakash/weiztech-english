@@ -9,9 +9,9 @@ import { submitContactForm } from "@/lib/actions/submitContactForm";
 import { CONTACT_FORM_INITIAL_STATE } from "@/lib/forms/contact-state";
 import type { FieldError, FieldName } from "@/lib/forms/schema";
 
-import styles from "./ContactForm.module.css";
 import { TurnstileWidget } from "../TurnstileWidget";
 
+import styles from "./ContactForm.module.css";
 import { SubmitButton } from "./SubmitButton";
 
 export interface ContactFormProps {

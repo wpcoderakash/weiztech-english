@@ -1,0 +1,81 @@
+import type { ReactNode } from "react";
+
+import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import type { Metadata } from "next";
+
+import { currentAdmin } from "@/lib/supabase/server";
+
+import styles from "../admin.module.css";
+import { signOut } from "../login/actions";
+
+export const metadata: Metadata = {
+  title: "WeizTech Admin",
+  robots: { index: false, follow: false },
+};
+
+const NAV = [
+  { label: "Dashboard", href: "/admin", icon: "◧" },
+  { label: "Submissions", href: "/admin/submissions", icon: "✉" },
+];
+
+const SOON = [
+  "Pages & Sections",
+  "Blog",
+  "Media Library",
+  "Navigation",
+  "SEO",
+  "Settings",
+  "Users & Roles",
+];
+
+export default async function AdminLayout({ children }: { children: ReactNode }) {
+  const admin = await currentAdmin();
+  if (!admin) redirect("/admin/login");
+
+  return (
+    <div className={styles.root}>
+      <aside className={styles.sidebar}>
+        <div className={styles.brand}>
+          <span className={styles.brandDot} />
+          WeizTech CMS
+        </div>
+
+        <div className={styles.navGroupLabel}>Manage</div>
+        {NAV.map((item) => (
+          <Link key={item.href} href={item.href} className={styles.navLink}>
+            <span aria-hidden="true">{item.icon}</span>
+            {item.label}
+          </Link>
+        ))}
+
+        <div className={styles.navGroupLabel}>Coming next</div>
+        {SOON.map((label) => (
+          <span key={label} className={`${styles.navLink} ${styles.navSoon}`}>
+            {label}
+            <span className={styles.navBadge}>soon</span>
+          </span>
+        ))}
+
+        <div className={styles.sidebarFooter}>Phase C1 · Supabase</div>
+      </aside>
+
+      <div className={styles.main}>
+        <div className={styles.topbar}>
+          <div className={styles.topbarTitle}>Admin</div>
+          <div className={styles.userChip}>
+            <span>{admin.email}</span>
+            <span className={styles.rolePill}>{admin.role.replace("_", " ")}</span>
+            <form action={signOut}>
+              <button type="submit" className={styles.signOut}>
+                Sign out
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className={styles.content}>{children}</div>
+      </div>
+    </div>
+  );
+}

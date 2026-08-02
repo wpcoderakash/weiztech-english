@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 
+import { recordApplication } from "@/lib/actions/recordSubmission";
 import { formatCareersSubmission, parseCareersSubmission } from "@/lib/forms/careers-schema";
 import {
   CAREERS_FAILURE_MESSAGE as FAILURE,
@@ -81,8 +82,11 @@ export async function submitCareersApplication(
     console.warn("[careers] TURNSTILE_SECRET_KEY is not set — the form is unprotected.");
   }
 
-  const mail = getMailAdapter();
   const { value } = parsed;
+
+  await recordApplication(value, ip, !turnstile.skipped);
+
+  const mail = getMailAdapter();
 
   const result = await mail.send({
     to: getCareersRecipient(),

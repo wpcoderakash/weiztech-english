@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { Heading, Icon, Text } from "@/components/primitives";
 
@@ -83,7 +83,13 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
 
 function AnswerPanel({ id, isOpen, answer }: { id: string; isOpen: boolean; answer: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const maxBlockSize = isOpen && ref.current ? `${ref.current.scrollHeight}px` : "0px";
+  const [maxBlockSize, setMaxBlockSize] = useState("0px");
+
+  /* Measured in an effect (refs must not be read during render): on open,
+     the target is the answer's scrollHeight; on close, back to 0. */
+  useEffect(() => {
+    setMaxBlockSize(isOpen && ref.current ? `${ref.current.scrollHeight}px` : "0px");
+  }, [isOpen]);
 
   return (
     <div id={id} className={styles.panel} style={{ maxBlockSize }} inert={!isOpen}>

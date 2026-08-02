@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 
+import { recordSubmission } from "@/lib/actions/recordSubmission";
 import {
   CONTACT_FAILURE_MESSAGE as FAILURE,
   CONTACT_SUCCESS_MESSAGE as SUCCESS,
@@ -86,6 +87,15 @@ export async function submitContactForm(
   }
 
   const pagePath = (formData.get("pagePath") as string | null) ?? "(unknown)";
+
+  await recordSubmission({
+    form: "contact",
+    payload: parsed.value,
+    pageSource: pagePath,
+    ip,
+    turnstileOk: !turnstile.skipped,
+  });
+
   const mail = getMailAdapter();
 
   const result = await mail.send({
