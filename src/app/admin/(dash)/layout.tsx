@@ -23,6 +23,8 @@ const NAV = [
   { label: "Media Library", href: "/admin/media", icon: "🖼" },
   { label: "SEO", href: "/admin/seo", icon: "◎" },
   { label: "Navigation & Settings", href: "/admin/site", icon: "⚙" },
+  { label: "Users & Roles", href: "/admin/users", icon: "☺" },
+  { label: "Activity", href: "/admin/activity", icon: "≡" },
 ];
 
 const SOON = ["Media Library", "Navigation", "SEO", "Settings", "Users & Roles"];
