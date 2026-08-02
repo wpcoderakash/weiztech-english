@@ -4,6 +4,8 @@ import { supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../admin.module.css";
 
+import { ClearCacheButton } from "./ClearCacheButton";
+
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
@@ -41,6 +43,13 @@ export default async function AdminDashboardPage() {
             <div className={styles.statHint}>{s.hint}</div>
           </div>
         ))}
+      </div>
+
+      <div className={styles.panel} style={{ marginBlockEnd: 16 }}>
+        <div className={styles.panelHead}>
+          Site cache
+          <ClearCacheButton />
+        </div>
       </div>
 
       <div className={styles.panel}>
