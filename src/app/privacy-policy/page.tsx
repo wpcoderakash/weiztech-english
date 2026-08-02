@@ -4,6 +4,7 @@ import { PostBody } from "@/components/blog";
 import { Container, Section } from "@/components/layout";
 import { PageHero } from "@/components/sections";
 import { PRIVACY_BLOCKS, PRIVACY_HERO } from "@/content/pages/privacy";
+import { getSection } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
@@ -28,20 +29,23 @@ export const metadata: Metadata = pageMetadata({
  * renderer, not a blog-specific one, and the legal copy is the same
  * headings-and-paragraphs shape.
  */
-export default function PrivacyPolicyPage() {
+export default async function PrivacyPolicyPage() {
+  /* C2 pilot: content comes from the CMS, with the in-repo constants as the
+     byte-identical fallback (and the CMS_READS=off kill switch). */
+  const [hero, blocks] = await Promise.all([
+    getSection("privacy-policy", "PRIVACY_HERO", PRIVACY_HERO),
+    getSection("privacy-policy", "PRIVACY_BLOCKS", PRIVACY_BLOCKS),
+  ]);
+
   return (
     <>
       {/* Hero — source section#nvfdcd. */}
-      <PageHero
-        className={styles.hero}
-        headingId="privacy-heading"
-        heading={PRIVACY_HERO.heading}
-      />
+      <PageHero className={styles.hero} headingId="privacy-heading" heading={hero.heading} />
 
       {/* Body — source section#kwvmxa, container#hqesbg at width--l. */}
       <Section className={styles.bodySection}>
         <Container className={styles.bodyInner}>
-          <PostBody blocks={PRIVACY_BLOCKS} flow="document" />
+          <PostBody blocks={blocks} flow="document" />
         </Container>
       </Section>
     </>
