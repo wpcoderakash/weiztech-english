@@ -27,6 +27,7 @@ const NAV = [
   { label: "SEO", href: "/admin/seo", icon: "◎" },
   { label: "Navigation & Settings", href: "/admin/site", icon: "⚙" },
   { label: "Users & Roles", href: "/admin/users", icon: "☺" },
+  { label: "Security", href: "/admin/security", icon: "🔒" },
   { label: "Activity", href: "/admin/activity", icon: "≡" },
 ];
 

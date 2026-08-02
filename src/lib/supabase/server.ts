@@ -48,6 +48,11 @@ export async function currentAdmin(): Promise<{
   const auth = await supabaseAuth();
   const { data } = await auth.auth.getUser();
   if (!data.user) return null;
+  /* 2FA enforcement: once a user has a verified TOTP factor, a password-only
+     (aal1) session is treated as not signed in — the login screen shows the
+     code step. */
+  const { data: aal } = await auth.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (aal && aal.nextLevel === "aal2" && aal.currentLevel !== "aal2") return null;
   const { data: profile } = await supabaseAdmin()
     .from("profiles")
     .select("role, name")
@@ -55,4 +60,27 @@ export async function currentAdmin(): Promise<{
     .single();
   if (!profile) return null;
   return { userId: data.user.id, email: data.user.email ?? "", role: profile.role as AppRole };
+}
+
+/** MFA state for the signed-in user (login + security pages). */
+export async function mfaState(): Promise<{
+  signedIn: boolean;
+  needsCode: boolean;
+  enrolled: boolean;
+  factorId: string | null;
+}> {
+  const auth = await supabaseAuth();
+  const { data } = await auth.auth.getUser();
+  if (!data.user) return { signedIn: false, needsCode: false, enrolled: false, factorId: null };
+  const [{ data: aal }, { data: factors }] = await Promise.all([
+    auth.auth.mfa.getAuthenticatorAssuranceLevel(),
+    auth.auth.mfa.listFactors(),
+  ]);
+  const verified = factors?.totp.find((f) => f.status === "verified") ?? null;
+  return {
+    signedIn: true,
+    needsCode: Boolean(aal && aal.nextLevel === "aal2" && aal.currentLevel !== "aal2"),
+    enrolled: Boolean(verified),
+    factorId: verified?.id ?? null,
+  };
 }

@@ -1,10 +1,8 @@
 import Link from "next/link";
 
-import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../../admin.module.css";
-
-import { AdminSlugForm } from "./AdminSlugForm";
 
 export const dynamic = "force-dynamic";
 
@@ -28,13 +26,10 @@ const SETTING_LABELS: Record<string, string> = {
 
 export default async function AdminSitePage() {
   const db = supabaseAdmin();
-  const me = await currentAdmin();
-  const [menus, settings, slugRow] = await Promise.all([
+  const [menus, settings] = await Promise.all([
     db.from("navigation_menus").select("key, updated_at").order("key"),
     db.from("settings").select("key, updated_at").neq("key", "admin_slug").order("key"),
-    db.from("settings").select("value").eq("key", "admin_slug").maybeSingle(),
   ]);
-  const currentSlug = (slugRow.data?.value as { slug?: string } | null)?.slug ?? "";
 
   const block = (
     title: string,
@@ -64,12 +59,6 @@ export default async function AdminSitePage() {
 
   return (
     <>
-      {me?.role === "super_admin" ? (
-        <div className={styles.panel} style={{ marginBlockEnd: 16 }}>
-          <div className={styles.panelHead}>Admin access URL</div>
-          <AdminSlugForm current={currentSlug} origin="https://weiztech-next.vercel.app" />
-        </div>
-      ) : null}
       {block("Navigation", "navigation", menus.data ?? [], NAV_LABELS)}
       {block("Global settings", "settings", settings.data ?? [], SETTING_LABELS)}
     </>
