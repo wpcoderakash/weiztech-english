@@ -13,6 +13,8 @@ import { version } from "../../../../package.json";
 import styles from "../admin.module.css";
 import { signOut } from "../login/actions";
 
+import { ClearCacheButton } from "./ClearCacheButton";
+
 export const metadata: Metadata = {
   title: "WeizTech Admin",
   robots: { index: false, follow: false },
@@ -63,6 +65,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         <div className={styles.topbar}>
           <div className={styles.topbarTitle}>Admin</div>
           <div className={styles.userChip}>
+            <ClearCacheButton />
             <span>{admin.email}</span>
             <span className={styles.rolePill}>{admin.role.replace("_", " ")}</span>
             <form action={signOut}>
