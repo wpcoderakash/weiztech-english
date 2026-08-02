@@ -13,15 +13,16 @@ import {
   CYBERSEC_HERO_STEPS,
 } from "@/content/animations/pages";
 import {
-  CYBERSEC_CAPABILITIES,
-  CYBERSEC_CONTACT_CTA,
-  CYBERSEC_EXPERIENCE,
-  CYBERSEC_EXPERIENCE_HEADING,
-  CYBERSEC_HERO,
-  CYBERSEC_INTRO,
-  CYBERSEC_LOGOS,
-  CYBERSEC_VIEW_LABEL,
+  CYBERSEC_CAPABILITIES as CYBERSEC_CAPABILITIES_FALLBACK,
+  CYBERSEC_CONTACT_CTA as CYBERSEC_CONTACT_CTA_FALLBACK,
+  CYBERSEC_EXPERIENCE as CYBERSEC_EXPERIENCE_FALLBACK,
+  CYBERSEC_EXPERIENCE_HEADING as CYBERSEC_EXPERIENCE_HEADING_FALLBACK,
+  CYBERSEC_HERO as CYBERSEC_HERO_FALLBACK,
+  CYBERSEC_INTRO as CYBERSEC_INTRO_FALLBACK,
+  CYBERSEC_LOGOS as CYBERSEC_LOGOS_FALLBACK,
+  CYBERSEC_VIEW_LABEL as CYBERSEC_VIEW_LABEL_FALLBACK,
 } from "@/content/pages/cybersec";
+import { getSection } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
@@ -33,7 +34,38 @@ export const metadata: Metadata = pageMetadata({
   path: "/cybersec/",
 });
 
-export default function CybersecPage() {
+export default async function CybersecPage() {
+  /* C3: content from the CMS; the aliased imports are the byte-identical
+     fallbacks (and the CMS_READS=off kill switch). */
+  const CYBERSEC_CAPABILITIES = await getSection(
+    "cybersec",
+    "CYBERSEC_CAPABILITIES",
+    CYBERSEC_CAPABILITIES_FALLBACK,
+  );
+  const CYBERSEC_CONTACT_CTA = await getSection(
+    "cybersec",
+    "CYBERSEC_CONTACT_CTA",
+    CYBERSEC_CONTACT_CTA_FALLBACK,
+  );
+  const CYBERSEC_EXPERIENCE = await getSection(
+    "cybersec",
+    "CYBERSEC_EXPERIENCE",
+    CYBERSEC_EXPERIENCE_FALLBACK,
+  );
+  const CYBERSEC_EXPERIENCE_HEADING = await getSection(
+    "cybersec",
+    "CYBERSEC_EXPERIENCE_HEADING",
+    CYBERSEC_EXPERIENCE_HEADING_FALLBACK,
+  );
+  const CYBERSEC_HERO = await getSection("cybersec", "CYBERSEC_HERO", CYBERSEC_HERO_FALLBACK);
+  const CYBERSEC_INTRO = await getSection("cybersec", "CYBERSEC_INTRO", CYBERSEC_INTRO_FALLBACK);
+  const CYBERSEC_LOGOS = await getSection("cybersec", "CYBERSEC_LOGOS", CYBERSEC_LOGOS_FALLBACK);
+  const CYBERSEC_VIEW_LABEL = await getSection(
+    "cybersec",
+    "CYBERSEC_VIEW_LABEL",
+    CYBERSEC_VIEW_LABEL_FALLBACK,
+  );
+
   return (
     <>
       {/* Hero — source section#dyxvig. Same skeleton as Hardware and Software:

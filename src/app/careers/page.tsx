@@ -11,12 +11,13 @@ import {
   CAREERS_POSITIONS_STEPS,
 } from "@/content/animations/pages";
 import {
-  CAREERS_BENEFITS,
-  CAREERS_HERO,
-  CAREERS_INTRO,
-  CAREERS_POSITIONS,
-  CAREERS_SECTION_HEADING,
+  CAREERS_BENEFITS as CAREERS_BENEFITS_FALLBACK,
+  CAREERS_HERO as CAREERS_HERO_FALLBACK,
+  CAREERS_INTRO as CAREERS_INTRO_FALLBACK,
+  CAREERS_POSITIONS as CAREERS_POSITIONS_FALLBACK,
+  CAREERS_SECTION_HEADING as CAREERS_SECTION_HEADING_FALLBACK,
 } from "@/content/pages/careers";
+import { getSection } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
@@ -37,7 +38,27 @@ export const metadata: Metadata = pageMetadata({
  * on the page — they need the click handler — so the page stays a Server
  * Component and prerenders.
  */
-export default function CareersPage() {
+export default async function CareersPage() {
+  /* C3: content from the CMS; the aliased imports are the byte-identical
+     fallbacks (and the CMS_READS=off kill switch). */
+  const CAREERS_BENEFITS = await getSection(
+    "careers",
+    "CAREERS_BENEFITS",
+    CAREERS_BENEFITS_FALLBACK,
+  );
+  const CAREERS_HERO = await getSection("careers", "CAREERS_HERO", CAREERS_HERO_FALLBACK);
+  const CAREERS_INTRO = await getSection("careers", "CAREERS_INTRO", CAREERS_INTRO_FALLBACK);
+  const CAREERS_POSITIONS = await getSection(
+    "careers",
+    "CAREERS_POSITIONS",
+    CAREERS_POSITIONS_FALLBACK,
+  );
+  const CAREERS_SECTION_HEADING = await getSection(
+    "careers",
+    "CAREERS_SECTION_HEADING",
+    CAREERS_SECTION_HEADING_FALLBACK,
+  );
+
   return (
     <>
       {/* Hero — source section#zgwldk. */}

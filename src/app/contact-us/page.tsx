@@ -9,7 +9,12 @@ import {
   CONTACT_CARDS_STEPS,
   CONTACT_HERO_STEPS,
 } from "@/content/animations/pages";
-import { CONTACT_CARDS, CONTACT_CTA, CONTACT_HERO } from "@/content/pages/contact";
+import {
+  CONTACT_CARDS as CONTACT_CARDS_FALLBACK,
+  CONTACT_CTA as CONTACT_CTA_FALLBACK,
+  CONTACT_HERO as CONTACT_HERO_FALLBACK,
+} from "@/content/pages/contact";
+import { getSection } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
@@ -21,7 +26,13 @@ export const metadata: Metadata = pageMetadata({
   path: "/contact-us/",
 });
 
-export default function ContactUsPage() {
+export default async function ContactUsPage() {
+  /* C3: content from the CMS; the aliased imports are the byte-identical
+     fallbacks (and the CMS_READS=off kill switch). */
+  const CONTACT_CARDS = await getSection("contact-us", "CONTACT_CARDS", CONTACT_CARDS_FALLBACK);
+  const CONTACT_CTA = await getSection("contact-us", "CONTACT_CTA", CONTACT_CTA_FALLBACK);
+  const CONTACT_HERO = await getSection("contact-us", "CONTACT_HERO", CONTACT_HERO_FALLBACK);
+
   return (
     <>
       {/* Hero — source section#iwxcpj. The heading and body sit in a

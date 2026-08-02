@@ -14,12 +14,13 @@ import {
   HOME_WHY_STEPS,
 } from "@/content/animations/home";
 import {
-  HOME_CONTACT_CTA,
-  HOME_FAQ,
-  HOME_HERO,
-  HOME_SERVICES,
-  HOME_WHY_CHOOSE_US,
+  HOME_CONTACT_CTA as HOME_CONTACT_CTA_FALLBACK,
+  HOME_FAQ as HOME_FAQ_FALLBACK,
+  HOME_HERO as HOME_HERO_FALLBACK,
+  HOME_SERVICES as HOME_SERVICES_FALLBACK,
+  HOME_WHY_CHOOSE_US as HOME_WHY_CHOOSE_US_FALLBACK,
 } from "@/content/pages/home";
+import { getSection } from "@/lib/cms/getContent";
 import { VENDOR_LOGOS } from "@/content/site";
 
 import styles from "./page.module.css";
@@ -35,7 +36,19 @@ export const metadata: Metadata = {
     "Weiz Technologies is your partner for secure and reliable IT solutions that drive business growth. Contact us today to discover how we can propel your success.",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  /* C3: content from the CMS; the aliased imports are the byte-identical
+     fallbacks (and the CMS_READS=off kill switch). */
+  const HOME_CONTACT_CTA = await getSection("home", "HOME_CONTACT_CTA", HOME_CONTACT_CTA_FALLBACK);
+  const HOME_FAQ = await getSection("home", "HOME_FAQ", HOME_FAQ_FALLBACK);
+  const HOME_HERO = await getSection("home", "HOME_HERO", HOME_HERO_FALLBACK);
+  const HOME_SERVICES = await getSection("home", "HOME_SERVICES", HOME_SERVICES_FALLBACK);
+  const HOME_WHY_CHOOSE_US = await getSection(
+    "home",
+    "HOME_WHY_CHOOSE_US",
+    HOME_WHY_CHOOSE_US_FALLBACK,
+  );
+
   return (
     <>
       <Reveal steps={HOME_HERO_STEPS}>

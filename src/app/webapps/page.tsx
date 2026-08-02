@@ -18,16 +18,17 @@ import {
 } from "@/components/sections";
 import { WEBAPPS_SERVICES_STEPS, WEBAPPS_SHOWCASE_STEPS } from "@/content/animations/pages";
 import {
-  WEBAPPS_CONTACT_CTA,
-  WEBAPPS_FAQ,
-  WEBAPPS_HERO,
-  WEBAPPS_INDUSTRIES,
-  WEBAPPS_PRICING,
-  WEBAPPS_PROCESS,
-  WEBAPPS_SERVICES,
-  WEBAPPS_SHOWCASE,
-  WEBAPPS_WHY_CHOOSE_US,
+  WEBAPPS_CONTACT_CTA as WEBAPPS_CONTACT_CTA_FALLBACK,
+  WEBAPPS_FAQ as WEBAPPS_FAQ_FALLBACK,
+  WEBAPPS_HERO as WEBAPPS_HERO_FALLBACK,
+  WEBAPPS_INDUSTRIES as WEBAPPS_INDUSTRIES_FALLBACK,
+  WEBAPPS_PRICING as WEBAPPS_PRICING_FALLBACK,
+  WEBAPPS_PROCESS as WEBAPPS_PROCESS_FALLBACK,
+  WEBAPPS_SERVICES as WEBAPPS_SERVICES_FALLBACK,
+  WEBAPPS_SHOWCASE as WEBAPPS_SHOWCASE_FALLBACK,
+  WEBAPPS_WHY_CHOOSE_US as WEBAPPS_WHY_CHOOSE_US_FALLBACK,
 } from "@/content/pages/webapps";
+import { getSection } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
@@ -39,7 +40,39 @@ export const metadata: Metadata = pageMetadata({
   path: "/webapps/",
 });
 
-export default function WebappsPage() {
+export default async function WebappsPage() {
+  /* C3: content from the CMS; the aliased imports are the byte-identical
+     fallbacks (and the CMS_READS=off kill switch). */
+  const WEBAPPS_CONTACT_CTA = await getSection(
+    "webapps",
+    "WEBAPPS_CONTACT_CTA",
+    WEBAPPS_CONTACT_CTA_FALLBACK,
+  );
+  const WEBAPPS_FAQ = await getSection("webapps", "WEBAPPS_FAQ", WEBAPPS_FAQ_FALLBACK);
+  const WEBAPPS_HERO = await getSection("webapps", "WEBAPPS_HERO", WEBAPPS_HERO_FALLBACK);
+  const WEBAPPS_INDUSTRIES = await getSection(
+    "webapps",
+    "WEBAPPS_INDUSTRIES",
+    WEBAPPS_INDUSTRIES_FALLBACK,
+  );
+  const WEBAPPS_PRICING = await getSection("webapps", "WEBAPPS_PRICING", WEBAPPS_PRICING_FALLBACK);
+  const WEBAPPS_PROCESS = await getSection("webapps", "WEBAPPS_PROCESS", WEBAPPS_PROCESS_FALLBACK);
+  const WEBAPPS_SERVICES = await getSection(
+    "webapps",
+    "WEBAPPS_SERVICES",
+    WEBAPPS_SERVICES_FALLBACK,
+  );
+  const WEBAPPS_SHOWCASE = await getSection(
+    "webapps",
+    "WEBAPPS_SHOWCASE",
+    WEBAPPS_SHOWCASE_FALLBACK,
+  );
+  const WEBAPPS_WHY_CHOOSE_US = await getSection(
+    "webapps",
+    "WEBAPPS_WHY_CHOOSE_US",
+    WEBAPPS_WHY_CHOOSE_US_FALLBACK,
+  );
+
   return (
     <>
       {/*

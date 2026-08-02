@@ -7,12 +7,13 @@ import { Reveal } from "@/components/motion";
 import { ContactCTA, HeroIntro, PageHero } from "@/components/sections";
 import { SOFTWARE_CONTACT_STEPS, SOFTWARE_HERO_STEPS } from "@/content/animations/pages";
 import {
-  SOFTWARE_CONTACT_CTA,
-  SOFTWARE_HERO,
-  SOFTWARE_INTRO,
-  SOFTWARE_SERVICES,
-  SOFTWARE_TECH_LOGOS,
+  SOFTWARE_CONTACT_CTA as SOFTWARE_CONTACT_CTA_FALLBACK,
+  SOFTWARE_HERO as SOFTWARE_HERO_FALLBACK,
+  SOFTWARE_INTRO as SOFTWARE_INTRO_FALLBACK,
+  SOFTWARE_SERVICES as SOFTWARE_SERVICES_FALLBACK,
+  SOFTWARE_TECH_LOGOS as SOFTWARE_TECH_LOGOS_FALLBACK,
 } from "@/content/pages/software";
+import { getSection } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
@@ -24,7 +25,27 @@ export const metadata: Metadata = pageMetadata({
   path: "/software/",
 });
 
-export default function SoftwarePage() {
+export default async function SoftwarePage() {
+  /* C3: content from the CMS; the aliased imports are the byte-identical
+     fallbacks (and the CMS_READS=off kill switch). */
+  const SOFTWARE_CONTACT_CTA = await getSection(
+    "software",
+    "SOFTWARE_CONTACT_CTA",
+    SOFTWARE_CONTACT_CTA_FALLBACK,
+  );
+  const SOFTWARE_HERO = await getSection("software", "SOFTWARE_HERO", SOFTWARE_HERO_FALLBACK);
+  const SOFTWARE_INTRO = await getSection("software", "SOFTWARE_INTRO", SOFTWARE_INTRO_FALLBACK);
+  const SOFTWARE_SERVICES = await getSection(
+    "software",
+    "SOFTWARE_SERVICES",
+    SOFTWARE_SERVICES_FALLBACK,
+  );
+  const SOFTWARE_TECH_LOGOS = await getSection(
+    "software",
+    "SOFTWARE_TECH_LOGOS",
+    SOFTWARE_TECH_LOGOS_FALLBACK,
+  );
+
   return (
     <>
       <Reveal steps={SOFTWARE_HERO_STEPS}>
