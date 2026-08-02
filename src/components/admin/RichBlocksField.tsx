@@ -2,6 +2,7 @@
 
 import { useMemo, useRef } from "react";
 
+import ImageExt from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -17,6 +18,7 @@ import type { PostBlock } from "@/types/content";
  */
 export function RichBlocksField({ name, blocks }: { name: string; blocks: PostBlock[] }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const initial = useMemo(() => JSON.stringify(blocks), [blocks]);
 
   const editor = useEditor({
@@ -30,6 +32,7 @@ export function RichBlocksField({ name, blocks }: { name: string; blocks: PostBl
         link: false,
       }),
       Link.configure({ openOnClick: false }),
+      ImageExt,
     ],
     content: blocksToDoc(blocks) as object,
     onUpdate: ({ editor: e }) => {
@@ -70,6 +73,7 @@ export function RichBlocksField({ name, blocks }: { name: string; blocks: PostBl
           {btn("1. list", editor.isActive("orderedList"), () =>
             editor.chain().focus().toggleOrderedList().run(),
           )}
+          {btn("🖼 image", false, () => imageInputRef.current?.click())}
           {btn("link", editor.isActive("link"), () => {
             const prev = (editor.getAttributes("link").href as string | undefined) ?? "";
             const href = window.prompt("Link URL (empty to remove)", prev);
@@ -80,6 +84,28 @@ export function RichBlocksField({ name, blocks }: { name: string; blocks: PostBl
         </div>
       ) : null}
       <EditorContent editor={editor} className="rb-editor" />
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        hidden
+        data-rb-image
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          e.target.value = "";
+          if (!file || !editor) return;
+          void (async () => {
+            const body = new FormData();
+            body.append("file", file);
+            const res = await fetch("/admin/api/upload", { method: "POST", body });
+            const json = (await res.json()) as { url?: string };
+            if (json.url) {
+              const alt = window.prompt("Describe the image (alt text)", "") ?? "";
+              editor.chain().focus().setImage({ src: json.url, alt }).run();
+            }
+          })();
+        }}
+      />
       <input ref={inputRef} type="hidden" name={name} defaultValue={initial} />
     </div>
   );

@@ -56,6 +56,9 @@ function inlineToRuns(nodes: TiptapNode[] | undefined): TextRun[] {
 
 export function blocksToDoc(blocks: PostBlock[]): TiptapNode {
   const content: TiptapNode[] = blocks.map((block) => {
+    if (block.type === "image") {
+      return { type: "image", attrs: { src: block.src, alt: block.alt } };
+    }
     if (block.type === "heading") {
       return { type: "heading", attrs: { level: block.level }, content: runsToInline(block.runs) };
     }
@@ -78,6 +81,12 @@ export function blocksToDoc(blocks: PostBlock[]): TiptapNode {
 export function docToBlocks(doc: TiptapNode): PostBlock[] {
   const blocks: PostBlock[] = [];
   for (const node of doc.content ?? []) {
+    if (node.type === "image") {
+      const src = typeof node.attrs?.src === "string" ? node.attrs.src : "";
+      const alt = typeof node.attrs?.alt === "string" ? node.attrs.alt : "";
+      if (src) blocks.push({ type: "image", src, alt });
+      continue;
+    }
     if (node.type === "heading") {
       const level = node.attrs?.level === 3 ? 3 : 2;
       blocks.push({ type: "heading", level, runs: inlineToRuns(node.content) });
@@ -104,7 +113,7 @@ export function isBlockArray(value: unknown): value is PostBlock[] {
         b !== null &&
         typeof b === "object" &&
         "type" in b &&
-        ["heading", "paragraph", "list"].includes((b as { type: string }).type),
+        ["heading", "paragraph", "list", "image"].includes((b as { type: string }).type),
     )
   );
 }

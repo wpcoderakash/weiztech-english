@@ -58,3 +58,12 @@
 .document .heading {
   margin-block-start: 0;
 }
+
+/* CMS-inserted image blocks — full column width, spaced like paragraphs. */
+.image {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--radius-md);
+  margin-block: var(--space-s);
+}

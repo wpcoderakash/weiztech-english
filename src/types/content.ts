@@ -26,7 +26,9 @@ export interface TextRun {
 export type PostBlock =
   | { type: "heading"; level: 2 | 3; runs: TextRun[] }
   | { type: "paragraph"; runs: TextRun[] }
-  | { type: "list"; ordered: boolean; items: TextRun[][] };
+  | { type: "list"; ordered: boolean; items: TextRun[][] }
+  /** CMS-inserted image (none exist in the migrated corpus — additive). */
+  | { type: "image"; src: string; alt: string };
 
 export interface PostCategory {
   slug: string;

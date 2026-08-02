@@ -726,3 +726,38 @@
   color: #ff9d9d;
   font-size: 12px;
 }
+
+/* ---------- in-editor library picker ---------- */
+.content :global(.img-library) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 8px;
+  background: rgb(0 0 0 / 35%);
+  max-block-size: 220px;
+  overflow-y: auto;
+}
+
+.content :global(.img-library-item) {
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 6px;
+  background: #14101f;
+  cursor: pointer;
+  block-size: 60px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.content :global(.img-library-item:hover) {
+  border-color: #9666ff;
+}
+
+.content :global(.img-library-item img) {
+  max-inline-size: 100%;
+  max-block-size: 58px;
+  object-fit: contain;
+}
