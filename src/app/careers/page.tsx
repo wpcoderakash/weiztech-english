@@ -17,17 +17,27 @@ import {
   CAREERS_POSITIONS as CAREERS_POSITIONS_FALLBACK,
   CAREERS_SECTION_HEADING as CAREERS_SECTION_HEADING_FALLBACK,
 } from "@/content/pages/careers";
-import { getSection } from "@/lib/cms/getContent";
+import { getSection, getSeo } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
 /** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
-export const metadata: Metadata = pageMetadata({
+const METADATA_FALLBACK = {
   title: "Careers",
   description: DESCRIPTIONS.careers,
   path: "/careers/",
-});
+};
+
+/* C7: SEO title/description from the CMS (pages.seo), falling back to the
+   values above; path and og settings stay code-owned. */
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("careers", {
+    title: METADATA_FALLBACK.title,
+    description: METADATA_FALLBACK.description,
+  });
+  return pageMetadata({ ...METADATA_FALLBACK, ...seo });
+}
 
 /**
  * `/careers/` — source page ID 807. Three sections and one popup.

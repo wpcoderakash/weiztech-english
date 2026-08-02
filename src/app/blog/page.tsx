@@ -5,19 +5,29 @@ import { Container, Section } from "@/components/layout";
 import { Reveal } from "@/components/motion";
 import { PageHero } from "@/components/sections";
 import { BLOG_HERO_STEPS, BLOG_POSTS_STEPS } from "@/content/animations/pages";
-import { getPosts } from "@/lib/cms/getContent";
+import { getPosts, getSeo } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
 /** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
-export const metadata: Metadata = pageMetadata({
+const METADATA_FALLBACK = {
   title: "Our Blog",
   description: DESCRIPTIONS.blog,
   path: "/blog/",
   /* Rank Math treats the posts page as an archive: og:type website. */
-  ogType: "website",
-});
+  ogType: "website" as const,
+};
+
+/* C7: SEO title/description from the CMS (pages.seo), falling back to the
+   values above; path and og settings stay code-owned. */
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("blog", {
+    title: METADATA_FALLBACK.title,
+    description: METADATA_FALLBACK.description,
+  });
+  return pageMetadata({ ...METADATA_FALLBACK, ...seo });
+}
 
 /**
  * `/blog/` — the post index.

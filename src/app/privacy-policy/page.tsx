@@ -4,17 +4,27 @@ import { PostBody } from "@/components/blog";
 import { Container, Section } from "@/components/layout";
 import { PageHero } from "@/components/sections";
 import { PRIVACY_BLOCKS, PRIVACY_HERO } from "@/content/pages/privacy";
-import { getSection } from "@/lib/cms/getContent";
+import { getSection, getSeo } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
 /** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
-export const metadata: Metadata = pageMetadata({
+const METADATA_FALLBACK = {
   title: "Terms of Use & Privacy Policy",
   description: DESCRIPTIONS.privacy,
   path: "/privacy-policy/",
-});
+};
+
+/* C7: SEO title/description from the CMS (pages.seo), falling back to the
+   values above; path and og settings stay code-owned. */
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("privacy-policy", {
+    title: METADATA_FALLBACK.title,
+    description: METADATA_FALLBACK.description,
+  });
+  return pageMetadata({ ...METADATA_FALLBACK, ...seo });
+}
 
 /**
  * `/privacy-policy/` — source page ID 845, the simplest route on the site:

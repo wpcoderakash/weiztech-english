@@ -21,7 +21,7 @@ import styles from "./MobileMenuDrawer.module.css";
  * Adds a focus trap and Escape-to-close, neither of which the Bricks popup
  * had. Both are standard dialog behaviour and do not change the visuals.
  */
-export function MobileMenuDrawer() {
+export function MobileMenuDrawer({ menu = MOBILE_MENU }: { menu?: typeof MOBILE_MENU }) {
   const { isOpen, close } = useOverlay();
   const open = isOpen("mobileMenu");
   const panelRef = useRef<HTMLDivElement>(null);
@@ -74,11 +74,11 @@ export function MobileMenuDrawer() {
         {/* Top bar: quick contact + language toggle */}
         <div className={styles.topBar}>
           <div className={styles.quickContact}>
-            <Link href={MOBILE_MENU.cta.href} className={styles.quickCta}>
-              {MOBILE_MENU.cta.label}
+            <Link href={menu.cta.href} className={styles.quickCta}>
+              {menu.cta.label}
             </Link>
             <div className={styles.quickIcons}>
-              {MOBILE_MENU.quickContact.map((item) => (
+              {menu.quickContact.map((item) => (
                 <a key={item.href} href={item.href} aria-label={item.ariaLabel}>
                   <Icon name={item.icon as IconName} size="22px" color="var(--white)" />
                 </a>
@@ -106,7 +106,7 @@ export function MobileMenuDrawer() {
 
         {/* Two link columns */}
         <div className={styles.columns}>
-          {MOBILE_MENU.columns.map((column, index) => (
+          {menu.columns.map((column, index) => (
             <nav key={index} className={styles.column} aria-label={`Menu column ${index + 1}`}>
               {column.map((item) => (
                 <Link
@@ -127,9 +127,9 @@ export function MobileMenuDrawer() {
             no chevron, no collapse (measured; the accordion transcription was
             never functional and never matched). */}
         <nav className={styles.services} aria-label="Services">
-          <span className={styles.servicesTitle}>{MOBILE_MENU.services.label}</span>
+          <span className={styles.servicesTitle}>{menu.services.label}</span>
           <div className={styles.servicesList}>
-            {MOBILE_MENU.services.items.map((item) => (
+            {menu.services.items.map((item) => (
               <Link
                 key={item.href + item.label}
                 href={item.href}
@@ -145,13 +145,13 @@ export function MobileMenuDrawer() {
 
         {/* Footer CTA */}
         <Button
-          href={MOBILE_MENU.footerCta.href}
+          href={menu.footerCta.href}
           variant="solidLight"
           icon="ion-ios-paper-plane"
           iconPosition="right"
           className={styles.cta}
         >
-          {MOBILE_MENU.footerCta.label}
+          {menu.footerCta.label}
         </Button>
       </div>
     </div>

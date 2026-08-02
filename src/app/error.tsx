@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 
-import { Container, Section } from "@/components/layout";
+import { Container } from "@/components/layout/Container";
+import { Section } from "@/components/layout/Section";
 import { Button, Heading, Text } from "@/components/primitives";
 
 import styles from "./error.module.css";

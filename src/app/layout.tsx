@@ -8,6 +8,8 @@ import { CareersFormModal } from "@/components/forms";
 import { Footer, Header } from "@/components/layout";
 import { MobileMenuDrawer, ScrollReset, SkipLink } from "@/components/navigation";
 import { OverlayProvider } from "@/components/overlays";
+import { HEADER_NAV, MOBILE_MENU } from "@/content/site";
+import { getMenu } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, GOOGLE_SITE_VERIFICATION, SITE_URL, pageMetadata } from "@/lib/seo";
 
 import "@/styles/reset.css";
@@ -108,7 +110,12 @@ const ORGANIZATION_JSONLD = {
  * persist across route changes without remounting, otherwise it flashes on
  * navigation.
  */
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const [headerNav, mobileMenu] = await Promise.all([
+    getMenu("header", HEADER_NAV),
+    getMenu("mobile", MOBILE_MENU),
+  ]);
+
   return (
     <html lang="en" className={rubik.variable}>
       <body>
@@ -123,14 +130,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
         <OverlayProvider>
           <SkipLink />
-          <Header />
+          <Header nav={headerNav} />
           <BgGlow />
           <Starfield />
           <GlowTracker />
           <ScrollReset />
           <main id="main">{children}</main>
           <Footer />
-          <MobileMenuDrawer />
+          <MobileMenuDrawer menu={mobileMenu} />
           <CareersFormModal />
         </OverlayProvider>
       </body>

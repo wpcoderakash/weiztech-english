@@ -13,17 +13,27 @@ import {
   SOFTWARE_SERVICES as SOFTWARE_SERVICES_FALLBACK,
   SOFTWARE_TECH_LOGOS as SOFTWARE_TECH_LOGOS_FALLBACK,
 } from "@/content/pages/software";
-import { getSection } from "@/lib/cms/getContent";
+import { getSection, getSeo } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
 /** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
-export const metadata: Metadata = pageMetadata({
+const METADATA_FALLBACK = {
   title: "Software",
   description: DESCRIPTIONS.software,
   path: "/software/",
-});
+};
+
+/* C7: SEO title/description from the CMS (pages.seo), falling back to the
+   values above; path and og settings stay code-owned. */
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("software", {
+    title: METADATA_FALLBACK.title,
+    description: METADATA_FALLBACK.description,
+  });
+  return pageMetadata({ ...METADATA_FALLBACK, ...seo });
+}
 
 export default async function SoftwarePage() {
   /* C3: content from the CMS; the aliased imports are the byte-identical

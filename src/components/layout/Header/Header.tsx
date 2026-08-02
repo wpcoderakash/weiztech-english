@@ -23,7 +23,7 @@ import styles from "./Header.module.css";
  * The desktop nav is NOT a WordPress menu — the template hard-codes five
  * swap-hover links. See content/site.ts.
  */
-export function Header() {
+export function Header({ nav = HEADER_NAV }: { nav?: typeof HEADER_NAV }) {
   const [scrolled, setScrolled] = useState(false);
   const { open } = useOverlay();
 
@@ -55,7 +55,7 @@ export function Header() {
         <nav className={styles.navBlock} aria-label="Primary">
           <div className={styles.navPill}>
             <div className={styles.navLinks}>
-              {HEADER_NAV.map((item) => (
+              {nav.map((item) => (
                 <NavSwapLink
                   key={item.href + item.label}
                   label={item.label}

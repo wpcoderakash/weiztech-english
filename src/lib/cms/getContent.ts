@@ -95,3 +95,77 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   const posts = await getPosts();
   return posts.find((p) => p.slug === slug);
 }
+
+/* ---------------------------------------------------------------------------
+   C7 — site-wide reads: navigation menus, settings, per-page SEO. Tagged
+   "site" so one revalidation regenerates every route that renders the
+   chrome. Same fallback + kill-switch contract.
+   ------------------------------------------------------------------------- */
+
+const cachedSite = unstable_cache(
+  async () => {
+    const db = supabaseAdmin();
+    const [menus, settings] = await Promise.all([
+      db.from("navigation_menus").select("key, items"),
+      db.from("settings").select("key, value"),
+    ]);
+    if (menus.error) throw menus.error;
+    if (settings.error) throw settings.error;
+    return {
+      menus: Object.fromEntries(menus.data.map((m) => [m.key, m.items])),
+      settings: Object.fromEntries(settings.data.map((s) => [s.key, s.value])),
+    };
+  },
+  ["cms-site"],
+  { tags: ["site"] },
+);
+
+export async function getMenu<T>(key: string, fallback: T): Promise<T> {
+  if (process.env.CMS_READS === "off") return fallback;
+  try {
+    const site = await cachedSite();
+    return (site.menus[key] as T | undefined) ?? fallback;
+  } catch (cause) {
+    console.warn(`[cms] getMenu(${key}) fell back:`, cause);
+    return fallback;
+  }
+}
+
+export async function getSetting<T>(key: string, fallback: T): Promise<T> {
+  if (process.env.CMS_READS === "off") return fallback;
+  try {
+    const site = await cachedSite();
+    return (site.settings[key] as T | undefined) ?? fallback;
+  } catch (cause) {
+    console.warn(`[cms] getSetting(${key}) fell back:`, cause);
+    return fallback;
+  }
+}
+
+export interface PageSeo {
+  title: string;
+  description: string;
+}
+
+export async function getSeo(slug: string, fallback: PageSeo): Promise<PageSeo> {
+  if (process.env.CMS_READS === "off") return fallback;
+  try {
+    const seo = await unstable_cache(
+      async () => {
+        const { data, error } = await supabaseAdmin()
+          .from("pages")
+          .select("seo")
+          .eq("slug", slug)
+          .single();
+        if (error) throw error;
+        return data.seo as Partial<PageSeo>;
+      },
+      ["cms-seo", slug],
+      { tags: [`page:${slug}`] },
+    )();
+    return { title: seo.title || fallback.title, description: seo.description || fallback.description };
+  } catch (cause) {
+    console.warn(`[cms] getSeo(${slug}) fell back:`, cause);
+    return fallback;
+  }
+}

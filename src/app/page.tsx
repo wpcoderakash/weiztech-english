@@ -20,7 +20,7 @@ import {
   HOME_SERVICES as HOME_SERVICES_FALLBACK,
   HOME_WHY_CHOOSE_US as HOME_WHY_CHOOSE_US_FALLBACK,
 } from "@/content/pages/home";
-import { getSection } from "@/lib/cms/getContent";
+import { getSection, getSeo } from "@/lib/cms/getContent";
 import { VENDOR_LOGOS } from "@/content/site";
 
 import styles from "./page.module.css";
@@ -30,11 +30,21 @@ import styles from "./page.module.css";
  * Twitter card and JSON-LD land in Phase 13. The source's Home title override
  * is `%sitename% %sep% %sitedesc%`.
  */
-export const metadata: Metadata = {
+const METADATA_FALLBACK = {
   title: "Weiz Technologies - Power Your Business with Cutting-Edge IT",
   description:
     "Weiz Technologies is your partner for secure and reliable IT solutions that drive business growth. Contact us today to discover how we can propel your success.",
 };
+
+/* C7: home's SEO from the CMS; the raw Metadata shape (no pageMetadata) is
+   the original root-title behaviour, preserved. */
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("home", {
+    title: METADATA_FALLBACK.title,
+    description: METADATA_FALLBACK.description,
+  });
+  return { ...METADATA_FALLBACK, ...seo };
+}
 
 export default async function HomePage() {
   /* C3: content from the CMS; the aliased imports are the byte-identical

@@ -28,17 +28,27 @@ import {
   WEBAPPS_SHOWCASE as WEBAPPS_SHOWCASE_FALLBACK,
   WEBAPPS_WHY_CHOOSE_US as WEBAPPS_WHY_CHOOSE_US_FALLBACK,
 } from "@/content/pages/webapps";
-import { getSection } from "@/lib/cms/getContent";
+import { getSection, getSeo } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
 /** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
-export const metadata: Metadata = pageMetadata({
+const METADATA_FALLBACK = {
   title: "Web Design & Development",
   description: DESCRIPTIONS.webapps,
   path: "/webapps/",
-});
+};
+
+/* C7: SEO title/description from the CMS (pages.seo), falling back to the
+   values above; path and og settings stay code-owned. */
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("webapps", {
+    title: METADATA_FALLBACK.title,
+    description: METADATA_FALLBACK.description,
+  });
+  return pageMetadata({ ...METADATA_FALLBACK, ...seo });
+}
 
 export default async function WebappsPage() {
   /* C3: content from the CMS; the aliased imports are the byte-identical

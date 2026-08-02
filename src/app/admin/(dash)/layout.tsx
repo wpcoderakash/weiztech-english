@@ -21,6 +21,8 @@ const NAV = [
   { label: "Blog", href: "/admin/blog", icon: "✎" },
   { label: "Pages & Sections", href: "/admin/pages", icon: "▤" },
   { label: "Media Library", href: "/admin/media", icon: "🖼" },
+  { label: "SEO", href: "/admin/seo", icon: "◎" },
+  { label: "Navigation & Settings", href: "/admin/site", icon: "⚙" },
 ];
 
 const SOON = ["Media Library", "Navigation", "SEO", "Settings", "Users & Roles"];

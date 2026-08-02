@@ -22,17 +22,27 @@ import {
   CYBERSEC_LOGOS as CYBERSEC_LOGOS_FALLBACK,
   CYBERSEC_VIEW_LABEL as CYBERSEC_VIEW_LABEL_FALLBACK,
 } from "@/content/pages/cybersec";
-import { getSection } from "@/lib/cms/getContent";
+import { getSection, getSeo } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
 /** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
-export const metadata: Metadata = pageMetadata({
+const METADATA_FALLBACK = {
   title: "Cybersec",
   description: DESCRIPTIONS.cybersec,
   path: "/cybersec/",
-});
+};
+
+/* C7: SEO title/description from the CMS (pages.seo), falling back to the
+   values above; path and og settings stay code-owned. */
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("cybersec", {
+    title: METADATA_FALLBACK.title,
+    description: METADATA_FALLBACK.description,
+  });
+  return pageMetadata({ ...METADATA_FALLBACK, ...seo });
+}
 
 export default async function CybersecPage() {
   /* C3: content from the CMS; the aliased imports are the byte-identical

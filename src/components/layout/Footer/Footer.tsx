@@ -5,12 +5,13 @@ import { Container } from "@/components/layout/Container";
 import { FooterNavMenu } from "@/components/navigation";
 import { Divider, Heading, Link, Text } from "@/components/primitives";
 import {
-  COPYRIGHT,
-  FOOTER_INTRO,
-  FOOTER_QUICK_LINKS,
-  FOOTER_SERVICES,
-  OFFICES,
+  COPYRIGHT as COPYRIGHT_FALLBACK,
+  FOOTER_INTRO as FOOTER_INTRO_FALLBACK,
+  FOOTER_QUICK_LINKS as FOOTER_QUICK_LINKS_FALLBACK,
+  FOOTER_SERVICES as FOOTER_SERVICES_FALLBACK,
+  OFFICES as OFFICES_FALLBACK,
 } from "@/content/site";
+import { getMenu, getSetting } from "@/lib/cms/getContent";
 
 import styles from "./Footer.module.css";
 
@@ -21,8 +22,18 @@ import styles from "./Footer.module.css";
  * row below. The "Get in Touch" button is a NextBricks `glowingbutton`; its
  * animated spark border is reproduced in CSS.
  */
-export function Footer() {
+export async function Footer() {
   const year = new Date().getFullYear();
+
+  /* C7: chrome content from the CMS, in-repo constants as fallback. */
+  const [FOOTER_QUICK_LINKS, FOOTER_SERVICES, FOOTER_INTRO, OFFICES, COPYRIGHT] =
+    await Promise.all([
+      getMenu("footer_quick", FOOTER_QUICK_LINKS_FALLBACK),
+      getMenu("footer_services", FOOTER_SERVICES_FALLBACK),
+      getSetting("footer_intro", FOOTER_INTRO_FALLBACK),
+      getSetting("offices", OFFICES_FALLBACK),
+      getSetting("copyright", COPYRIGHT_FALLBACK),
+    ]);
 
   return (
     <footer className={styles.footer}>

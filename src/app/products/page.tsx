@@ -12,18 +12,28 @@ import {
   PRODUCTS_HERO as PRODUCTS_HERO_FALLBACK,
   PRODUCTS_INTRO as PRODUCTS_INTRO_FALLBACK,
 } from "@/content/pages/products";
-import { getSection } from "@/lib/cms/getContent";
+import { getSection, getSeo } from "@/lib/cms/getContent";
 import { VENDOR_LOGOS } from "@/content/site";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
 /** Rank Math-resolved title; the description is CHANGE #30 (lib/seo.ts). */
-export const metadata: Metadata = pageMetadata({
+const METADATA_FALLBACK = {
   title: "Hardware",
   description: DESCRIPTIONS.products,
   path: "/products/",
-});
+};
+
+/* C7: SEO title/description from the CMS (pages.seo), falling back to the
+   values above; path and og settings stay code-owned. */
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("products", {
+    title: METADATA_FALLBACK.title,
+    description: METADATA_FALLBACK.description,
+  });
+  return pageMetadata({ ...METADATA_FALLBACK, ...seo });
+}
 
 export default async function ProductsPage() {
   /* C3: content from the CMS; the aliased imports are the byte-identical
