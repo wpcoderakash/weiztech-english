@@ -33,18 +33,6 @@
   background-color: rgb(18 18 18 / 0.8);
 }
 
-/* Mobile/tablet: the 0.8 bar let scrolling hero titles read through under
-   the logo (var(--blur-md) resolves to nothing, so there was no frosting
-   either). Near-opaque + a real blur below the desktop nav breakpoint;
-   desktop keeps the audited 0.8. */
-@media (max-width: 1024px) {
-  .scrolled {
-    background-color: rgb(18 18 18 / 0.95);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
-}
-
 .inner {
   flex-direction: row;
   align-items: center;
