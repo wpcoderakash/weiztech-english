@@ -32,7 +32,16 @@ export async function inviteUser(_prev: InviteState, formData: FormData): Promis
     return { message: "Pick a valid role.", password: null };
   }
 
-  const password = randomBytes(9).toString("base64url");
+  /* Manual password if provided (min 8 chars); otherwise a generated
+     one-time password shown exactly once. */
+  const manual = String(formData.get("password") ?? "").trim();
+  if (manual && manual.length < 8) {
+    return {
+      message: "Password must be at least 8 characters (or leave empty to auto-generate).",
+      password: null,
+    };
+  }
+  const password = manual || randomBytes(9).toString("base64url");
   const db = supabaseAdmin();
   const { data, error } = await db.auth.admin.createUser({
     email,
@@ -50,10 +59,15 @@ export async function inviteUser(_prev: InviteState, formData: FormData): Promis
     diff: { email, role },
   });
   revalidatePath("/admin/users");
-  return {
-    message: `${email} created as ${role}. Share the one-time password now — it is not shown again:`,
-    password,
-  };
+  return manual
+    ? {
+        message: `${email} created as ${role.replace("_", " ")} with the password you set.`,
+        password: null,
+      }
+    : {
+        message: `${email} created as ${role.replace("_", " ")}. Share the one-time password now — it is not shown again:`,
+        password,
+      };
 }
 
 export async function setRole(userId: string, formData: FormData): Promise<void> {

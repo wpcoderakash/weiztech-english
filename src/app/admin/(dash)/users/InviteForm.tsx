@@ -44,8 +44,17 @@ export function InviteForm() {
         <option value="author">author</option>
         <option value="viewer">viewer</option>
       </select>
+      <input
+        className={styles.loginField}
+        style={{ maxInlineSize: 200, marginBlockEnd: 0 }}
+        name="password"
+        type="text"
+        minLength={8}
+        placeholder="password (empty = auto)"
+        autoComplete="off"
+      />
       <button type="submit" className={styles.exportBtn} style={{ border: 0 }} disabled={pending}>
-        {pending ? "Creating…" : "Invite user"}
+        {pending ? "Creating…" : "Add user"}
       </button>
       {state.message ? (
         <div
