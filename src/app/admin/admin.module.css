@@ -609,3 +609,71 @@
   font-size: 11px;
   color: #8b84a0;
 }
+
+/* ---------- repeater controls ---------- */
+.content :global(.rp-field) {
+  display: block;
+  inline-size: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #2f2f6a;
+  background: rgb(0 0 0 / 50%);
+  color: #fff;
+  font-size: 13px;
+}
+
+.content :global(.rp-field:focus) {
+  outline: none;
+  border-color: #9666ff;
+}
+
+.content :global(.rp-controls) {
+  margin-inline-start: 10px;
+  display: inline-flex;
+  gap: 4px;
+}
+
+.content :global(.rp-controls button) {
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  background: transparent;
+  color: #c9c3d9;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.content :global(.rp-controls button:hover:not(:disabled)) {
+  border-color: #9666ff;
+  color: #fff;
+}
+
+.content :global(.rp-controls button:disabled) {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.content :global(.rp-controls .rp-danger:hover:not(:disabled)) {
+  border-color: #ff6b6b;
+  color: #ff9d9d;
+}
+
+.content :global(.rp-add) {
+  margin-block-start: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px dashed rgb(150 102 255 / 50%);
+  background: rgb(127 22 233 / 8%);
+  color: #cbb8ff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.content :global(.rp-add:hover) {
+  background: rgb(127 22 233 / 18%);
+}
+
+.content :global(.rp-object) {
+  display: grid;
+  gap: 6px;
+}

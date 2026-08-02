@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { RichBlocksField, RichTextField } from "@/components/admin";
+import { RepeaterField, RichBlocksField, RichTextField } from "@/components/admin";
 import type { PostBlock } from "@/types/content";
 
 import { isBlockArray } from "./blocks";
@@ -62,12 +62,9 @@ export function renderFields(value: unknown, path: string, fieldCls: string): Re
         />
       );
     }
-    return value.map((item, i) => (
-      <fieldset key={posix(path, i)} className="jf-group">
-        <legend>#{i + 1}</legend>
-        {renderFields(item, posix(path, i), fieldCls)}
-      </fieldset>
-    ));
+    /* C8: object arrays edit in a client repeater — reorder, add, duplicate,
+       remove — serialised wholesale to a hidden input. */
+    return <RepeaterField key={path} name={path} items={value as Record<string, unknown>[]} />;
   }
   if (value !== null && typeof value === "object") {
     return Object.entries(value).map(([k, v]) => (
@@ -107,7 +104,19 @@ export function rebuildFromForm(value: unknown, path: string, form: FormData): u
         .map((line) => line.trim())
         .filter((line) => line.length > 0);
     }
-    return value.map((item, i) => rebuildFromForm(item, posix(path, i), form));
+    {
+      const v = form.get(path);
+      if (v === null) return value.map((item, i) => rebuildFromForm(item, posix(path, i), form));
+      try {
+        const parsed = JSON.parse(String(v)) as unknown;
+        if (Array.isArray(parsed) && parsed.every((x) => x !== null && typeof x === "object")) {
+          return parsed;
+        }
+        return value;
+      } catch {
+        return value;
+      }
+    }
   }
   if (value !== null && typeof value === "object") {
     return Object.fromEntries(
