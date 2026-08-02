@@ -1,9 +1,14 @@
 import type { ElementType, ReactNode } from "react";
 
+import { isRunArray } from "@/lib/cms/runs";
+import type { TextRun } from "@/types/content";
+
+import { RichRuns } from "./RichRuns";
 import styles from "./Text.module.css";
 
 export interface TextProps {
-  children: ReactNode;
+  /** Plain copy, or TextRun[] once an editor applies bold/italic/link. */
+  children: ReactNode | readonly TextRun[];
   /** Defaults to <p>. */
   as?: "p" | "span" | "div" | "li" | "strong" | "em" | undefined;
   /** Maps to the fluid text scale. Defaults to `s` — the theme-style default. */
@@ -35,6 +40,14 @@ export function Text({
 }: TextProps) {
   const Tag = as as ElementType;
 
+  /* CMS rich copy: a runs array renders as inline strong/em/link; plain
+     strings and normal children are untouched (identical output). */
+  const content = isRunArray(children) ? (
+    <RichRuns runs={children} linkClassName={styles.richLink ?? ""} />
+  ) : (
+    (children as ReactNode)
+  );
+
   return (
     <Tag
       data-anim={dataAnim}
@@ -43,7 +56,7 @@ export function Text({
         .join(" ")}
       style={weight ? { fontWeight: weight } : undefined}
     >
-      {children}
+      {content}
     </Tag>
   );
 }

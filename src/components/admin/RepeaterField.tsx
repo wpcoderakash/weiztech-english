@@ -3,8 +3,10 @@
 import { useState } from "react";
 
 import { isImagePath } from "@/lib/cms/imagePath";
+import { isRunArray } from "@/lib/cms/runs";
 
 import { InlineImageControl } from "./InlineImageControl";
+import { InlineRichText } from "./InlineRichText";
 
 /**
  * C8 — repeater editing for arrays of objects inside a section: reorder
@@ -50,12 +52,7 @@ function ItemFields({
     }
     const long = value.length > 70 || value.includes("\n");
     return long ? (
-      <textarea
-        className="rp-field"
-        value={value}
-        rows={Math.min(8, Math.max(2, Math.ceil(value.length / 80)))}
-        onChange={(e) => onChange(e.target.value)}
-      />
+      <InlineRichText value={value} onChange={(next) => onChange(next)} />
     ) : (
       <input className="rp-field" value={value} onChange={(e) => onChange(e.target.value)} />
     );
@@ -84,6 +81,9 @@ function ItemFields({
     );
   }
   if (Array.isArray(value)) {
+    if (isRunArray(value)) {
+      return <InlineRichText value={value} onChange={(next) => onChange(next)} />;
+    }
     if (value.every((v) => typeof v === "string")) {
       return (
         <textarea

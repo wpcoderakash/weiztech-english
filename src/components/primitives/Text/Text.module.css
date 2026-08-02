@@ -44,3 +44,14 @@
 .tone-white {
   color: var(--white);
 }
+
+/* Links produced by CMS rich copy (RichRuns) — visible but on-brand. */
+.richLink {
+  color: var(--secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.richLink:hover {
+  color: var(--white);
+}

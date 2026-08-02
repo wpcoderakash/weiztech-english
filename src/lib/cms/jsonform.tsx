@@ -5,16 +5,27 @@ import type { PostBlock } from "@/types/content";
 
 import { isBlockArray } from "./blocks";
 import { isImagePath } from "./imagePath";
+import { isRunArray } from "./runs";
 
 /**
- * C5 — schema-less section editor engine.
+ * C5 — schema-less section editor engine (clean rewrite; the patched
+ * original had landed a renderer branch inside the REBUILDER — a JSX return
+ * in rebuildFromForm — caught before any data was damaged).
  *
  * Sections hold arbitrary JSON mirroring the TS content shapes. The renderer
  * walks a value and emits fields whose NAMES are the JSON path; the rebuilder
- * walks the ORIGINAL value again and replaces leaves from the submitted form.
- * Structure (keys, array lengths, types) is therefore immutable in v1 — an
- * editor can change any text/number/flag but cannot break a component's
- * shape. Array add/remove arrives with the page-builder phase.
+ * walks the ORIGINAL value and replaces leaves from the submitted form. The
+ * two functions must stay branch-for-branch symmetric:
+ *
+ *   string (image-ish) → ImageField          → string
+ *   string (long)      → RichTextField       → string | TextRun[] ($runs)
+ *   string (short)     → <input>             → string
+ *   number / boolean   → typed inputs        → number / boolean
+ *   TextRun[]          → RichTextField       → string | TextRun[]
+ *   PostBlock[]        → RichBlocksField     → PostBlock[] (JSON)
+ *   string[]           → lines textarea      → string[]
+ *   object[]           → RepeaterField       → object[] (JSON, wholesale)
+ *   object             → labelled recursion  → object
  */
 
 const posix = (path: string, key: string | number) => (path ? `${path}.${key}` : String(key));
@@ -64,6 +75,9 @@ export function renderFields(value: unknown, path: string, fieldCls: string): Re
     );
   }
   if (Array.isArray(value)) {
+    if (isRunArray(value)) {
+      return <RichTextField key={path} name={fieldName(path)} defaultValue={value} />;
+    }
     if (isBlockArray(value)) {
       return <RichBlocksField key={path} name={fieldName(path)} blocks={value} />;
     }
@@ -98,7 +112,8 @@ export function renderFields(value: unknown, path: string, fieldCls: string): Re
 export function rebuildFromForm(value: unknown, path: string, form: FormData): unknown {
   if (typeof value === "string") {
     const v = form.get(fieldName(path));
-    return v === null ? value : String(v);
+    if (v === null) return value;
+    return unwrapRuns(String(v));
   }
   if (typeof value === "number") {
     const v = form.get(fieldName(path));
@@ -111,8 +126,23 @@ export function rebuildFromForm(value: unknown, path: string, form: FormData): u
     return v === null ? value : v === "true";
   }
   if (Array.isArray(value)) {
+    if (isRunArray(value)) {
+      const v = form.get(fieldName(path));
+      if (v === null) return value;
+      return unwrapRuns(String(v));
+    }
     if (isBlockArray(value)) {
-      return <RichBlocksField key={path} name={fieldName(path)} blocks={value} />;
+      const v = form.get(fieldName(path));
+      if (v === null) return value;
+      try {
+        const parsed = JSON.parse(String(v)) as unknown;
+        if (Array.isArray(parsed) && (isBlockArray(parsed) || parsed.length === 0)) {
+          return parsed as PostBlock[];
+        }
+        return value;
+      } catch {
+        return value;
+      }
     }
     if (value.every((v) => typeof v === "string")) {
       const v = form.get(`${fieldName(path)}__lines`);
@@ -142,6 +172,19 @@ export function rebuildFromForm(value: unknown, path: string, form: FormData): u
     );
   }
   return value;
+}
+
+/* RichTextField envelope: plain string, or {"$runs":[...]} once formatted. */
+function unwrapRuns(v: string): unknown {
+  if (v.startsWith('{"$runs":')) {
+    try {
+      const parsed = JSON.parse(v) as { $runs?: unknown };
+      if (isRunArray(parsed.$runs)) return parsed.$runs;
+    } catch {
+      /* fall through to the raw string */
+    }
+  }
+  return v;
 }
 
 function labelize(key: string): string {
