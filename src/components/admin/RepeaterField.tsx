@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 
+import { isImagePath } from "@/lib/cms/imagePath";
+
+import { InlineImageControl } from "./InlineImageControl";
+
 /**
  * C8 — repeater editing for arrays of objects inside a section: reorder
  * (up/down), duplicate, remove, and add (cloning the first item's shape with
@@ -31,8 +35,19 @@ function labelize(key: string): string {
   return key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_-]/g, " ");
 }
 
-function ItemFields({ value, onChange }: { value: unknown; onChange: (next: unknown) => void }) {
+function ItemFields({
+  value,
+  onChange,
+  fieldKey,
+}: {
+  value: unknown;
+  onChange: (next: unknown) => void;
+  fieldKey?: string;
+}) {
   if (typeof value === "string") {
+    if (isImagePath(value, fieldKey)) {
+      return <InlineImageControl value={value} onChange={(url) => onChange(url)} />;
+    }
     const long = value.length > 70 || value.includes("\n");
     return long ? (
       <textarea
@@ -96,6 +111,7 @@ function ItemFields({ value, onChange }: { value: unknown; onChange: (next: unkn
             <span className="jf-key">{labelize(k)}</span>
             <ItemFields
               value={v}
+              fieldKey={k}
               onChange={(next) => onChange({ ...(value as Item), [k]: next })}
             />
           </label>

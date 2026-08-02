@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 
-import { RepeaterField, RichBlocksField, RichTextField } from "@/components/admin";
+import { ImageField, RepeaterField, RichBlocksField, RichTextField } from "@/components/admin";
 import type { PostBlock } from "@/types/content";
 
 import { isBlockArray } from "./blocks";
+import { isImagePath } from "./imagePath";
 
 /**
  * C5 — schema-less section editor engine.
@@ -18,13 +19,28 @@ import { isBlockArray } from "./blocks";
 
 const posix = (path: string, key: string | number) => (path ? `${path}.${key}` : String(key));
 
+/* A field at the section ROOT would get name="" — and browsers drop
+   empty-named fields from submissions entirely (a whole top-level-array
+   section silently never saved). Every input name and every FormData read
+   goes through this sentinel. */
+const fieldName = (path: string) => (path === "" ? "$root" : path);
+
 export function renderFields(value: unknown, path: string, fieldCls: string): ReactNode {
   if (typeof value === "string") {
+    if (isImagePath(value, path.split(".").pop() ?? "")) {
+      return <ImageField key={path} name={fieldName(path)} defaultValue={value} />;
+    }
     const long = value.length > 70 || value.includes("\n");
     return long ? (
-      <RichTextField key={path} name={path} defaultValue={value} />
+      <RichTextField key={path} name={fieldName(path)} defaultValue={value} />
     ) : (
-      <input key={path} className={fieldCls} name={path} defaultValue={value} type="text" />
+      <input
+        key={path}
+        className={fieldCls}
+        name={fieldName(path)}
+        defaultValue={value}
+        type="text"
+      />
     );
   }
   if (typeof value === "number") {
@@ -32,7 +48,7 @@ export function renderFields(value: unknown, path: string, fieldCls: string): Re
       <input
         key={path}
         className={fieldCls}
-        name={path}
+        name={fieldName(path)}
         defaultValue={value}
         type="number"
         step="any"
@@ -41,7 +57,7 @@ export function renderFields(value: unknown, path: string, fieldCls: string): Re
   }
   if (typeof value === "boolean") {
     return (
-      <select key={path} className={fieldCls} name={path} defaultValue={String(value)}>
+      <select key={path} className={fieldCls} name={fieldName(path)} defaultValue={String(value)}>
         <option value="true">yes</option>
         <option value="false">no</option>
       </select>
@@ -49,14 +65,14 @@ export function renderFields(value: unknown, path: string, fieldCls: string): Re
   }
   if (Array.isArray(value)) {
     if (isBlockArray(value)) {
-      return <RichBlocksField key={path} name={path} blocks={value} />;
+      return <RichBlocksField key={path} name={fieldName(path)} blocks={value} />;
     }
     if (value.every((v) => typeof v === "string")) {
       return (
         <textarea
           key={path}
           className={fieldCls}
-          name={`${path}__lines`}
+          name={`${fieldName(path)}__lines`}
           defaultValue={(value as string[]).join("\n")}
           rows={Math.min(12, value.length + 1)}
         />
@@ -64,7 +80,9 @@ export function renderFields(value: unknown, path: string, fieldCls: string): Re
     }
     /* C8: object arrays edit in a client repeater — reorder, add, duplicate,
        remove — serialised wholesale to a hidden input. */
-    return <RepeaterField key={path} name={path} items={value as Record<string, unknown>[]} />;
+    return (
+      <RepeaterField key={path} name={fieldName(path)} items={value as Record<string, unknown>[]} />
+    );
   }
   if (value !== null && typeof value === "object") {
     return Object.entries(value).map(([k, v]) => (
@@ -79,25 +97,25 @@ export function renderFields(value: unknown, path: string, fieldCls: string): Re
 
 export function rebuildFromForm(value: unknown, path: string, form: FormData): unknown {
   if (typeof value === "string") {
-    const v = form.get(path);
+    const v = form.get(fieldName(path));
     return v === null ? value : String(v);
   }
   if (typeof value === "number") {
-    const v = form.get(path);
+    const v = form.get(fieldName(path));
     if (v === null) return value;
     const n = Number(v);
     return Number.isFinite(n) ? n : value;
   }
   if (typeof value === "boolean") {
-    const v = form.get(path);
+    const v = form.get(fieldName(path));
     return v === null ? value : v === "true";
   }
   if (Array.isArray(value)) {
     if (isBlockArray(value)) {
-      return <RichBlocksField key={path} name={path} blocks={value} />;
+      return <RichBlocksField key={path} name={fieldName(path)} blocks={value} />;
     }
     if (value.every((v) => typeof v === "string")) {
-      const v = form.get(`${path}__lines`);
+      const v = form.get(`${fieldName(path)}__lines`);
       if (v === null) return value;
       return String(v)
         .split("\n")
@@ -105,7 +123,7 @@ export function rebuildFromForm(value: unknown, path: string, form: FormData): u
         .filter((line) => line.length > 0);
     }
     {
-      const v = form.get(path);
+      const v = form.get(fieldName(path));
       if (v === null) return value.map((item, i) => rebuildFromForm(item, posix(path, i), form));
       try {
         const parsed = JSON.parse(String(v)) as unknown;

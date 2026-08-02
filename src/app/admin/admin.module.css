@@ -677,3 +677,52 @@
   display: grid;
   gap: 6px;
 }
+
+/* ---------- image field ---------- */
+.content :global(.img-field) {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 10px;
+  padding: 10px;
+  background: rgb(0 0 0 / 25%);
+}
+
+.content :global(.img-preview) {
+  inline-size: 110px;
+  block-size: 78px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background:
+    repeating-conic-gradient(rgb(255 255 255 / 5%) 0% 25%, transparent 0% 50%) 0 0 / 16px 16px,
+    #14101f;
+  color: #8b84a0;
+  font-size: 11px;
+}
+
+.content :global(.img-preview img) {
+  max-inline-size: 100%;
+  max-block-size: 78px;
+  object-fit: contain;
+}
+
+.content :global(.img-controls) {
+  flex: 1;
+  display: grid;
+  gap: 8px;
+}
+
+.content :global(.img-actions) {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.content :global(.img-error) {
+  color: #ff9d9d;
+  font-size: 12px;
+}
