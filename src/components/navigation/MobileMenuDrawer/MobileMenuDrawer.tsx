@@ -8,7 +8,6 @@ import type { IconName } from "@/components/primitives";
 import { MOBILE_MENU } from "@/content/site";
 
 import { LanguageToggle } from "../LanguageToggle";
-import { MobileNavAccordion } from "../MobileNavAccordion";
 
 import styles from "./MobileMenuDrawer.module.css";
 
@@ -124,19 +123,32 @@ export function MobileMenuDrawer() {
           ))}
         </div>
 
-        {/* Services accordion */}
-        <div className={styles.services}>
-          <MobileNavAccordion
-            label={MOBILE_MENU.services.label}
-            items={MOBILE_MENU.services.items}
-          />
-        </div>
+        {/* Services — static on the live popup: title + always-visible links,
+            no chevron, no collapse (measured; the accordion transcription was
+            never functional and never matched). */}
+        <nav className={styles.services} aria-label="Services">
+          <span className={styles.servicesTitle}>{MOBILE_MENU.services.label}</span>
+          <div className={styles.servicesList}>
+            {MOBILE_MENU.services.items.map((item) => (
+              <Link
+                key={item.href + item.label}
+                href={item.href}
+                aria-label={item.ariaLabel ?? item.label}
+                className={styles.serviceLink}
+                onClick={close}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </nav>
 
         {/* Footer CTA */}
         <Button
           href={MOBILE_MENU.footerCta.href}
           variant="solidLight"
           icon="ion-ios-paper-plane"
+          iconPosition="right"
           className={styles.cta}
         >
           {MOBILE_MENU.footerCta.label}
