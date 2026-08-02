@@ -87,6 +87,9 @@ export default async function AdminBlogPage() {
                       {post.status === "published" ? "unpublish" : "publish"}
                     </button>
                   </form>
+                  <a className={styles.miniBtn} href={`/admin/blog/${post.id}`}>
+                    edit content
+                  </a>
                   <a
                     className={styles.miniBtn}
                     href={`/${post.slug}/`}

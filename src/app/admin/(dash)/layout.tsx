@@ -19,16 +19,10 @@ const NAV = [
   { label: "Dashboard", href: "/admin", icon: "◧" },
   { label: "Submissions", href: "/admin/submissions", icon: "✉" },
   { label: "Blog", href: "/admin/blog", icon: "✎" },
+  { label: "Pages & Sections", href: "/admin/pages", icon: "▤" },
 ];
 
-const SOON = [
-  "Pages & Sections",
-  "Media Library",
-  "Navigation",
-  "SEO",
-  "Settings",
-  "Users & Roles",
-];
+const SOON = ["Media Library", "Navigation", "SEO", "Settings", "Users & Roles"];
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const admin = await currentAdmin();

@@ -448,3 +448,113 @@
   color: #ff9d9d;
   font-size: 12.5px;
 }
+
+/* ---------- section editor (JSON form engine) ---------- */
+.content :global(.jf-form) {
+  padding: 18px;
+  display: grid;
+  gap: 4px;
+}
+
+.content :global(.jf-label) {
+  display: grid;
+  gap: 4px;
+  margin-block-end: 8px;
+}
+
+.content :global(.jf-key) {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #8b84a0;
+}
+
+.content :global(.jf-group) {
+  margin-block: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 10px;
+}
+
+.content :global(.jf-group legend) {
+  padding-inline: 6px;
+  font-size: 11px;
+  color: #b9a8ff;
+}
+
+/* ---------- tiptap surfaces ---------- */
+.content :global(.rb-wrap) {
+  border: 1px solid #2f2f6a;
+  border-radius: 10px;
+  background: rgb(0 0 0 / 50%);
+  overflow: hidden;
+}
+
+.content :global(.rb-toolbar) {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border-block-end: 1px solid rgb(255 255 255 / 8%);
+  background: rgb(3 1 22 / 60%);
+}
+
+.content :global(.rb-btn) {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  background: transparent;
+  color: #c9c3d9;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.content :global(.rb-btn:hover) {
+  border-color: #9666ff;
+  color: #fff;
+}
+
+.content :global(.rb-btn-active) {
+  background: linear-gradient(135deg, #7f16e9, #9666ff);
+  border-color: transparent;
+  color: #fff;
+}
+
+.content :global(.rb-editor .ProseMirror) {
+  min-block-size: 90px;
+  max-block-size: 480px;
+  overflow-y: auto;
+  padding: 12px 14px;
+  outline: none;
+  color: #e7e3f1;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.content :global(.rb-editor .ProseMirror h2) {
+  font-size: 19px;
+  font-weight: 700;
+  color: #fff;
+  margin-block: 14px 6px;
+}
+
+.content :global(.rb-editor .ProseMirror h3) {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-block: 12px 4px;
+}
+
+.content :global(.rb-editor .ProseMirror a) {
+  color: #b9a8ff;
+  text-decoration: underline;
+}
+
+.content :global(.rb-editor .ProseMirror ul),
+.content :global(.rb-editor .ProseMirror ol) {
+  padding-inline-start: 22px;
+}
+
+.content :global(.rb-editor-plain .ProseMirror) {
+  min-block-size: 56px;
+}
