@@ -75,20 +75,38 @@ export async function getGraphToken(config: GraphConfig): Promise<string> {
 }
 
 /** Cheap credential check: a token round-trip plus a mailbox read. */
+/** Roles granted to the app, read from the access token's own claims. */
+function tokenRoles(token: string): string[] {
+  try {
+    const segment = token.split(".")[1];
+    if (!segment) return [];
+    const claims = JSON.parse(Buffer.from(segment, "base64").toString("utf8")) as {
+      roles?: string[];
+    };
+    return claims.roles ?? [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Credential check that needs NO extra permissions: acquiring a token proves
+ * the tenant/client/secret triple, and the token's own `roles` claim proves
+ * whether admin consent for Mail.Send was actually granted. (Probing
+ * /users/{id} demanded User.Read.All, which a send-only app should not have —
+ * that produced a misleading "Insufficient privileges".)
+ */
 export async function testGraphConnection(config: GraphConfig): Promise<GraphResult> {
   try {
     const token = await getGraphToken(config);
-    const res = await fetch(
-      `https://graph.microsoft.com/v1.0/users/${encodeURIComponent(config.senderEmail)}?$select=mail,displayName`,
-      { headers: { authorization: `Bearer ${token}` }, cache: "no-store" },
-    );
-    if (!res.ok) {
-      const detail = (await res.json().catch(() => null)) as {
-        error?: { message?: string };
-      } | null;
+    const roles = tokenRoles(token);
+    if (!roles.some((role) => role === "Mail.Send" || role === "Mail.ReadWrite")) {
       return {
         ok: false,
-        error: detail?.error?.message ?? `mailbox lookup failed (${res.status})`,
+        error:
+          roles.length === 0
+            ? "Credentials are valid, but no application permissions are granted yet. In Azure → API permissions add Microsoft Graph → Application permissions → Mail.Send, then click 'Grant admin consent'."
+            : `Credentials are valid, but Mail.Send is missing (granted: ${roles.join(", ")}). Add Mail.Send as an APPLICATION permission and grant admin consent.`,
       };
     }
     return { ok: true };
@@ -141,8 +159,25 @@ export async function sendGraphMail(
       },
     );
     if (res.status === 202 || res.ok) return { ok: true };
-    const detail = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
-    return { ok: false, error: detail?.error?.message ?? `sendMail failed (${res.status})` };
+    const detail = (await res.json().catch(() => null)) as {
+      error?: { code?: string; message?: string };
+    } | null;
+    const code = detail?.error?.code ?? "";
+    const errorMessage = detail?.error?.message ?? `sendMail failed (${res.status})`;
+    /* The two failures every first-time setup hits, named plainly. */
+    if (res.status === 403 || code === "ErrorAccessDenied") {
+      return {
+        ok: false,
+        error: `${errorMessage} — check that Mail.Send has admin consent AND that "${config.senderEmail}" is a real mailbox in this tenant (a shared mailbox is fine; an alias or an address on another tenant is not).`,
+      };
+    }
+    if (res.status === 404 || code === "ErrorInvalidUser" || code === "ResourceNotFound") {
+      return {
+        ok: false,
+        error: `Mailbox "${config.senderEmail}" was not found in this tenant. Create it in Microsoft 365 admin (a shared mailbox needs no licence) or use an existing mailbox address.`,
+      };
+    }
+    return { ok: false, error: errorMessage };
   } catch (cause) {
     return { ok: false, error: cause instanceof Error ? cause.message : String(cause) };
   }
