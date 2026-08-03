@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 
 import { randomBytes } from "node:crypto";
 
-
 import { currentAdmin, supabaseAdmin, type AppRole } from "@/lib/supabase/server";
 
 const ROLES: AppRole[] = ["super_admin", "admin", "editor", "content_manager", "author", "viewer"];

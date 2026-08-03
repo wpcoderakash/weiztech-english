@@ -69,7 +69,6 @@ export function PostBody({ blocks, flow = "post" }: PostBodyProps) {
         }
 
         if (block.type === "image") {
-           
           return (
             <img key={i} className={styles.image} src={block.src} alt={block.alt} loading="lazy" />
           );
