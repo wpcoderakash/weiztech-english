@@ -1,8 +1,9 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { randomBytes } from "node:crypto";
 
-import { revalidatePath } from "next/cache";
 
 import { currentAdmin, supabaseAdmin, type AppRole } from "@/lib/supabase/server";
 

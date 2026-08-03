@@ -13,7 +13,7 @@ export default async function AdminSectionEditorPage({
 }: {
   params: Promise<{ slug: string; sectionId: string }>;
 }) {
-  const { slug, sectionId } = await params;
+  const { sectionId } = await params;
   const db = supabaseAdmin();
   const { data: section } = await db
     .from("sections")

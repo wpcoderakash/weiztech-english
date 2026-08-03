@@ -1,6 +1,7 @@
+import { Fragment } from "react";
+
 import Image from "next/image";
 
-import { Fragment } from "react";
 
 import type { Metadata } from "next";
 

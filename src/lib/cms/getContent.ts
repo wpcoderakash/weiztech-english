@@ -2,7 +2,9 @@ import "server-only";
 
 import { unstable_cache } from "next/cache";
 
+import { POSTS as POSTS_FALLBACK } from "@/content/posts";
 import { supabaseAdmin } from "@/lib/supabase/server";
+import type { Post } from "@/types/content";
 
 /**
  * C2 read path — pages fetch their published sections from Supabase, keyed
@@ -89,10 +91,6 @@ export async function getSection<T>(pageSlug: string, key: string, fallback: T):
    C4 — blog reads. Posts were seeded with the whole in-repo Post object in
    `body`, so the read path returns them 1:1. Same resilience contract.
    ------------------------------------------------------------------------- */
-
-import type { Post } from "@/types/content";
-
-import { POSTS as POSTS_FALLBACK } from "@/content/posts";
 
 const cachedPosts = unstable_cache(
   async () => {

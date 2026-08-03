@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 
 import { recordSubmission } from "@/lib/actions/recordSubmission";
+import { sendFormEmail } from "@/lib/email/send";
 import {
   CONTACT_FAILURE_MESSAGE as FAILURE,
   CONTACT_SUCCESS_MESSAGE as SUCCESS,
@@ -95,6 +96,24 @@ export async function submitContactForm(
     ip,
     turnstileOk: !turnstile.skipped,
   });
+
+  /* Microsoft Graph via the dashboard-managed email system. */
+  const graphOutcome = await sendFormEmail({
+    formKey: "contact",
+    label: "Contact Form",
+    payload: parsed.value as unknown as Record<string, unknown>,
+    submitterEmail: parsed.value.email,
+    submitterName: parsed.value.name,
+  });
+
+  if (
+    graphOutcome.failed > 0 ||
+    (graphOutcome.skipped && graphOutcome.reason !== "graph-not-configured")
+  ) {
+    console.warn(
+      `[contact] graph mail: sent=${graphOutcome.sent} failed=${graphOutcome.failed} ${graphOutcome.reason ?? ""}`,
+    );
+  }
 
   const mail = getMailAdapter();
 

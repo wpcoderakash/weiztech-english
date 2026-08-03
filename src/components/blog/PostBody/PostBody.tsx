@@ -69,8 +69,7 @@ export function PostBody({ blocks, flow = "post" }: PostBodyProps) {
         }
 
         if (block.type === "image") {
-          /* eslint-disable-next-line @next/next/no-img-element -- editor
-             uploads have no stored dimensions; plain img with lazy loading */
+           
           return (
             <img key={i} className={styles.image} src={block.src} alt={block.alt} loading="lazy" />
           );

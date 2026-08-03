@@ -4,8 +4,8 @@ import { supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../../admin.module.css";
 
-import { CopyUrl } from "./CopyUrl";
 import { deleteMedia, updateAlt, uploadMedia } from "./actions";
+import { CopyUrl } from "./CopyUrl";
 
 export const dynamic = "force-dynamic";
 

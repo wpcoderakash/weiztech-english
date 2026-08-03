@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useId, useMemo, useRef } from "react";
 
 import ImageExt from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -17,8 +17,8 @@ import type { PostBlock } from "@/types/content";
  * fidelity test over every existing document).
  */
 export function RichBlocksField({ name, blocks }: { name: string; blocks: PostBlock[] }) {
+  const fieldId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
-  const imageInputRef = useRef<HTMLInputElement>(null);
   const initial = useMemo(() => JSON.stringify(blocks), [blocks]);
 
   const editor = useEditor({
@@ -73,7 +73,11 @@ export function RichBlocksField({ name, blocks }: { name: string; blocks: PostBl
           {btn("1. list", editor.isActive("orderedList"), () =>
             editor.chain().focus().toggleOrderedList().run(),
           )}
-          {btn("🖼 image", false, () => imageInputRef.current?.click())}
+          {btn("🖼 image", false, () => {
+            /* querySelector, not a ref read: the lint rule forbids touching
+               ref.current from a render-created closure. */
+            document.querySelector<HTMLInputElement>(`input[data-rb-image="${fieldId}"]`)?.click();
+          })}
           {btn("link", editor.isActive("link"), () => {
             const prev = (editor.getAttributes("link").href as string | undefined) ?? "";
             const href = window.prompt("Link URL (empty to remove)", prev);
@@ -85,11 +89,10 @@ export function RichBlocksField({ name, blocks }: { name: string; blocks: PostBl
       ) : null}
       <EditorContent editor={editor} className="rb-editor" />
       <input
-        ref={imageInputRef}
         type="file"
         accept="image/*"
         hidden
-        data-rb-image
+        data-rb-image={fieldId}
         onChange={(e) => {
           const file = e.target.files?.[0];
           e.target.value = "";

@@ -4,8 +4,8 @@ import { currentAdmin, mfaState, supabaseAdmin } from "@/lib/supabase/server";
 import styles from "../../admin.module.css";
 import { AdminSlugForm } from "../site/AdminSlugForm";
 
-import { EnrollForm } from "./EnrollForm";
 import { disable2fa } from "./actions";
+import { EnrollForm } from "./EnrollForm";
 
 export const dynamic = "force-dynamic";
 

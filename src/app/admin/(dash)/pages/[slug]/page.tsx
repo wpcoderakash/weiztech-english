@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { notFound } from "next/navigation";
 
 import { ORDERABLE_PAGES } from "@/lib/cms/orderable";

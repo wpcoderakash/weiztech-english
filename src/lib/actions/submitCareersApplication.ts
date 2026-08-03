@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 
 import { recordApplication } from "@/lib/actions/recordSubmission";
+import { sendFormEmail } from "@/lib/email/send";
 import { formatCareersSubmission, parseCareersSubmission } from "@/lib/forms/careers-schema";
 import {
   CAREERS_FAILURE_MESSAGE as FAILURE,
@@ -85,6 +86,31 @@ export async function submitCareersApplication(
   const { value } = parsed;
 
   await recordApplication(value, ip, !turnstile.skipped);
+
+  const { cv, ...careersPayload } = value as unknown as Record<string, unknown> & {
+    cv?: { filename: string; contentType: string; bytes: Uint8Array };
+  };
+  const graphOutcome = await sendFormEmail({
+    formKey: "careers",
+    label: "Career Application",
+    payload: { ...careersPayload, cvFilename: cv?.filename ?? "" },
+    submitterEmail: (value as { email?: string }).email,
+    submitterName: (value as { fullName?: string }).fullName,
+    ...(cv
+      ? {
+          attachments: [{ filename: cv.filename, contentType: cv.contentType, content: cv.bytes }],
+        }
+      : {}),
+  });
+
+  if (
+    graphOutcome.failed > 0 ||
+    (graphOutcome.skipped && graphOutcome.reason !== "graph-not-configured")
+  ) {
+    console.warn(
+      `[careers] graph mail: sent=${graphOutcome.sent} failed=${graphOutcome.failed} ${graphOutcome.reason ?? ""}`,
+    );
+  }
 
   const mail = getMailAdapter();
 

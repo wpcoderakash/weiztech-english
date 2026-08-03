@@ -1,11 +1,10 @@
 import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../../admin.module.css";
-
 import { ProfileForm } from "../security/ProfileForm";
 
-import { InviteForm } from "./InviteForm";
 import { removeUser, setRole } from "./actions";
+import { InviteForm } from "./InviteForm";
 
 export const dynamic = "force-dynamic";
 

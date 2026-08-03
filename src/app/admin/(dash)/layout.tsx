@@ -9,7 +9,6 @@ import type { Metadata } from "next";
 import { currentAdmin } from "@/lib/supabase/server";
 
 import { version } from "../../../../package.json";
-
 import styles from "../admin.module.css";
 import { signOut } from "../login/actions";
 
@@ -29,6 +28,7 @@ const NAV = [
   { label: "SEO", href: "/admin/seo", icon: "◎" },
   { label: "Navigation & Settings", href: "/admin/site", icon: "⚙" },
   { label: "Users & Roles", href: "/admin/users", icon: "☺" },
+  { label: "Email", href: "/admin/email", icon: "✉️" },
   { label: "Security", href: "/admin/security", icon: "🔒" },
   { label: "Activity", href: "/admin/activity", icon: "≡" },
 ];

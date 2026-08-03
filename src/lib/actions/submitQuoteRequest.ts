@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 
 import { recordSubmission } from "@/lib/actions/recordSubmission";
+import { sendFormEmail } from "@/lib/email/send";
 import { formatQuoteSubmission, parseQuoteSubmission } from "@/lib/forms/quote-schema";
 import {
   QUOTE_FAILURE_MESSAGE as FAILURE,
@@ -85,6 +86,23 @@ export async function submitQuoteRequest(
     ip,
     turnstileOk: !turnstile.skipped,
   });
+
+  const graphOutcome = await sendFormEmail({
+    formKey: "quote",
+    label: "Quote Request",
+    payload: parsed.value as unknown as Record<string, unknown>,
+    submitterEmail: parsed.value.email,
+    submitterName: (parsed.value as { fullName?: string }).fullName,
+  });
+
+  if (
+    graphOutcome.failed > 0 ||
+    (graphOutcome.skipped && graphOutcome.reason !== "graph-not-configured")
+  ) {
+    console.warn(
+      `[quote] graph mail: sent=${graphOutcome.sent} failed=${graphOutcome.failed} ${graphOutcome.reason ?? ""}`,
+    );
+  }
 
   const mail = getMailAdapter();
 

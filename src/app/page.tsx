@@ -20,8 +20,8 @@ import {
   HOME_SERVICES as HOME_SERVICES_FALLBACK,
   HOME_WHY_CHOOSE_US as HOME_WHY_CHOOSE_US_FALLBACK,
 } from "@/content/pages/home";
-import { getSection, getSeo } from "@/lib/cms/getContent";
 import { VENDOR_LOGOS } from "@/content/site";
+import { getSection, getSeo } from "@/lib/cms/getContent";
 
 import styles from "./page.module.css";
 

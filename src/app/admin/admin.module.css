@@ -761,3 +761,36 @@
   max-block-size: 58px;
   object-fit: contain;
 }
+
+/* ---------- email recipients (drag & drop) ---------- */
+.content :global(.rcp-list) {
+  display: grid;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.content :global(.rcp-row) {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 10px;
+  background: rgb(0 0 0 / 25%);
+  cursor: grab;
+}
+
+.content :global(.rcp-row:hover) {
+  border-color: rgb(150 102 255 / 40%);
+}
+
+.content :global(.rcp-dragging) {
+  opacity: 0.5;
+}
+
+.content :global(.rcp-handle) {
+  color: #8b84a0;
+  font-size: 16px;
+  cursor: grab;
+}

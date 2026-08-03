@@ -26,7 +26,6 @@ export function LoginForm() {
             name="code"
             placeholder="123 456"
             maxLength={7}
-            autoFocus
             required
           />
           <button className={styles.loginBtn} type="submit" disabled={codePending}>

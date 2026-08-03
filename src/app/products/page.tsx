@@ -12,8 +12,8 @@ import {
   PRODUCTS_HERO as PRODUCTS_HERO_FALLBACK,
   PRODUCTS_INTRO as PRODUCTS_INTRO_FALLBACK,
 } from "@/content/pages/products";
-import { getSection, getSeo } from "@/lib/cms/getContent";
 import { VENDOR_LOGOS } from "@/content/site";
+import { getSection, getSeo } from "@/lib/cms/getContent";
 import { DESCRIPTIONS, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
