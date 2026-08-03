@@ -222,10 +222,15 @@ export async function testRecipient(id: string): Promise<void> {
 
 /* ---------------- Per-form settings ---------------- */
 
-export async function saveFormSettings(formKey: string, formData: FormData): Promise<void> {
-  if (!(await requireSuperAdmin())) return;
+export async function saveFormSettings(
+  formKey: string,
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  if (!(await requireSuperAdmin())) return { message: "Super admin only.", ok: false };
+
   const recipientIds = formData.getAll("recipient_ids").map(String);
-  await supabaseAdmin()
+  const { error } = await supabaseAdmin()
     .from("form_email_settings")
     .update({
       notify_enabled: formData.get("notify_enabled") === "on",
@@ -240,8 +245,12 @@ export async function saveFormSettings(formKey: string, formData: FormData): Pro
       updated_at: new Date().toISOString(),
     })
     .eq("form_key", formKey);
+
+  if (error) return { message: error.message, ok: false };
+
   await audit("email.form_settings_saved", "form_email_settings", formKey);
   revalidatePath("/admin/email");
+  return { message: `${formKey} settings saved.`, ok: true };
 }
 
 /* ---------------- Templates ---------------- */

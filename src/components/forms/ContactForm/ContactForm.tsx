@@ -60,17 +60,9 @@ export function ContactForm({
 
   const describedBy = (field: FieldName) => (errorFor(field) ? `${id}-${field}-error` : undefined);
 
-  /* A successful submission replaces the form, as the original did. */
-  if (state.status === "success") {
-    return (
-      <p className={styles.success} role="status">
-        {state.message}
-      </p>
-    );
-  }
-
   return (
-    <form
+    <>
+      <form
       action={formAction}
       data-anim="form"
       className={styles.form}
@@ -185,5 +177,18 @@ export function ContactForm({
         <SubmitButton className={styles.submit}>{submitLabel}</SubmitButton>
       </div>
     </form>
+
+      {state.status === "success" && state.message ? (
+        <p className={styles.success} role="status" style={{ marginBlockStart: 16 }}>
+          {state.message}
+        </p>
+      ) : null}
+
+      {state.status === "error" && state.message ? (
+        <p className={styles.formError} role="alert" style={{ marginBlockStart: 16 }}>
+          {state.message}
+        </p>
+      ) : null}
+    </>
   );
 }

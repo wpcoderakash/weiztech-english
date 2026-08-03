@@ -128,12 +128,7 @@ export function CareersFormModal() {
         {/* divider#couemk — 0.5px #4747b3. */}
         <hr className={styles.divider} />
 
-        {state.status === "success" ? (
-          <p className={styles.success} role="status">
-            {state.message}
-          </p>
-        ) : (
-          <form action={formAction} className={styles.form} noValidate>
+        <form action={formAction} className={styles.form} noValidate>
             {state.status === "error" && state.message ? (
               <p className={styles.formError} role="alert">
                 {state.message}
@@ -259,7 +254,18 @@ export function CareersFormModal() {
             <TurnstileWidget />
             <SubmitButton className={styles.submit}>Submit</SubmitButton>
           </form>
-        )}
+
+        {state.status === "success" && state.message ? (
+          <p className={styles.success} role="status" style={{ marginBlockStart: 16 }}>
+            {state.message}
+          </p>
+        ) : null}
+
+        {state.status === "error" && state.message ? (
+          <p className={styles.formError} role="alert" style={{ marginBlockStart: 16 }}>
+            {state.message}
+          </p>
+        ) : null}
       </div>
     </div>
   );

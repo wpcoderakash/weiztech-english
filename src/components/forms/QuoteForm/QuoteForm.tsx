@@ -40,17 +40,9 @@ export function QuoteForm() {
       </span>
     ) : null;
 
-  /* A successful submission replaces the form, as the original did. */
-  if (state.status === "success") {
-    return (
-      <p className={styles.success} role="status">
-        {state.message}
-      </p>
-    );
-  }
-
   return (
-    <form action={formAction} className={styles.form} noValidate data-anim="form">
+    <>
+      <form action={formAction} className={styles.form} noValidate data-anim="form">
       {state.status === "error" && state.message ? (
         <p className={styles.formError} role="alert">
           {state.message}
@@ -217,5 +209,18 @@ export function QuoteForm() {
         <SubmitButton className={styles.submit}>Send Message</SubmitButton>
       </div>
     </form>
+
+      {state.status === "success" && state.message ? (
+        <p className={styles.success} role="status" style={{ marginBlockStart: 16 }}>
+          {state.message}
+        </p>
+      ) : null}
+
+      {state.status === "error" && state.message ? (
+        <p className={styles.formError} role="alert" style={{ marginBlockStart: 16 }}>
+          {state.message}
+        </p>
+      ) : null}
+    </>
   );
 }

@@ -8,7 +8,6 @@ import styles from "../../admin.module.css";
 import {
   deleteRecipient,
   retryEmail,
-  saveFormSettings,
   saveTemplate,
   setPrimaryRecipient,
   testRecipient,
@@ -22,6 +21,7 @@ import {
   TestConnectionButton,
 } from "./EmailForms";
 import { RecipientList, type Recipient } from "./RecipientList";
+import { FormSettingsFormWrapper } from "./FormSettingsForm";
 
 export const dynamic = "force-dynamic";
 
@@ -209,126 +209,13 @@ export default async function AdminEmailPage() {
                   {f.notify_enabled ? "notifications on" : "off"}
                 </span>
               </summary>
-              <form
-                action={saveFormSettings.bind(null, f.form_key)}
-                style={{ display: "grid", gap: 8, marginBlockStart: 10 }}
-              >
-                <label
-                  style={{
-                    display: "flex",
-                    gap: 8,
-                    alignItems: "center",
-                    fontSize: 13,
-                    color: "#c9c3d9",
-                  }}
-                >
-                  <input type="checkbox" name="notify_enabled" defaultChecked={f.notify_enabled} />{" "}
-                  Enable email notifications
-                </label>
-                <span className="jf-key">recipients (none selected = all enabled)</span>
-                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                  {recipientRows.map((r) => (
-                    <label
-                      key={r.id}
-                      style={{
-                        display: "flex",
-                        gap: 6,
-                        alignItems: "center",
-                        fontSize: 12.5,
-                        color: "#c9c3d9",
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        name="recipient_ids"
-                        value={r.id}
-                        defaultChecked={(f.recipient_ids as string[]).includes(r.id)}
-                      />
-                      {r.email}
-                    </label>
-                  ))}
-                </div>
-                <label className="jf-label">
-                  <span className="jf-key">subject</span>
-                  <input
-                    className={styles.loginField}
-                    name="subject"
-                    defaultValue={f.subject}
-                    style={{ marginBlockEnd: 0 }}
-                  />
-                </label>
-                <label className="jf-label">
-                  <span className="jf-key">reply-to (empty = submitter)</span>
-                  <input
-                    className={styles.loginField}
-                    name="reply_to"
-                    defaultValue={f.reply_to}
-                    style={{ marginBlockEnd: 0 }}
-                  />
-                </label>
-                <label className="jf-label">
-                  <span className="jf-key">cc</span>
-                  <input
-                    className={styles.loginField}
-                    name="cc"
-                    defaultValue={f.cc}
-                    style={{ marginBlockEnd: 0 }}
-                  />
-                </label>
-                <label className="jf-label">
-                  <span className="jf-key">bcc</span>
-                  <input
-                    className={styles.loginField}
-                    name="bcc"
-                    defaultValue={f.bcc}
-                    style={{ marginBlockEnd: 0 }}
-                  />
-                </label>
-                <label
-                  style={{
-                    display: "flex",
-                    gap: 8,
-                    alignItems: "center",
-                    fontSize: 13,
-                    color: "#c9c3d9",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    name="auto_reply_enabled"
-                    defaultChecked={f.auto_reply_enabled}
-                  />{" "}
-                  Send auto-reply to the submitter
-                </label>
-                <label className="jf-label">
-                  <span className="jf-key">auto-reply subject</span>
-                  <input
-                    className={styles.loginField}
-                    name="auto_reply_subject"
-                    defaultValue={f.auto_reply_subject}
-                    style={{ marginBlockEnd: 0 }}
-                  />
-                </label>
-                <label className="jf-label">
-                  <span className="jf-key">
-                    auto-reply html ({"{{name}} {{message}} {{footer}}"})
-                  </span>
-                  <textarea
-                    className={styles.loginField}
-                    name="auto_reply_html"
-                    rows={6}
-                    defaultValue={f.auto_reply_html || DEFAULT_AUTO_REPLY_HTML}
-                    style={{ marginBlockEnd: 0, fontFamily: "monospace", fontSize: 12 }}
-                  />
-                </label>
-                <button
-                  type="submit"
-                  className={styles.exportBtn}
-                  style={{ border: 0, justifySelf: "start" }}
-                >
-                  Save form settings
-                </button>
-              </form>
+              <FormSettingsFormWrapper
+                formKey={f.form_key}
+                label={f.label}
+                f={f}
+                recipientRows={recipientRows}
+                defaultAutoReplyHtml={DEFAULT_AUTO_REPLY_HTML}
+              />
             </details>
           ))}
         </div>
