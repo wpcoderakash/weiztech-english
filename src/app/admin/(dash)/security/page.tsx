@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/seo";
 import { currentAdmin, mfaState, supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../../admin.module.css";
@@ -24,7 +25,7 @@ export default async function AdminSecurityPage() {
         <div className={styles.panel} style={{ marginBlockEnd: 16 }}>
           <div className={styles.panelHead}>Admin access URL</div>
           <div className="jf-form">
-            <AdminSlugForm current={currentSlug} origin="https://weiztech-next.vercel.app" />
+            <AdminSlugForm current={currentSlug} origin={SITE_URL} />
           </div>
         </div>
       ) : null}
