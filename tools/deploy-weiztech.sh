@@ -3,7 +3,7 @@
 set -u
 APP=/home/weiztech-english/app
 NODE=/home/weiztech-english/.nvm/versions/node/v22.23.2/bin
-SHA=875a0ee
+SHA=d487af5
 STAMP=$(date +%Y%m%d-%H%M%S)
 
 echo "=== 1. Download from GitHub ==="

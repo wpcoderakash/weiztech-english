@@ -6,6 +6,8 @@ import { supabaseAdmin } from "@/lib/supabase/server";
 import styles from "../../../../admin.module.css";
 import { discardDraft, publishSection, restoreRevision, saveDraft } from "../../actions";
 
+import { ActionButton, DraftActions, SaveDraftForm } from "./EditorForms";
+
 export const dynamic = "force-dynamic";
 
 export default async function AdminSectionEditorPage({
@@ -45,33 +47,23 @@ export default async function AdminSectionEditorPage({
             ) : null}
           </span>
           <span className={styles.rowActions}>
-            {hasDraft ? (
-              <>
-                <form action={publishSection.bind(null, section.id)}>
-                  <button type="submit" className={styles.exportBtn} style={{ border: 0 }}>
-                    Publish
-                  </button>
-                </form>
-                <form action={discardDraft.bind(null, section.id)}>
-                  <button type="submit" className={styles.miniBtn}>
-                    Discard draft
-                  </button>
-                </form>
-              </>
-            ) : null}
+            <DraftActions
+              hasDraft={hasDraft}
+              publish={publishSection.bind(null, section.id)}
+              discard={discardDraft.bind(null, section.id)}
+              publishClassName={styles.exportBtn ?? ""}
+              discardClassName={styles.miniBtn ?? ""}
+            />
           </span>
         </div>
 
-        <form action={saveDraft.bind(null, section.id)} className="jf-form">
+        <SaveDraftForm
+          action={saveDraft.bind(null, section.id)}
+          className="jf-form"
+          buttonClassName={styles.exportBtn ?? ""}
+        >
           {renderFields(editing, "", styles.loginField ?? "")}
-          <button
-            type="submit"
-            className={styles.exportBtn}
-            style={{ border: 0, marginBlockStart: 14 }}
-          >
-            Save draft
-          </button>
-        </form>
+        </SaveDraftForm>
       </div>
 
       {(revisions ?? []).length > 0 ? (
@@ -83,11 +75,13 @@ export default async function AdminSectionEditorPage({
                 <tr key={rev.id}>
                   <td>{new Date(rev.created_at).toLocaleString("en-GB")}</td>
                   <td>
-                    <form action={restoreRevision.bind(null, rev.id)}>
-                      <button type="submit" className={styles.miniBtn}>
-                        restore this version
-                      </button>
-                    </form>
+                    <ActionButton
+                      action={restoreRevision.bind(null, rev.id)}
+                      label="restore this version"
+                      pendingLabel="Restoring…"
+                      className={styles.miniBtn ?? ""}
+                      confirm="Restore this version? The current live content will be replaced (it is kept as a revision)."
+                    />
                   </td>
                 </tr>
               ))}

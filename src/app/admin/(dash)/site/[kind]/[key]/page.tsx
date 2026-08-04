@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { SaveForm } from "@/components/admin";
 import { renderFields } from "@/lib/cms/jsonform";
 import { supabaseAdmin } from "@/lib/supabase/server";
 
@@ -29,16 +30,16 @@ export default async function AdminSiteEditorPage({
         </span>
         <span style={{ fontSize: 12, opacity: 0.6 }}>Saving publishes site-wide immediately.</span>
       </div>
-      <form action={saveSiteEntry.bind(null, kind, key)} className="jf-form">
+      <SaveForm
+        action={saveSiteEntry.bind(null, kind, key)}
+        className="jf-form"
+        label="Save & publish"
+        pendingLabel="Saving…"
+        buttonClassName={styles.exportBtn ?? ""}
+        buttonStyle={{ border: 0 }}
+      >
         {renderFields((row as Record<string, unknown>)[column], "", styles.loginField ?? "")}
-        <button
-          type="submit"
-          className={styles.exportBtn}
-          style={{ border: 0, marginBlockStart: 14 }}
-        >
-          Save & publish
-        </button>
-      </form>
+      </SaveForm>
     </div>
   );
 }

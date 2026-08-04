@@ -1,3 +1,4 @@
+import { SaveForm } from "@/components/admin";
 import { supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../../admin.module.css";
@@ -40,9 +41,12 @@ export default async function AdminSeoPage() {
                   </div>
                 </td>
                 <td>
-                  <form
+                  <SaveForm
                     action={saveSeo.bind(null, page.slug)}
-                    style={{ display: "grid", gap: 8, maxInlineSize: 560 }}
+                    label="Save & publish"
+                    pendingLabel="Saving…"
+                    buttonClassName={styles.exportBtn ?? ""}
+                    buttonStyle={{ border: 0, justifySelf: "start" }}
                   >
                     <input
                       className={styles.loginField}
@@ -59,14 +63,7 @@ export default async function AdminSeoPage() {
                       rows={2}
                       maxLength={300}
                     />
-                    <button
-                      type="submit"
-                      className={styles.exportBtn}
-                      style={{ border: 0, justifySelf: "start" }}
-                    >
-                      Save & publish
-                    </button>
-                  </form>
+                  </SaveForm>
                 </td>
               </tr>
             );

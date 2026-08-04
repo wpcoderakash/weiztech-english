@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { RichBlocksField } from "@/components/admin";
+import { RichBlocksField, SaveForm } from "@/components/admin";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import type { Post } from "@/types/content";
 
@@ -31,7 +31,14 @@ export default async function AdminPostEditorPage({ params }: { params: Promise<
           view live
         </a>
       </div>
-      <form action={savePostBody.bind(null, post.id)} className="jf-form">
+      <SaveForm
+        action={savePostBody.bind(null, post.id)}
+        className="jf-form"
+        label="Publish changes"
+        pendingLabel="Publishing…"
+        buttonClassName={styles.exportBtn ?? ""}
+        buttonStyle={{ border: 0 }}
+      >
         <label className="jf-label">
           <span className="jf-key">title</span>
           <input className={styles.loginField} name="title" defaultValue={body.title} required />
@@ -47,14 +54,7 @@ export default async function AdminPostEditorPage({ params }: { params: Promise<
         </label>
         <span className="jf-key">content</span>
         <RichBlocksField name="blocks" blocks={body.blocks} />
-        <button
-          type="submit"
-          className={styles.exportBtn}
-          style={{ border: 0, marginBlockStart: 14 }}
-        >
-          Publish changes
-        </button>
-      </form>
+      </SaveForm>
     </div>
   );
 }

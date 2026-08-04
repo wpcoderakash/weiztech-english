@@ -5,6 +5,8 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { rebuildFromForm } from "@/lib/cms/jsonform";
 import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
+import type { EditorState } from "../pages/editor-state";
+
 const CAN_EDIT = new Set(["super_admin", "admin"]);
 
 /**
@@ -18,24 +20,31 @@ const CAN_EDIT = new Set(["super_admin", "admin"]);
  */
 const PROTECTED_SETTINGS_KEYS = new Set(["admin_slug"]);
 
+function sideDone(ok: boolean, message: string): EditorState {
+  return { ok, message, at: Date.now() };
+}
+
 /** Navigation menus and global settings — one editor, two tables. */
 export async function saveSiteEntry(
   kind: "navigation" | "settings",
   key: string,
+  _prev: EditorState,
   formData: FormData,
-): Promise<void> {
+): Promise<EditorState> {
   const admin = await currentAdmin();
-  if (!admin || !CAN_EDIT.has(admin.role)) return;
+  if (!admin || !CAN_EDIT.has(admin.role)) {
+    return sideDone(false, "You do not have permission to change site settings.");
+  }
   if (kind === "settings" && PROTECTED_SETTINGS_KEYS.has(key)) {
     console.warn(`[site] blocked generic edit of protected setting "${key}" by ${admin.email}`);
-    return;
+    return sideDone(false, "That setting has its own editor and cannot be changed here.");
   }
 
   const db = supabaseAdmin();
   const table = kind === "navigation" ? "navigation_menus" : "settings";
   const column = kind === "navigation" ? "items" : "value";
   const { data: row } = await db.from(table).select(column).eq("key", key).single();
-  if (!row) return;
+  if (!row) return sideDone(false, `No ${kind} entry called "${key}".`);
 
   const next = rebuildFromForm((row as Record<string, unknown>)[column], "", formData);
   const { error } = await db
@@ -44,7 +53,7 @@ export async function saveSiteEntry(
     .eq("key", key);
   if (error) {
     console.error(`[site] ${table}.${key} save failed: ${error.message}`);
-    return;
+    return sideDone(false, "Could not save — try again.");
   }
   await db.from("activity_log").insert({
     actor_id: admin.userId,
@@ -54,6 +63,7 @@ export async function saveSiteEntry(
   });
   revalidateTag("site", "max");
   revalidatePath(`/admin/site/${kind}/${key}`);
+  return sideDone(true, "Saved and live across the site.");
 }
 
 /* ---- Hidden admin entry URL (dashboard-configurable) ---- */

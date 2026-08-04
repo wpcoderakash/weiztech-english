@@ -1,13 +1,23 @@
 "use server";
 
 import { revalidatePath, revalidateTag } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { rebuildFromForm } from "@/lib/cms/jsonform";
 import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
+import type { EditorState } from "./editor-state";
+
 const CAN_EDIT = new Set(["super_admin", "admin", "editor", "content_manager"]);
 const CAN_PUBLISH = new Set(["super_admin", "admin", "editor"]);
+
+/**
+ * Every editor action answers the only question the person clicking has:
+ * did it work? These used to return void, so a permission failure, a database
+ * error and a success were all indistinguishable — the page just sat there.
+ */
+function done(ok: boolean, message: string): EditorState {
+  return { ok, message, at: Date.now() };
+}
 
 async function sectionWithPage(id: string) {
   const { data, error } = await supabaseAdmin()
@@ -26,9 +36,15 @@ async function sectionWithPage(id: string) {
 }
 
 /** Save the edited fields as a draft — the live site is untouched. */
-export async function saveDraft(sectionId: string, formData: FormData): Promise<void> {
+export async function saveDraft(
+  sectionId: string,
+  _prev: EditorState,
+  formData: FormData,
+): Promise<EditorState> {
   const admin = await currentAdmin();
-  if (!admin || !CAN_EDIT.has(admin.role)) return;
+  if (!admin || !CAN_EDIT.has(admin.role)) {
+    return done(false, "You do not have permission to edit this section.");
+  }
 
   const section = await sectionWithPage(sectionId);
   const base = section.draft_data ?? section.data;
@@ -40,7 +56,7 @@ export async function saveDraft(sectionId: string, formData: FormData): Promise<
     .eq("id", sectionId);
   if (error) {
     console.error(`[pages] draft save failed for ${sectionId}: ${error.message}`);
-    return;
+    return done(false, "Could not save. Your changes are still on screen — try again.");
   }
   await supabaseAdmin().from("activity_log").insert({
     actor_id: admin.userId,
@@ -49,15 +65,22 @@ export async function saveDraft(sectionId: string, formData: FormData): Promise<
     entity_id: sectionId,
   });
   revalidatePath(`/admin/pages/${section.pages.slug}/${sectionId}`);
+  return done(true, "Draft saved. Click Publish to put it on the live site.");
 }
 
 /** Publish: previous published data becomes a revision; draft goes live. */
-export async function publishSection(sectionId: string): Promise<void> {
+export async function publishSection(
+  sectionId: string,
+  _prev: EditorState,
+  _formData: FormData,
+): Promise<EditorState> {
   const admin = await currentAdmin();
-  if (!admin || !CAN_PUBLISH.has(admin.role)) return;
+  if (!admin || !CAN_PUBLISH.has(admin.role)) {
+    return done(false, "You do not have permission to publish. Ask an editor or admin.");
+  }
 
   const section = await sectionWithPage(sectionId);
-  if (section.draft_data == null) return;
+  if (section.draft_data == null) return done(false, "There is no draft to publish.");
 
   const db = supabaseAdmin();
   /* The revision IS the backup of what is about to be overwritten. If it does
@@ -70,7 +93,10 @@ export async function publishSection(sectionId: string): Promise<void> {
   });
   if (revisionError) {
     console.error(`[pages] publish aborted — revision backup failed: ${revisionError.message}`);
-    return;
+    return done(
+      false,
+      "Could not publish: the backup of the current version failed. Nothing changed.",
+    );
   }
   const { error: publishError } = await db
     .from("sections")
@@ -78,7 +104,7 @@ export async function publishSection(sectionId: string): Promise<void> {
     .eq("id", sectionId);
   if (publishError) {
     console.error(`[pages] publish failed for ${sectionId}: ${publishError.message}`);
-    return;
+    return done(false, "Could not publish. Nothing changed — try again.");
   }
   await db.from("activity_log").insert({
     actor_id: admin.userId,
@@ -88,11 +114,21 @@ export async function publishSection(sectionId: string): Promise<void> {
   });
   revalidateTag(`page:${section.pages.slug}`, "max");
   revalidatePath(`/admin/pages/${section.pages.slug}/${sectionId}`);
+  return done(
+    true,
+    `Published. It is live on /${section.pages.slug === "home" ? "" : section.pages.slug + "/"} now.`,
+  );
 }
 
-export async function discardDraft(sectionId: string): Promise<void> {
+export async function discardDraft(
+  sectionId: string,
+  _prev: EditorState,
+  _formData: FormData,
+): Promise<EditorState> {
   const admin = await currentAdmin();
-  if (!admin || !CAN_EDIT.has(admin.role)) return;
+  if (!admin || !CAN_EDIT.has(admin.role)) {
+    return done(false, "You do not have permission to edit this section.");
+  }
   const section = await sectionWithPage(sectionId);
   const { error } = await supabaseAdmin()
     .from("sections")
@@ -100,7 +136,7 @@ export async function discardDraft(sectionId: string): Promise<void> {
     .eq("id", sectionId);
   if (error) {
     console.error(`[pages] discard draft failed for ${sectionId}: ${error.message}`);
-    return;
+    return done(false, "Could not discard the draft — try again.");
   }
   /* Discarding destroys unpublished work — it belongs in the audit trail
      alongside save_draft and publish. */
@@ -111,12 +147,19 @@ export async function discardDraft(sectionId: string): Promise<void> {
     entity_id: sectionId,
   });
   revalidatePath(`/admin/pages/${section.pages.slug}/${sectionId}`);
+  return done(true, "Draft discarded. You are back to the published version.");
 }
 
 /** Restore a past revision as the LIVE data (current live becomes a revision). */
-export async function restoreRevision(revisionId: string): Promise<void> {
+export async function restoreRevision(
+  revisionId: string,
+  _prev: EditorState,
+  _formData: FormData,
+): Promise<EditorState> {
   const admin = await currentAdmin();
-  if (!admin || !CAN_PUBLISH.has(admin.role)) return;
+  if (!admin || !CAN_PUBLISH.has(admin.role)) {
+    return done(false, "You do not have permission to restore a version.");
+  }
 
   const db = supabaseAdmin();
   const { data: rev, error } = await db
@@ -135,7 +178,10 @@ export async function restoreRevision(revisionId: string): Promise<void> {
   });
   if (revisionError) {
     console.error(`[pages] restore aborted — revision backup failed: ${revisionError.message}`);
-    return;
+    return done(
+      false,
+      "Could not restore: backing up the current version failed. Nothing changed.",
+    );
   }
   const { error: restoreError } = await db
     .from("sections")
@@ -143,7 +189,7 @@ export async function restoreRevision(revisionId: string): Promise<void> {
     .eq("id", rev.section_id);
   if (restoreError) {
     console.error(`[pages] restore failed for ${rev.section_id}: ${restoreError.message}`);
-    return;
+    return done(false, "Could not restore that version — try again.");
   }
   await db.from("activity_log").insert({
     actor_id: admin.userId,
@@ -153,7 +199,8 @@ export async function restoreRevision(revisionId: string): Promise<void> {
     diff: { revision: revisionId },
   });
   revalidateTag(`page:${section.pages.slug}`, "max");
-  redirect(`/admin/pages/${section.pages.slug}/${rev.section_id}`);
+  revalidatePath(`/admin/pages/${section.pages.slug}/${rev.section_id}`);
+  return done(true, "That version is restored and live.");
 }
 
 /* ---- C8 pilot: section-level order + visibility (ORDERABLE_PAGES only) ---- */
