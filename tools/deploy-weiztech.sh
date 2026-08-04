@@ -1,9 +1,9 @@
 #!/bin/bash
-# Deploy commit 0974ca5 to the weiztech.com app ONLY (never touches /home/weiz).
+# Deploy the tip of main to the weiztech.com app ONLY (never touches /home/weiz).
 set -u
 APP=/home/weiztech-english/app
 NODE=/home/weiztech-english/.nvm/versions/node/v22.23.2/bin
-SHA=d487af5
+SHA=main   # deploys the tip of main; the script prints the commit it fetched
 STAMP=$(date +%Y%m%d-%H%M%S)
 
 echo "=== 1. Download from GitHub ==="
