@@ -1,5 +1,46 @@
 import type { NextConfig } from "next";
 
+/**
+ * Content-Security-Policy.
+ *
+ * Origins are exactly the ones the site uses: Turnstile (script + its own
+ * iframe), Supabase (storage images/videos + auth/REST from the browser).
+ * `unsafe-inline` stays because Next injects inline scripts/styles and the
+ * JSON-LD blocks are inline; `unsafe-eval` is dev-only (React Refresh).
+ */
+const SUPABASE_HOST = (() => {
+  try {
+    return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").host;
+  } catch {
+    return "dewmgdusgpoqhvwdfcgj.supabase.co";
+  }
+})();
+
+const CSP = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV !== "production" ? " 'unsafe-eval'" : ""} https://challenges.cloudflare.com`,
+  "style-src 'self' 'unsafe-inline'",
+  `img-src 'self' data: blob: https://${SUPABASE_HOST}`,
+  "font-src 'self' data:",
+  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://challenges.cloudflare.com`,
+  `media-src 'self' blob: https://${SUPABASE_HOST}`,
+  "frame-src https://challenges.cloudflare.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+].join("; ");
+
+const SECURITY_HEADERS = [
+  { key: "Content-Security-Policy", value: CSP },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
+  /* Only meaningful over HTTPS; harmless elsewhere. 180 days + subdomains. */
+  { key: "Strict-Transport-Security", value: "max-age=15552000; includeSubDomains" },
+];
+
 const nextConfig: NextConfig = {
   /**
    * CRITICAL for URL preservation.
@@ -14,6 +55,16 @@ const nextConfig: NextConfig = {
 
   /** Do not advertise the framework. */
   poweredByHeader: false,
+
+  experimental: {
+    /**
+     * The careers form accepts a CV up to 8 MB (MAX_CV_BYTES in
+     * careers-schema.ts). Server Actions default to a 1 MB body, which
+     * rejected anything larger at the framework level — before the schema
+     * could return its own field error. This must stay >= MAX_CV_BYTES.
+     */
+    serverActions: { bodySizeLimit: "10mb" },
+  },
 
   images: {
     formats: ["image/avif", "image/webp"],
@@ -53,6 +104,10 @@ const nextConfig: NextConfig = {
    * Next matches `source` against the ENCODED pathname (verified: the
    * decoded literal 404s), so the six sources are percent-encoded.
    */
+  async headers() {
+    return [{ source: "/(.*)", headers: SECURITY_HEADERS }];
+  },
+
   async redirects() {
     /* 10 retired Cyber Clients brand pages, each with a doubled variant. */
     const cyberBrands = [

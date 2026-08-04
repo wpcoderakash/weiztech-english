@@ -20,8 +20,8 @@ import {
   SendTestEmailForm,
   TestConnectionButton,
 } from "./EmailForms";
-import { RecipientList, type Recipient } from "./RecipientList";
 import { FormSettingsFormWrapper } from "./FormSettingsForm";
+import { RecipientList, type Recipient } from "./RecipientList";
 
 export const dynamic = "force-dynamic";
 

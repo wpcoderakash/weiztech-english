@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { rejectUpload } from "@/lib/media/validate";
 import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
 const CAN_UPLOAD = new Set(["super_admin", "admin", "editor", "content_manager", "author"]);
@@ -29,6 +30,13 @@ export async function uploadMedia(formData: FormData): Promise<void> {
   const ext = ALLOWED.get(file.type);
   if (!ext) return;
 
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const rejection = rejectUpload(file.type, bytes);
+  if (rejection) {
+    console.warn(`[media] upload rejected (${file.name}): ${rejection}`);
+    return;
+  }
+
   const safe = file.name
     .replace(/\.[^.]+$/, "")
     .replace(/[^\w-]+/g, "-")
@@ -38,7 +46,7 @@ export async function uploadMedia(formData: FormData): Promise<void> {
   const db = supabaseAdmin();
   const { error } = await db.storage
     .from("media")
-    .upload(path, Buffer.from(await file.arrayBuffer()), { contentType: file.type });
+    .upload(path, Buffer.from(bytes), { contentType: file.type });
   if (error) {
     console.error("[media] upload failed:", error.message);
     return;

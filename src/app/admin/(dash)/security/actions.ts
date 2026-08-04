@@ -122,7 +122,19 @@ export async function updateProfile(
     if (password !== confirm) return { message: "Passwords do not match.", ok: false };
     const auth = await supabaseAuth();
     const { error } = await auth.auth.updateUser({ password });
-    if (error) return { message: `Could not change password: ${error.message}`, ok: false };
+    if (error) {
+      /* GoTrue's text leaks backend detail — log it, show a generic message. */
+      console.error(`[security] password change failed for ${admin.email}: ${error.message}`);
+      return { message: "Could not change the password. Please try again.", ok: false };
+    }
+    /* A password change is what someone does AFTER suspecting a compromise —
+       it must evict every other session, otherwise an attacker holding a
+       stolen cookie keeps full access with the old session still valid. The
+       current session is deliberately preserved (scope: "others"). */
+    const { error: revokeError } = await auth.auth.signOut({ scope: "others" });
+    if (revokeError) {
+      console.error(`[security] could not revoke other sessions: ${revokeError.message}`);
+    }
   }
 
   if (name) {

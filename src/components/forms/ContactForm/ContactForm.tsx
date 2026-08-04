@@ -63,120 +63,120 @@ export function ContactForm({
   return (
     <>
       <form
-      action={formAction}
-      data-anim="form"
-      className={styles.form}
-      noValidate
-      style={
-        fieldPaddingBlock
-          ? ({ "--field-padding-block": fieldPaddingBlock } as CSSProperties)
-          : undefined
-      }
-    >
-      {state.status === "error" && state.message ? (
-        <p className={styles.formError} role="alert">
-          {state.message}
-        </p>
-      ) : null}
-
-      <input type="hidden" name="pagePath" value={pathname} />
-
-      {/* Honeypot — hidden from people, irresistible to bots. */}
-      <div className={styles.honeypot} aria-hidden="true">
-        <label htmlFor={`${id}-company`}>Company</label>
-        <input id={`${id}-company`} name="company" type="text" tabIndex={-1} autoComplete="off" />
-      </div>
-
-      <div className={styles.field}>
-        <label className="visually-hidden" htmlFor={`${id}-name`}>
-          {nameLabel}
-        </label>
-        <input
-          id={`${id}-name`}
-          name="name"
-          type="text"
-          autoComplete="name"
-          placeholder="Full name"
-          className={styles.input}
-          aria-describedby={describedBy("name")}
-        />
-        {errorFor("name") ? (
-          <span id={`${id}-name-error`} className={styles.fieldError}>
-            {errorFor("name")}
-          </span>
+        action={formAction}
+        data-anim="form"
+        className={styles.form}
+        noValidate
+        style={
+          fieldPaddingBlock
+            ? ({ "--field-padding-block": fieldPaddingBlock } as CSSProperties)
+            : undefined
+        }
+      >
+        {state.status === "error" && state.message ? (
+          <p className={styles.formError} role="alert">
+            {state.message}
+          </p>
         ) : null}
-      </div>
 
-      <div className={`${styles.field} ${styles.fieldHalf}`}>
-        <label className="visually-hidden" htmlFor={`${id}-phone`}>
-          Phone
-        </label>
-        <input
-          id={`${id}-phone`}
-          name="phone"
-          type="tel"
-          required
-          autoComplete="tel"
-          placeholder={phonePlaceholder}
-          className={styles.input}
-          aria-invalid={errorFor("phone") ? true : undefined}
-          aria-describedby={describedBy("phone")}
-        />
-        {errorFor("phone") ? (
-          <span id={`${id}-phone-error`} className={styles.fieldError}>
-            {errorFor("phone")}
-          </span>
-        ) : null}
-      </div>
+        <input type="hidden" name="pagePath" value={pathname} />
 
-      <div className={`${styles.field} ${styles.fieldHalf}`}>
-        <label className="visually-hidden" htmlFor={`${id}-email`}>
-          Email
-        </label>
-        <input
-          id={`${id}-email`}
-          name="email"
-          type="email"
-          required
-          autoComplete="email"
-          placeholder="Email address"
-          className={styles.input}
-          aria-invalid={errorFor("email") ? true : undefined}
-          aria-describedby={describedBy("email")}
-        />
-        {errorFor("email") ? (
-          <span id={`${id}-email-error`} className={styles.fieldError}>
-            {errorFor("email")}
-          </span>
-        ) : null}
-      </div>
+        {/* Honeypot — hidden from people, irresistible to bots. */}
+        <div className={styles.honeypot} aria-hidden="true">
+          <label htmlFor={`${id}-company`}>Company</label>
+          <input id={`${id}-company`} name="company" type="text" tabIndex={-1} autoComplete="off" />
+        </div>
 
-      <div className={styles.field}>
-        <label className="visually-hidden" htmlFor={`${id}-message`}>
-          Message
-        </label>
-        <textarea
-          id={`${id}-message`}
-          name="message"
-          required
-          placeholder="How can we help you?"
-          className={styles.textarea}
-          aria-invalid={errorFor("message") ? true : undefined}
-          aria-describedby={describedBy("message")}
-        />
-        {errorFor("message") ? (
-          <span id={`${id}-message-error`} className={styles.fieldError}>
-            {errorFor("message")}
-          </span>
-        ) : null}
-      </div>
+        <div className={styles.field}>
+          <label className="visually-hidden" htmlFor={`${id}-name`}>
+            {nameLabel}
+          </label>
+          <input
+            id={`${id}-name`}
+            name="name"
+            type="text"
+            autoComplete="name"
+            placeholder="Full name"
+            className={styles.input}
+            aria-describedby={describedBy("name")}
+          />
+          {errorFor("name") ? (
+            <span id={`${id}-name-error`} className={styles.fieldError}>
+              {errorFor("name")}
+            </span>
+          ) : null}
+        </div>
 
-      <TurnstileWidget />
+        <div className={`${styles.field} ${styles.fieldHalf}`}>
+          <label className="visually-hidden" htmlFor={`${id}-phone`}>
+            Phone
+          </label>
+          <input
+            id={`${id}-phone`}
+            name="phone"
+            type="tel"
+            required
+            autoComplete="tel"
+            placeholder={phonePlaceholder}
+            className={styles.input}
+            aria-invalid={errorFor("phone") ? true : undefined}
+            aria-describedby={describedBy("phone")}
+          />
+          {errorFor("phone") ? (
+            <span id={`${id}-phone-error`} className={styles.fieldError}>
+              {errorFor("phone")}
+            </span>
+          ) : null}
+        </div>
 
-      <div className={styles.submitWrapper}>
-        <SubmitButton className={styles.submit}>{submitLabel}</SubmitButton>
-      </div>
-    </form>
+        <div className={`${styles.field} ${styles.fieldHalf}`}>
+          <label className="visually-hidden" htmlFor={`${id}-email`}>
+            Email
+          </label>
+          <input
+            id={`${id}-email`}
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            placeholder="Email address"
+            className={styles.input}
+            aria-invalid={errorFor("email") ? true : undefined}
+            aria-describedby={describedBy("email")}
+          />
+          {errorFor("email") ? (
+            <span id={`${id}-email-error`} className={styles.fieldError}>
+              {errorFor("email")}
+            </span>
+          ) : null}
+        </div>
+
+        <div className={styles.field}>
+          <label className="visually-hidden" htmlFor={`${id}-message`}>
+            Message
+          </label>
+          <textarea
+            id={`${id}-message`}
+            name="message"
+            required
+            placeholder="How can we help you?"
+            className={styles.textarea}
+            aria-invalid={errorFor("message") ? true : undefined}
+            aria-describedby={describedBy("message")}
+          />
+          {errorFor("message") ? (
+            <span id={`${id}-message-error`} className={styles.fieldError}>
+              {errorFor("message")}
+            </span>
+          ) : null}
+        </div>
+
+        <TurnstileWidget />
+
+        <div className={styles.submitWrapper}>
+          <SubmitButton className={styles.submit}>{submitLabel}</SubmitButton>
+        </div>
+      </form>
 
       {state.status === "success" && state.message ? (
         <p className={styles.success} role="status" style={{ marginBlockStart: 16 }}>

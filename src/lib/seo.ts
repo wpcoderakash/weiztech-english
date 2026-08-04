@@ -84,6 +84,17 @@ export function pageMetadata({
  * characters, one per route, drawn from each page's own copy so they say
  * nothing the page does not.
  */
+/**
+ * Serialise an object for a JSON-LD <script> block.
+ *
+ * `JSON.stringify` alone does not escape `<`, so a DB-authored value
+ * containing `</script>` would terminate the block and inject markup.
+ * Escaping every `<` with its JSON unicode escape is the standard fix.
+ */
+export function jsonLdString(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
 export const DESCRIPTIONS = {
   home: "Weiz Technologies is your partner for secure and reliable IT solutions that drive business growth. Contact us today to discover how we can propel your success.",
   products:

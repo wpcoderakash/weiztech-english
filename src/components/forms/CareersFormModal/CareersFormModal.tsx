@@ -129,131 +129,131 @@ export function CareersFormModal() {
         <hr className={styles.divider} />
 
         <form action={formAction} className={styles.form} noValidate>
-            {state.status === "error" && state.message ? (
-              <p className={styles.formError} role="alert">
-                {state.message}
-              </p>
-            ) : null}
+          {state.status === "error" && state.message ? (
+            <p className={styles.formError} role="alert">
+              {state.message}
+            </p>
+          ) : null}
 
-            {/* Honeypot — checked before the upload is read. */}
-            <div className={styles.honeypot} aria-hidden="true">
-              <label htmlFor={`${id}-company`}>Company</label>
-              <input
-                id={`${id}-company`}
-                name="company"
-                type="text"
-                tabIndex={-1}
-                autoComplete="off"
-              />
-            </div>
+          {/* Honeypot — checked before the upload is read. */}
+          <div className={styles.honeypot} aria-hidden="true">
+            <label htmlFor={`${id}-company`}>Company</label>
+            <input
+              id={`${id}-company`}
+              name="company"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
 
-            <div className={styles.fieldHalf}>
-              <label className={styles.label} htmlFor={`${id}-firstName`}>
-                First name <span aria-hidden="true">*</span>
-              </label>
-              <input
-                id={`${id}-firstName`}
-                name="firstName"
-                type="text"
-                required
-                autoComplete="given-name"
-                placeholder="First name"
-                className={styles.input}
-                aria-invalid={errorFor("firstName") ? true : undefined}
-                aria-describedby={describedBy("firstName")}
-              />
-              {fieldError("firstName")}
-            </div>
+          <div className={styles.fieldHalf}>
+            <label className={styles.label} htmlFor={`${id}-firstName`}>
+              First name <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id={`${id}-firstName`}
+              name="firstName"
+              type="text"
+              required
+              autoComplete="given-name"
+              placeholder="First name"
+              className={styles.input}
+              aria-invalid={errorFor("firstName") ? true : undefined}
+              aria-describedby={describedBy("firstName")}
+            />
+            {fieldError("firstName")}
+          </div>
 
-            <div className={styles.fieldHalf}>
-              <label className={styles.label} htmlFor={`${id}-lastName`}>
-                Last name <span aria-hidden="true">*</span>
-              </label>
-              <input
-                id={`${id}-lastName`}
-                name="lastName"
-                type="text"
-                required
-                autoComplete="family-name"
-                placeholder="Last name"
-                className={styles.input}
-                aria-invalid={errorFor("lastName") ? true : undefined}
-                aria-describedby={describedBy("lastName")}
-              />
-              {fieldError("lastName")}
-            </div>
+          <div className={styles.fieldHalf}>
+            <label className={styles.label} htmlFor={`${id}-lastName`}>
+              Last name <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id={`${id}-lastName`}
+              name="lastName"
+              type="text"
+              required
+              autoComplete="family-name"
+              placeholder="Last name"
+              className={styles.input}
+              aria-invalid={errorFor("lastName") ? true : undefined}
+              aria-describedby={describedBy("lastName")}
+            />
+            {fieldError("lastName")}
+          </div>
 
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor={`${id}-email`}>
-                Email <span aria-hidden="true">*</span>
-              </label>
-              <input
-                id={`${id}-email`}
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                placeholder="Email address"
-                className={styles.input}
-                aria-invalid={errorFor("email") ? true : undefined}
-                aria-describedby={describedBy("email")}
-              />
-              {fieldError("email")}
-            </div>
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor={`${id}-email`}>
+              Email <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id={`${id}-email`}
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="Email address"
+              className={styles.input}
+              aria-invalid={errorFor("email") ? true : undefined}
+              aria-describedby={describedBy("email")}
+            />
+            {fieldError("email")}
+          </div>
 
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor={`${id}-message`}>
-                Message <span aria-hidden="true">*</span>
-              </label>
-              <textarea
-                id={`${id}-message`}
-                name="message"
-                required
-                placeholder="Message"
-                className={styles.textarea}
-                aria-invalid={errorFor("message") ? true : undefined}
-                aria-describedby={describedBy("message")}
-              />
-              {fieldError("message")}
-            </div>
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor={`${id}-message`}>
+              Message <span aria-hidden="true">*</span>
+            </label>
+            <textarea
+              id={`${id}-message`}
+              name="message"
+              required
+              placeholder="Message"
+              className={styles.textarea}
+              aria-invalid={errorFor("message") ? true : undefined}
+              aria-describedby={describedBy("message")}
+            />
+            {fieldError("message")}
+          </div>
 
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor={`${id}-cv`}>
-                CV <span aria-hidden="true">*</span>
-              </label>
-              {/*
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor={`${id}-cv`}>
+              CV <span aria-hidden="true">*</span>
+            </label>
+            {/*
                 The input is visually hidden rather than `display: none` so it
                 stays focusable and keyboard-operable; the styled label is its
                 control. `fileUploadButtonText` is the source's own wording.
               */}
-              <input
-                id={`${id}-cv`}
-                name="cv"
-                type="file"
-                required
-                accept="application/pdf,.pdf"
-                className={styles.fileInput}
-                aria-invalid={errorFor("cv") ? true : undefined}
-                aria-describedby={describedBy("cv")}
-                onChange={(event) => setFileName(event.target.files?.[0]?.name ?? null)}
-              />
-              <label htmlFor={`${id}-cv`} className={styles.fileButton}>
-                Upload your CV (PDF Only)
-              </label>
-              <span className={styles.fileName}>{fileName ?? "No file chosen"}</span>
-              {fieldError("cv")}
-            </div>
+            <input
+              id={`${id}-cv`}
+              name="cv"
+              type="file"
+              required
+              accept="application/pdf,.pdf"
+              className={styles.fileInput}
+              aria-invalid={errorFor("cv") ? true : undefined}
+              aria-describedby={describedBy("cv")}
+              onChange={(event) => setFileName(event.target.files?.[0]?.name ?? null)}
+            />
+            <label htmlFor={`${id}-cv`} className={styles.fileButton}>
+              Upload your CV (PDF Only)
+            </label>
+            <span className={styles.fileName}>{fileName ?? "No file chosen"}</span>
+            {fieldError("cv")}
+          </div>
 
-            {/*
+          {/*
               Turnstile mounts here once NEXT_PUBLIC_TURNSTILE_SITE_KEY is
               set — the source has `enableTurnstile: true` with a dark theme.
               The server verifies the token and skips the check when no secret
               is configured, so the form works either way.
             */}
 
-            <TurnstileWidget />
-            <SubmitButton className={styles.submit}>Submit</SubmitButton>
-          </form>
+          <TurnstileWidget />
+          <SubmitButton className={styles.submit}>Submit</SubmitButton>
+        </form>
 
         {state.status === "success" && state.message ? (
           <p className={styles.success} role="status" style={{ marginBlockStart: 16 }}>

@@ -4,14 +4,13 @@ import { headers } from "next/headers";
 
 import { recordSubmission } from "@/lib/actions/recordSubmission";
 import { sendFormEmail } from "@/lib/email/send";
-import { formatQuoteSubmission, parseQuoteSubmission } from "@/lib/forms/quote-schema";
+import { parseQuoteSubmission } from "@/lib/forms/quote-schema";
 import {
   QUOTE_FAILURE_MESSAGE as FAILURE,
   QUOTE_SUCCESS_MESSAGE as SUCCESS,
 } from "@/lib/forms/quote-state";
 import type { QuoteFormState } from "@/lib/forms/quote-state";
 import { verifyTurnstile } from "@/lib/forms/turnstile";
-import { getMailAdapter, getQuoteRecipient } from "@/lib/mail";
 
 /**
  * The Get a Quote request — the third and last runtime data path.
@@ -102,29 +101,6 @@ export async function submitQuoteRequest(
     console.warn(
       `[quote] graph mail: sent=${graphOutcome.sent} failed=${graphOutcome.failed} ${graphOutcome.reason ?? ""}`,
     );
-  }
-
-  const mail = getMailAdapter();
-
-  const result = await mail.send({
-    to: getQuoteRecipient(),
-    /*
-     * Bricks' own `emailSubject` is "Contact form request" — the same subject
-     * the contact form sends, so quote requests are indistinguishable from
-     * contact messages in the inbox. Left as the source has it; changing it
-     * is a one-line call flagged in the phase report.
-     */
-    subject: "Contact form request",
-    text: formatQuoteSubmission(parsed.value),
-    replyTo: parsed.value.email,
-    /* The source's `fromName` is "טופס הצעת מחיר" on an English form —
-       the CHANGE #28 pattern again. */
-    fromName: "WeizTech",
-  });
-
-  if (!result.ok) {
-    console.error(`[quote] ${mail.name} failed: ${result.error}`);
-    return { status: "error", message: FAILURE };
   }
 
   return { status: "success", message: SUCCESS };

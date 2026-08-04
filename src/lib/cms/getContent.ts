@@ -94,14 +94,25 @@ export async function getSection<T>(pageSlug: string, key: string, fallback: T):
 
 const cachedPosts = unstable_cache(
   async () => {
-    const { data, error } = await supabaseAdmin()
-      .from("posts")
-      .select("body, status, published_at")
-      .eq("status", "published")
-      .is("deleted_at", null)
-      .order("published_at", { ascending: false });
+    const db = supabaseAdmin();
+    const [{ data, error }, { count, error: countError }] = await Promise.all([
+      db
+        .from("posts")
+        .select("body, status, published_at")
+        .eq("status", "published")
+        .is("deleted_at", null)
+        .order("published_at", { ascending: false }),
+      db.from("posts").select("id", { count: "exact", head: true }).is("deleted_at", null),
+    ]);
     if (error) throw error;
-    return data.map((row) => row.body as Post);
+    if (countError) throw countError;
+    return {
+      posts: data.map((row) => row.body as Post),
+      /* Distinguishes "the CMS has no posts at all" (unseeded database — use
+         the in-repo fallback) from "the CMS has posts, none published"
+         (an editor's deliberate choice — publish nothing). */
+      seeded: (count ?? 0) > 0,
+    };
   },
   ["cms-posts"],
   { tags: ["posts"] },
@@ -110,8 +121,11 @@ const cachedPosts = unstable_cache(
 export async function getPosts(): Promise<readonly Post[]> {
   if (process.env.CMS_READS === "off") return POSTS_FALLBACK;
   try {
-    const posts = await cachedPosts();
-    return posts.length > 0 ? posts : POSTS_FALLBACK;
+    const { posts, seeded } = await cachedPosts();
+    if (posts.length > 0) return posts;
+    /* Previously any empty result resurrected all nine in-repo posts, so
+       unpublishing the last post silently republished everything. */
+    return seeded ? [] : POSTS_FALLBACK;
   } catch (cause) {
     console.warn("[cms] getPosts fell back:", cause);
     return POSTS_FALLBACK;

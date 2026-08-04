@@ -1,7 +1,9 @@
 "use client";
 
 import { useActionState } from "react";
+
 import styles from "../../admin.module.css";
+
 import { saveFormSettings, type ActionState } from "./actions";
 import type { Recipient } from "./RecipientList";
 
@@ -44,10 +46,7 @@ export function FormSettingsFormWrapper({
   recipientRows,
   defaultAutoReplyHtml,
 }: Props) {
-  const [state, action, pending] = useActionState(
-    saveFormSettings.bind(null, formKey),
-    INITIAL,
-  );
+  const [state, action, pending] = useActionState(saveFormSettings.bind(null, formKey), INITIAL);
 
   return (
     <form action={action} style={{ display: "grid", gap: 8, marginBlockStart: 10 }}>
@@ -131,11 +130,7 @@ export function FormSettingsFormWrapper({
           color: "#c9c3d9",
         }}
       >
-        <input
-          type="checkbox"
-          name="auto_reply_enabled"
-          defaultChecked={f.auto_reply_enabled}
-        />{" "}
+        <input type="checkbox" name="auto_reply_enabled" defaultChecked={f.auto_reply_enabled} />{" "}
         Send auto-reply to the submitter
       </label>
       <label className="jf-label">

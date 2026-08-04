@@ -1,14 +1,25 @@
-import { supabaseAdmin } from "@/lib/supabase/server";
+import { notFound } from "next/navigation";
+
+import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../../admin.module.css";
 
 export const dynamic = "force-dynamic";
+
+/** The audit trail names every admin and what they did — manage-level only. */
+const CAN_VIEW = new Set(["super_admin", "admin"]);
 
 export default async function AdminActivityPage({
   searchParams,
 }: {
   searchParams: Promise<{ entity?: string }>;
 }) {
+  /* The (dash) layout guards signed-out users, but a shared layout does not
+     re-run for every RSC segment request — each page that reads privileged
+     data checks for itself. */
+  const me = await currentAdmin();
+  if (!me || !CAN_VIEW.has(me.role)) notFound();
+
   const { entity = "all" } = await searchParams;
   const db = supabaseAdmin();
 

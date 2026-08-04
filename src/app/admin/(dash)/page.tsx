@@ -1,12 +1,18 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-import { supabaseAdmin } from "@/lib/supabase/server";
+import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../admin.module.css";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
+  /* Own guard: a shared layout is not re-executed for every RSC segment
+     request, so this page cannot rely on it alone before reading lead data. */
+  const me = await currentAdmin();
+  if (!me) redirect("/admin/login");
+
   const db = supabaseAdmin();
   // eslint-disable-next-line react-hooks/purity -- server component, per-request time is the point
   const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();

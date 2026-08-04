@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
 import styles from "../../admin.module.css";
@@ -19,6 +21,10 @@ const ROLE_OPTIONS = [
 
 export default async function AdminUsersPage() {
   const me = await currentAdmin();
+  /* The full staff roster with email addresses is admin-level data, and the
+     page must not render it just because the layout let the request through. */
+  if (!me || !["super_admin", "admin"].includes(me.role)) notFound();
+
   const db = supabaseAdmin();
   const [{ data: profiles }, { data: authUsers }] = await Promise.all([
     db.from("profiles").select("user_id, name, role, created_at"),

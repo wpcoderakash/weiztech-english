@@ -7,7 +7,7 @@ import { Container, Section } from "@/components/layout";
 import { PageHero } from "@/components/sections";
 import { POSTS } from "@/content/posts";
 import { getPostBySlug } from "@/lib/cms/getContent";
-import { SITE_URL, pageMetadata } from "@/lib/seo";
+import { SITE_URL, jsonLdString, pageMetadata } from "@/lib/seo";
 
 import styles from "./page.module.css";
 
@@ -76,7 +76,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }}
       />
       <PageHero
         className={styles.hero}

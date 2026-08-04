@@ -10,7 +10,13 @@ import { MobileMenuDrawer, ScrollReset, SkipLink } from "@/components/navigation
 import { OverlayProvider } from "@/components/overlays";
 import { HEADER_NAV, MOBILE_MENU } from "@/content/site";
 import { getMenu } from "@/lib/cms/getContent";
-import { DESCRIPTIONS, GOOGLE_SITE_VERIFICATION, SITE_URL, pageMetadata } from "@/lib/seo";
+import {
+  DESCRIPTIONS,
+  GOOGLE_SITE_VERIFICATION,
+  SITE_URL,
+  jsonLdString,
+  pageMetadata,
+} from "@/lib/seo";
 
 import "@/styles/reset.css";
 import "@/styles/tokens.css";
@@ -126,7 +132,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <script
           type="application/ld+json"
 
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdString(ORGANIZATION_JSONLD) }}
         />
         <OverlayProvider>
           <SkipLink />

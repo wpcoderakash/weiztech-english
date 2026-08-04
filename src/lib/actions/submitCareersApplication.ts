@@ -4,14 +4,13 @@ import { headers } from "next/headers";
 
 import { recordApplication } from "@/lib/actions/recordSubmission";
 import { sendFormEmail } from "@/lib/email/send";
-import { formatCareersSubmission, parseCareersSubmission } from "@/lib/forms/careers-schema";
+import { parseCareersSubmission } from "@/lib/forms/careers-schema";
 import {
   CAREERS_FAILURE_MESSAGE as FAILURE,
   CAREERS_SUCCESS_MESSAGE as SUCCESS,
 } from "@/lib/forms/careers-state";
 import type { CareersFormState } from "@/lib/forms/careers-state";
 import { verifyTurnstile } from "@/lib/forms/turnstile";
-import { getCareersRecipient, getMailAdapter } from "@/lib/mail";
 
 /**
  * The careers application — the site's second runtime data path, and the only
@@ -27,9 +26,26 @@ const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_WINDOW = 3;
 const hits = new Map<string, number[]>();
 
+function recentHits(ip: string, now: number): number[] {
+  return (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+}
+
+/** Read-only check — does not consume an attempt. */
 function rateLimited(ip: string): boolean {
+  return recentHits(ip, Date.now()).length >= MAX_PER_WINDOW;
+}
+
+/**
+ * Consume an attempt. Only ACCEPTED submissions count: the request body is
+ * already buffered by the time this action runs, so charging an applicant for
+ * a wrong file type or a missed field saves no bandwidth and would lock them
+ * out of the form for an hour over a typo. What the limit protects is the
+ * expensive downstream — storage plus an 8 MB mail attachment — and that only
+ * happens once a submission validates.
+ */
+function recordAttempt(ip: string): void {
   const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  const recent = recentHits(ip, now);
   recent.push(now);
   hits.set(ip, recent);
 
@@ -38,8 +54,6 @@ function rateLimited(ip: string): boolean {
       if (times.every((t) => now - t >= WINDOW_MS)) hits.delete(key);
     }
   }
-
-  return recent.length > MAX_PER_WINDOW;
 }
 
 export async function submitCareersApplication(
@@ -112,30 +126,8 @@ export async function submitCareersApplication(
     );
   }
 
-  const mail = getMailAdapter();
-
-  const result = await mail.send({
-    to: getCareersRecipient(),
-    /* Bricks' own `emailSubject`. */
-    subject: "Career Form Request",
-    text: formatCareersSubmission(value),
-    replyTo: value.email,
-    /* The source's `fromName` is "קורות חיים" (Hebrew for "CV") on an English
-       form — CHANGE #28, same as the failure message. */
-    fromName: "WeizTech Careers",
-    attachments: [
-      {
-        filename: value.cv.filename,
-        contentType: value.cv.contentType,
-        content: value.cv.bytes,
-      },
-    ],
-  });
-
-  if (!result.ok) {
-    console.error(`[careers] ${mail.name} failed: ${result.error}`);
-    return { status: "error", message: FAILURE };
-  }
+  /* The accepted submission is what the hourly limit protects. */
+  recordAttempt(ip);
 
   return { status: "success", message: SUCCESS };
 }

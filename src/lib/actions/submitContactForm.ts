@@ -9,9 +9,8 @@ import {
   CONTACT_SUCCESS_MESSAGE as SUCCESS,
 } from "@/lib/forms/contact-state";
 import type { ContactFormState } from "@/lib/forms/contact-state";
-import { formatSubmission, parseContactSubmission } from "@/lib/forms/schema";
+import { parseContactSubmission } from "@/lib/forms/schema";
 import { verifyTurnstile } from "@/lib/forms/turnstile";
-import { getMailAdapter, getRecipient } from "@/lib/mail";
 
 /**
  * The site's only runtime data path (PHASE-5 §9).
@@ -87,7 +86,9 @@ export async function submitContactForm(
     console.warn("[contact] TURNSTILE_SECRET_KEY is not set — the form is unprotected.");
   }
 
-  const pagePath = (formData.get("pagePath") as string | null) ?? "(unknown)";
+  /* Client-supplied and unbounded otherwise: it is stored on the submission
+     and echoed into the notification email. */
+  const pagePath = ((formData.get("pagePath") as string | null) ?? "(unknown)").slice(0, 200);
 
   await recordSubmission({
     form: "contact",
@@ -113,21 +114,6 @@ export async function submitContactForm(
     console.warn(
       `[contact] graph mail: sent=${graphOutcome.sent} failed=${graphOutcome.failed} ${graphOutcome.reason ?? ""}`,
     );
-  }
-
-  const mail = getMailAdapter();
-
-  const result = await mail.send({
-    to: getRecipient(),
-    subject: "Contact form request",
-    text: formatSubmission(parsed.value, pagePath),
-    replyTo: parsed.value.email,
-    fromName: "WeizTech",
-  });
-
-  if (!result.ok) {
-    console.error(`[contact] ${mail.name} failed: ${result.error}`);
-    return { status: "error", message: FAILURE };
   }
 
   return { status: "success", message: SUCCESS };

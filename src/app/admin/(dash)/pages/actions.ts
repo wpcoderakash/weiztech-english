@@ -34,7 +34,14 @@ export async function saveDraft(sectionId: string, formData: FormData): Promise<
   const base = section.draft_data ?? section.data;
   const next = rebuildFromForm(base, "", formData);
 
-  await supabaseAdmin().from("sections").update({ draft_data: next }).eq("id", sectionId);
+  const { error } = await supabaseAdmin()
+    .from("sections")
+    .update({ draft_data: next })
+    .eq("id", sectionId);
+  if (error) {
+    console.error(`[pages] draft save failed for ${sectionId}: ${error.message}`);
+    return;
+  }
   await supabaseAdmin().from("activity_log").insert({
     actor_id: admin.userId,
     action: "section.save_draft",
@@ -53,15 +60,26 @@ export async function publishSection(sectionId: string): Promise<void> {
   if (section.draft_data == null) return;
 
   const db = supabaseAdmin();
-  await db.from("section_revisions").insert({
+  /* The revision IS the backup of what is about to be overwritten. If it does
+     not land, publishing would destroy the current live version with nothing
+     to roll back to — so this must succeed before the section is touched. */
+  const { error: revisionError } = await db.from("section_revisions").insert({
     section_id: sectionId,
     data: section.data as object,
     editor_id: admin.userId,
   });
-  await db
+  if (revisionError) {
+    console.error(`[pages] publish aborted — revision backup failed: ${revisionError.message}`);
+    return;
+  }
+  const { error: publishError } = await db
     .from("sections")
     .update({ data: section.draft_data as object, draft_data: null })
     .eq("id", sectionId);
+  if (publishError) {
+    console.error(`[pages] publish failed for ${sectionId}: ${publishError.message}`);
+    return;
+  }
   await db.from("activity_log").insert({
     actor_id: admin.userId,
     action: "section.publish",
@@ -76,7 +94,22 @@ export async function discardDraft(sectionId: string): Promise<void> {
   const admin = await currentAdmin();
   if (!admin || !CAN_EDIT.has(admin.role)) return;
   const section = await sectionWithPage(sectionId);
-  await supabaseAdmin().from("sections").update({ draft_data: null }).eq("id", sectionId);
+  const { error } = await supabaseAdmin()
+    .from("sections")
+    .update({ draft_data: null })
+    .eq("id", sectionId);
+  if (error) {
+    console.error(`[pages] discard draft failed for ${sectionId}: ${error.message}`);
+    return;
+  }
+  /* Discarding destroys unpublished work — it belongs in the audit trail
+     alongside save_draft and publish. */
+  await supabaseAdmin().from("activity_log").insert({
+    actor_id: admin.userId,
+    action: "section.discard_draft",
+    entity: "sections",
+    entity_id: sectionId,
+  });
   revalidatePath(`/admin/pages/${section.pages.slug}/${sectionId}`);
 }
 
@@ -94,12 +127,24 @@ export async function restoreRevision(revisionId: string): Promise<void> {
   if (error) throw error;
   const section = await sectionWithPage(rev.section_id);
 
-  await db.from("section_revisions").insert({
+  /* Same rule as publish: back up the live version before replacing it. */
+  const { error: revisionError } = await db.from("section_revisions").insert({
     section_id: rev.section_id,
     data: section.data as object,
     editor_id: admin.userId,
   });
-  await db.from("sections").update({ data: rev.data, draft_data: null }).eq("id", rev.section_id);
+  if (revisionError) {
+    console.error(`[pages] restore aborted — revision backup failed: ${revisionError.message}`);
+    return;
+  }
+  const { error: restoreError } = await db
+    .from("sections")
+    .update({ data: rev.data, draft_data: null })
+    .eq("id", rev.section_id);
+  if (restoreError) {
+    console.error(`[pages] restore failed for ${rev.section_id}: ${restoreError.message}`);
+    return;
+  }
   await db.from("activity_log").insert({
     actor_id: admin.userId,
     action: "section.restore",

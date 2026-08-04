@@ -7,6 +7,17 @@ import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
 const CAN_EDIT = new Set(["super_admin", "admin"]);
 
+/**
+ * Settings keys the generic editor must never touch.
+ *
+ * `admin_slug` has its own action (`saveAdminSlug`) with a super-admin check,
+ * a format regex and a reserved-path list. Without this guard an `admin` could
+ * open /admin/site/settings/admin_slug directly and rewrite the gate slug
+ * through this generic path — bypassing all three protections and either
+ * hijacking a public route or locking everyone out of /admin.
+ */
+const PROTECTED_SETTINGS_KEYS = new Set(["admin_slug"]);
+
 /** Navigation menus and global settings — one editor, two tables. */
 export async function saveSiteEntry(
   kind: "navigation" | "settings",
@@ -15,6 +26,10 @@ export async function saveSiteEntry(
 ): Promise<void> {
   const admin = await currentAdmin();
   if (!admin || !CAN_EDIT.has(admin.role)) return;
+  if (kind === "settings" && PROTECTED_SETTINGS_KEYS.has(key)) {
+    console.warn(`[site] blocked generic edit of protected setting "${key}" by ${admin.email}`);
+    return;
+  }
 
   const db = supabaseAdmin();
   const table = kind === "navigation" ? "navigation_menus" : "settings";
@@ -23,10 +38,14 @@ export async function saveSiteEntry(
   if (!row) return;
 
   const next = rebuildFromForm((row as Record<string, unknown>)[column], "", formData);
-  await db
+  const { error } = await db
     .from(table)
     .update({ [column]: next, updated_at: new Date().toISOString() })
     .eq("key", key);
+  if (error) {
+    console.error(`[site] ${table}.${key} save failed: ${error.message}`);
+    return;
+  }
   await db.from("activity_log").insert({
     actor_id: admin.userId,
     action: `${kind}.update`,

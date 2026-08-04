@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { rejectUpload } from "@/lib/media/validate";
 import { currentAdmin, supabaseAdmin } from "@/lib/supabase/server";
 
 const CAN_UPLOAD = new Set(["super_admin", "admin", "editor", "content_manager", "author"]);
@@ -26,6 +27,10 @@ export async function POST(request: NextRequest) {
   const ext = ALLOWED.get(file.type);
   if (!ext) return NextResponse.json({ error: "unsupported type" }, { status: 400 });
 
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const rejection = rejectUpload(file.type, bytes);
+  if (rejection) return NextResponse.json({ error: rejection }, { status: 400 });
+
   const safe = file.name
     .replace(/\.[^.]+$/, "")
     .replace(/[^\w-]+/g, "-")
@@ -34,7 +39,7 @@ export async function POST(request: NextRequest) {
   const db = supabaseAdmin();
   const { error } = await db.storage
     .from("media")
-    .upload(path, Buffer.from(await file.arrayBuffer()), { contentType: file.type });
+    .upload(path, Buffer.from(bytes), { contentType: file.type });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   await db.from("media").insert({
