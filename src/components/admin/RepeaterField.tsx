@@ -37,6 +37,26 @@ function labelize(key: string): string {
   return key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_-]/g, " ");
 }
 
+/**
+ * Does this value render as a single NATIVE control? Only then may its
+ * wrapper be a <label> — a label forwards clicks to its first labelable
+ * descendant, so wrapping the inline rich-text or image widgets made a click
+ * on the text focus their first button instead of placing the caret.
+ * Mirrors the branches in ItemFields below.
+ */
+function rendersNativeControl(value: unknown, key?: string): boolean {
+  if (typeof value === "string") {
+    if (isImagePath(value, key)) return false; // InlineImageControl
+    return !(value.length > 70 || value.includes("\n")); // long → InlineRichText
+  }
+  if (typeof value === "number" || typeof value === "boolean") return true;
+  if (Array.isArray(value)) {
+    if (isRunArray(value)) return false;
+    return value.every((v) => typeof v === "string"); // lines textarea
+  }
+  return false;
+}
+
 function ItemFields({
   value,
   onChange,
@@ -106,16 +126,27 @@ function ItemFields({
   if (value !== null && typeof value === "object") {
     return (
       <div className="rp-object">
-        {Object.entries(value).map(([k, v]) => (
-          <label key={k} className="jf-label">
-            <span className="jf-key">{labelize(k)}</span>
-            <ItemFields
-              value={v}
-              fieldKey={k}
-              onChange={(next) => onChange({ ...(value as Item), [k]: next })}
-            />
-          </label>
-        ))}
+        {Object.entries(value).map(([k, v]) => {
+          const inner = (
+            <>
+              <span className="jf-key">{labelize(k)}</span>
+              <ItemFields
+                value={v}
+                fieldKey={k}
+                onChange={(next) => onChange({ ...(value as Item), [k]: next })}
+              />
+            </>
+          );
+          return rendersNativeControl(v, k) ? (
+            <label key={k} className="jf-label">
+              {inner}
+            </label>
+          ) : (
+            <div key={k} className="jf-label">
+              {inner}
+            </div>
+          );
+        })}
       </div>
     );
   }

@@ -30,6 +30,32 @@ import { isRunArray } from "./runs";
 
 const posix = (path: string, key: string | number) => (path ? `${path}.${key}` : String(key));
 
+/**
+ * Does this value render as a single NATIVE control (input / select /
+ * textarea)? Only then may its wrapper be a <label>.
+ *
+ * A <label> forwards every click inside it to its first labelable descendant.
+ * The rich-text, blocks, repeater and image widgets each carry their own
+ * buttons and inputs, so wrapping them meant that clicking the editor text
+ * focused the widget's first button (the "B" in the rich-text toolbar) instead
+ * of placing the caret — typing then went nowhere. Those get a plain <div>.
+ * Nested objects also get a <div>: a <label> inside a <label> is invalid.
+ *
+ * Must stay in step with the branches in renderFields below.
+ */
+function rendersNativeControl(value: unknown, key: string): boolean {
+  if (typeof value === "string") {
+    if (isImagePath(value, key)) return false; // ImageField
+    return !(value.length > 70 || value.includes("\n")); // long → RichTextField
+  }
+  if (typeof value === "number" || typeof value === "boolean") return true;
+  if (Array.isArray(value)) {
+    if (isRunArray(value) || isBlockArray(value)) return false;
+    return value.every((v) => typeof v === "string"); // lines textarea
+  }
+  return false;
+}
+
 /* A field at the section ROOT would get name="" — and browsers drop
    empty-named fields from submissions entirely (a whole top-level-array
    section silently never saved). Every input name and every FormData read
@@ -99,12 +125,24 @@ export function renderFields(value: unknown, path: string, fieldCls: string): Re
     );
   }
   if (value !== null && typeof value === "object") {
-    return Object.entries(value).map(([k, v]) => (
-      <label key={posix(path, k)} className="jf-label">
-        <span className="jf-key">{labelize(k)}</span>
-        {renderFields(v, posix(path, k), fieldCls)}
-      </label>
-    ));
+    return Object.entries(value).map(([k, v]) => {
+      const inner = (
+        <>
+          <span className="jf-key">{labelize(k)}</span>
+          {renderFields(v, posix(path, k), fieldCls)}
+        </>
+      );
+      /* Same class either way — identical styling, different click semantics. */
+      return rendersNativeControl(v, k) ? (
+        <label key={posix(path, k)} className="jf-label">
+          {inner}
+        </label>
+      ) : (
+        <div key={posix(path, k)} className="jf-label">
+          {inner}
+        </div>
+      );
+    });
   }
   return null;
 }
