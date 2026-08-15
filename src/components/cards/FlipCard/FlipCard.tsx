@@ -35,7 +35,11 @@ export function FlipCard({ title, body }: FlipCardProps) {
               #brxe-cvqknh and its three siblings in home.json, each with
               `_typography: { color: white, font-size: var(--text-xs) }`.
               Text's default tone is var(--base) (#aea6ba), which left the copy
-              a washed-out mauve against the purple card. */}
+              a washed-out mauve against the purple card.
+
+              Stays --text-xs here: mobile keeps the source sizing exactly.
+              The desktop-only bump to --text-m lives behind a min-width: 768px
+              query at the foot of FlipCard.module.css — see the note there. */}
           <Text size="xs" tone="white">
             {body}
           </Text>

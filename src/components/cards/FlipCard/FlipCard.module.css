@@ -73,6 +73,39 @@
   transform: rotateX(180deg);
 }
 
+/* DESKTOP ONLY — the back copy was too small to read at the ported --text-xs
+   (14px). Below 768px nothing here applies and mobile renders exactly as the
+   source did: --text-xs, 1.8 leading, 12/24 padding. 767px is this codebase's
+   mobile breakpoint (18 other rules use it).
+
+   Measured over CDP at 1440/1280/1024/900/768/390. The binding case is NOT the
+   widest viewport — it is the 768-1024 band, where the grid track squeezes the
+   card to ~225px wide while the height stays pinned at 324px (the global class
+   has no responsive height override). There the ported 24px side padding left a
+   177px measure, and 18px copy ran to 11 lines / 297px against 300px of content
+   box — a 3px margin, i.e. one copy edit away from overflowing the face.
+
+   Trimming the side padding to 12px widens the measure to 201px at 768, which
+   drops the worst card ("Built to Last", the longest body) back to 10 lines and
+   restores ~30px of head-room at every width in range. The front face keeps the
+   ported 12/24 — its titles are short and centred, so they never needed it. */
+@media (min-width: 768px) {
+  /* Doubled: `.face.face` above sets the `padding` shorthand at (0,2,0), so a
+     plain `.back` at (0,1,0) loses outright. */
+  .back.back {
+    padding-inline: 12px;
+  }
+
+  .back p {
+    /* (0,1,1) — clears Text.module.css's `.size-xs` at (0,1,0). */
+    font-size: var(--text-m);
+    /* Body's 1.8 (inherited — Text sets font-size only) is far too loose for a
+       narrow centred column, and at 18px it alone overflowed the card. 1.5 is
+       what makes the larger size fit, and reads better at this measure. */
+    line-height: 1.5;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .inner {
     transition-duration: 0.01ms;
